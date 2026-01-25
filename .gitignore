@@ -54,7 +54,8 @@
 # dependencies
 /node_modules
 /.pnp
-.pnp.*
+.pnp.*git status
+
 .yarn/*
 !.yarn/patches
 !.yarn/plugins
