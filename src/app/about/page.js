@@ -103,7 +103,7 @@ export default function About() {
 
           {/* Story / One Piece */}
           <BentoCard className="md:col-span-5 md:row-span-1 bg-black text-white" delay={0.3} title="Philosophy">
-             <div className="absolute -top-20 -left-20 opacity-10 group-hover:scale-110 transition-transform duration-1000">
+             <div className="absolute -top-20 -left-20 opacity-10 group-hover:scale-110 transition-transform duration-1000 pointer-events-none">
                <FaAnchor className="text-[20rem]" />
              </div>
              
@@ -115,9 +115,10 @@ export default function About() {
                  {t.story.text}
                </p>
                
-               <div className="p-8 rounded-3xl bg-white/5 border border-white/10">
-                  <p className="text-[10px] font-black uppercase tracking-widest opacity-40 mb-4">The Will of D.</p>
-                  <p className="text-xl italic font-serif">&quot;Inherited Will, The Destiny of Age, and The Dreams of Its People. These are things that will not be stopped.&quot;</p>
+               <div className="p-8 rounded-3xl bg-white/5 border border-white/10 group-hover:border-orange-500/30 transition-colors duration-500">
+                  <p className="text-[10px] font-black uppercase tracking-widest text-orange-500 mb-4">{t.story.will_of_d.title}</p>
+                  <p className={`text-xl italic font-serif leading-relaxed ${language === 'jp' ? 'font-noto' : ''}`}>&quot;{t.story.will_of_d.quote.replace(/"/g, '')}&quot;</p>
+                  <p className="mt-4 text-[10px] font-black uppercase tracking-widest opacity-30 text-right">— Eiichiro Oda</p>
                </div>
              </div>
           </BentoCard>

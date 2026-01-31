@@ -25,7 +25,11 @@ export const translations = {
       },
       story: {
         title: "The Origin Story",
-        text: "My journey wasn't traditional. Fuelled by curiosity and an obsession with 'One Piece' (shonen spirit!), I taught myself the MERN stack from the ground up. Like Luffy setting sail, I dove into React, databases, and algorithms with zero hesitation."
+        text: "My journey wasn't traditional. Fuelled by curiosity and an obsession with 'One Piece' (shonen spirit!), I taught myself the MERN stack from the ground up. Like Luffy setting sail, I dove into React, databases, and algorithms with zero hesitation.",
+        will_of_d: {
+          title: "The Will of D.",
+          quote: '"Inherited Will, The Destiny of Age, and The Dreams of Its People. These are things that will not be stopped."'
+        }
       },
       language: {
         title: "Global Mindset",
@@ -272,7 +276,11 @@ export const translations = {
       },
       story: {
         title: "原点",
-        text: "私の旅は伝統的なものではありませんでした。好奇心と「ワンピース」への執着（少年精神！）に支えられ、MERNスタックを基礎から独学で学びました。ルフィが出航するように、私はためらうことなくReact、データベース、アルゴリズムに飛び込みました。"
+        text: "私の旅は伝統的なものではありませんでした。好奇心と「ワンピース」への執着（少年精神！）に支えられ、MERNスタックを基礎から独学で学びました。ルフィが出航するように、私はためらうことなくReact、データベース、アルゴリズムに飛び込みました。",
+        will_of_d: {
+          title: "Dの意志",
+          quote: "「受け継がれる意志、時代のうねり、人の夢。これらは止めることのできないものだ」"
+        }
       },
       language: {
         title: "グローバルマインドセット",

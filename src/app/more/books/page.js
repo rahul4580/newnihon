@@ -5,80 +5,51 @@ import { motion } from 'motion/react';
 import { useLanguage } from '../../../context/LanguageContext';
 import { translations } from '../../../utils/translations';
 import Navbar from '../../../components/Navbar';
-import { FaBookOpen, FaStar, FaBookmark } from 'react-icons/fa';
+import { FaBookOpen } from 'react-icons/fa';
 import Footer from '../../../components/Footer';
-
-const BookCard = ({ title, author, desc, delay, index }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 50, rotateX: 20 }}
-    whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
-    viewport={{ once: true }}
-    transition={{ duration: 0.8, delay: index * 0.1, ease: [0.76, 0, 0.24, 1] }}
-    className="group relative h-[450px] w-full max-w-[320px] mx-auto perspective-2000"
-  >
-    <div className="relative h-full w-full transition-all duration-700 transform-style-3d group-hover:rotate-y-[25deg] group-hover:-translate-x-4">
-      {/* Book Cover */}
-      <div className="absolute inset-0 bg-neutral-900 border border-neutral-800 rounded-r-3xl rounded-l-md shadow-[20px_20px_60px_-15px_rgba(0,0,0,0.5)] dark:shadow-[20px_20px_60px_-15px_rgba(255,255,255,0.05)] p-10 flex flex-col justify-between text-white overflow-hidden group-hover:border-neutral-700 transition-colors">
-        {/* Spine/Edge */}
-        <div className="absolute top-0 left-0 w-6 h-full bg-gradient-to-r from-black/40 via-white/5 to-transparent z-10 border-r border-white/5"></div>
-        
-        {/* Textures */}
-        <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/leather.png')]"></div>
-
-        <div className="relative z-20">
-          <div className="text-[10px] text-white/40 font-black uppercase tracking-[0.3em] mb-4">{author}</div>
-          <h3 className="text-3xl font-serif font-black leading-tight tracking-tight italic group-hover:text-blue-400 transition-colors">{title}</h3>
-        </div>
-
-        <div className="flex justify-center items-center relative z-20 opacity-10 group-hover:opacity-40 transition-all duration-500 scale-150 group-hover:scale-110">
-           <FaBookOpen className="text-9xl" />
-        </div>
-
-        <div className="relative z-20">
-           <div className="flex gap-1 text-yellow-500 mb-6 drop-shadow-lg">
-             {[1, 2, 3, 4, 5].map(i => <FaStar key={i} size={14} />) || <FaStar size={14} />}
-           </div>
-           <p className="text-sm text-white/50 font-medium line-clamp-3 leading-relaxed group-hover:text-white/80 transition-colors">
-             {desc}
-           </p>
-        </div>
-      </div>
-      
-      {/* Page Thickness Effect */}
-      <div className="absolute top-2 bottom-2 right-[-20px] w-10 bg-white dark:bg-neutral-800 rounded-r-md transform translate-z-[-20px] shadow-inner flex flex-col justify-around py-4 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
-         {[...Array(10)].map((_, i) => <div key={i} className="h-px w-full bg-black/5 dark:bg-white/5"></div>)}
-      </div>
-    </div>
-  </motion.div>
-);
-
-const ChatBubble = ({ name, message, delay }) => (
-  <motion.div
-    initial={{ opacity: 0, x: -20 }}
-    whileInView={{ opacity: 1, x: 0 }}
-    transition={{ delay }}
-    className="flex gap-4 items-start mb-6"
-  >
-    <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-neutral-800 flex items-center justify-center font-bold text-xs shrink-0">
-      {name[0]}
-    </div>
-    <div className="bg-gray-100 dark:bg-neutral-900 p-4 rounded-2xl rounded-tl-none border border-gray-200 dark:border-neutral-800 max-w-[80%]">
-      <p className="text-xs font-bold mb-1 opacity-50 uppercase tracking-widest">{name}</p>
-      <p className="text-sm font-medium">{message}</p>
-    </div>
-  </motion.div>
-);
 
 export default function Books() {
   const { language } = useLanguage();
   const t = translations[language].more_books || {};
   const list = t.list || [];
 
+  const floatingKanji = ['本', '読', '学', '知', '心', '道'];
+
   return (
-    <div className="bg-[#fafafa] dark:bg-black min-h-screen text-black dark:text-white selection:bg-blue-500 selection:text-white transition-colors duration-500">
+    <div className="bg-[#fafafa] dark:bg-black min-h-screen text-black dark:text-white selection:bg-blue-500 selection:text-white transition-colors duration-500 overflow-hidden">
       <Navbar />
       
-      <div className="container mx-auto px-6 pt-32 pb-32">
+      {/* Background Decorative Elements */}
+      <div className="fixed inset-0 pointer-events-none select-none overflow-hidden">
+        {floatingKanji.map((k, i) => (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0 }}
+            animate={{
+              opacity: [0.02, 0.05, 0.02],
+              y: [0, -100, 0],
+              rotate: [0, 10, -10, 0],
+            }}
+            transition={{
+              duration: 10 + i * 2,
+              repeat: Infinity,
+              ease: 'linear',
+              delay: i * 1.5,
+            }}
+            className="absolute text-[15vw] font-noto text-black dark:text-white"
+            style={{
+              left: `${(i + 1) * 15}%`,
+              top: `${20 + (i % 3) * 20}%`,
+            }}
+          >
+            {k}
+          </motion.div>
+        ))}
+        <div className="absolute top-0 right-0 w-[50vw] h-[50vw] bg-blue-500/5 rounded-full blur-[120px] -mr-[25vw] -mt-[10vw]"></div>
+        <div className="absolute bottom-0 left-0 w-[40vw] h-[40vw] bg-purple-500/5 rounded-full blur-[100px] -ml-[20vw] -mb-[10vw]"></div>
+      </div>
+
+      <div className="container mx-auto px-6 pt-32 pb-32 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -87,7 +58,7 @@ export default function Books() {
           <motion.div 
             initial={{ scale: 0.8, rotate: 10 }}
             animate={{ scale: 1, rotate: 0 }}
-            className="inline-block p-5 rounded-[1.5rem] bg-blue-500 text-white mb-8 shadow-2xl shadow-blue-500/20"
+            className="inline-block p-5 rounded-[1.5rem] bg-black text-white dark:bg-white dark:text-black mb-8 shadow-2xl"
           >
             <FaBookOpen className="text-4xl" />
           </motion.div>
@@ -99,47 +70,85 @@ export default function Books() {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-16 max-w-7xl mx-auto">
-          {/* Bookshelf - Left Column */}
-          <div className="lg:col-span-2">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-              {list.map((book, i) => (
-                <BookCard 
-                  key={i}
-                  index={i}
-                  {...book}
-                />
+        {/* Single Focus Card (matches /more/languages style) */}
+        <div className="max-w-5xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="bg-blue-600 text-white p-12 md:p-16 rounded-[2.5rem] relative overflow-hidden shadow-2xl shadow-blue-500/20 group"
+          >
+            <div className="absolute top-0 right-0 p-16 opacity-10 group-hover:scale-110 transition-transform duration-700 select-none pointer-events-none">
+              <FaBookOpen className="text-[20rem]" />
+            </div>
+
+            <div className="relative z-10">
+              <div className="flex items-center gap-4 mb-8">
+                <div className="w-3 h-3 rounded-full bg-white animate-pulse"></div>
+                <span className="text-white font-black uppercase tracking-[0.3em] text-[10px]">
+                  {t.current_read || 'Currently Reading'}
+                </span>
+              </div>
+
+              <h2 className={`text-5xl md:text-7xl font-black mb-6 tracking-tight ${language === 'jp' ? 'font-noto' : ''}`}>
+                {list?.[0]?.title || 'Atomic Habits'}
+              </h2>
+              <p className={`text-xl text-white/85 mb-12 leading-relaxed font-medium ${language === 'jp' ? 'font-noto' : ''}`}>
+                {list?.[0]?.desc || 'Building systems for success.'}
+              </p>
+
+              <div className="bg-white/10 backdrop-blur-md border border-white/20 p-8 md:p-10 rounded-[2rem] mb-8 group-hover:bg-white/15 transition-colors duration-500">
+                <p className="text-[10px] text-center text-white/70 font-black uppercase tracking-[0.2em] mb-4">
+                  Reading List
+                </p>
+                <div className="space-y-4">
+                  {(list || []).slice(0, 3).map((book) => (
+                    <div key={`${book.title}-${book.author}`} className="flex items-start justify-between gap-6">
+                      <div>
+                        <div className="text-lg font-black tracking-tight">{book.title}</div>
+                        <div className="text-white/70 text-sm font-medium">{book.author}</div>
+                      </div>
+                      <div className="text-[10px] font-black uppercase tracking-[0.25em] text-white/60 whitespace-nowrap">
+                        Saved
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap gap-3 relative z-10">
+              {['Self-Improvement', 'Systems', 'Design', 'Engineering', 'Focus', 'Discipline'].map((item) => (
+                <span key={item} className="px-6 py-2 bg-black/20 backdrop-blur-sm rounded-full text-xs font-black uppercase tracking-widest border border-white/10">
+                  {item}
+                </span>
               ))}
             </div>
-          </div>
+          </motion.div>
+        </div>
 
-          {/* Social/Chat Side - Right Column */}
-          <div className="lg:col-span-1">
-             <motion.div
-               initial={{ opacity: 0, x: 20 }}
-               whileInView={{ opacity: 1, x: 0 }}
-               className="sticky top-32 bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 p-8 rounded-[2.5rem] shadow-xl"
-             >
-                <div className="flex items-center gap-4 mb-8">
-                   <div className="w-3 h-3 rounded-full bg-green-500 animate-pulse"></div>
-                   <h3 className="text-xl font-black uppercase tracking-tighter">Discussion Room</h3>
-                </div>
-
-                <div className="space-y-2 mb-8">
-                  <ChatBubble name="Alex" message="Atomic Habits changed my morning routine completely!" delay={0.1} />
-                  <ChatBubble name="Sarah" message="Have you read 'The Alchemist'? It fits this shelf perfectly." delay={0.3} />
-                  <ChatBubble name="Rahul" message="Working on 'Clean Code' right now. Refactoring everything! 🚀" delay={0.5} />
-                </div>
-
-                <div className="relative">
-                   <input 
-                     type="text" 
-                     placeholder="Say something..." 
-                     className="w-full bg-gray-100 dark:bg-black border border-gray-200 dark:border-neutral-800 rounded-2xl py-4 px-6 text-sm font-medium focus:outline-none focus:border-blue-500 transition-colors"
-                   />
-                </div>
-             </motion.div>
-          </div>
+        {/* Download CTA */}
+        <div className="max-w-4xl mx-auto mt-16">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="bg-white dark:bg-neutral-900 border border-black/5 dark:border-white/10 rounded-[2rem] px-8 py-10 md:px-12 md:py-12 shadow-xl flex flex-col md:flex-row md:items-center md:justify-between gap-8"
+          >
+            <div>
+              <h3 className="text-2xl md:text-3xl font-black mb-3 tracking-tight">
+                All Books Download
+              </h3>
+              <p className="text-sm md:text-base text-gray-600 dark:text-neutral-400 max-w-xl">
+                A single download bundle (PDFs/notes) will be available soon. For now, the list above shows what I’m currently studying.
+              </p>
+            </div>
+            <button className="px-8 py-3 rounded-full text-xs font-black uppercase tracking-[0.3em] bg-black text-white dark:bg-white dark:text-black hover:bg-neutral-800 dark:hover:bg-neutral-200 transition-colors">
+              Download (Soon)
+            </button>
+          </motion.div>
         </div>
       </div>
 

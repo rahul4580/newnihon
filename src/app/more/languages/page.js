@@ -1,62 +1,20 @@
 'use client';
 
-import React, { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'motion/react';
+import React from 'react';
+import { motion } from 'motion/react';
+import Link from 'next/link';
 import { useLanguage } from '../../../context/LanguageContext';
 import { translations } from '../../../utils/translations';
 import Navbar from '../../../components/Navbar';
-import { FaLanguage, FaGlobeAsia, FaToriiGate } from 'react-icons/fa';
+import { FaLanguage, FaToriiGate } from 'react-icons/fa';
 import Footer from '../../../components/Footer';
 
-const LanguageCard = ({ lang, level, desc, progress, color, delay, icon: Icon }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true }}
-    transition={{ duration: 0.6, delay }}
-    className="bg-white/80 dark:bg-neutral-900/80 backdrop-blur-xl border border-gray-200 dark:border-neutral-800 p-8 rounded-[2rem] relative overflow-hidden group hover:shadow-2xl hover:shadow-black/5 dark:hover:shadow-white/5 transition-all duration-500"
-  >
-    <div className={`absolute -top-10 -right-10 w-40 h-40 bg-${color}-500/10 rounded-full blur-3xl group-hover:bg-${color}-500/20 transition-colors duration-500`}></div>
-    
-    <div className="flex justify-between items-start mb-8 relative z-10">
-      <div className={`p-4 rounded-2xl bg-${color}-50 dark:bg-${color}-500/10 text-${color}-600 dark:text-${color}-400 shadow-inner`}>
-        <Icon className="text-3xl" />
-      </div>
-      <span className={`inline-block px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] bg-${color}-500/10 text-${color}-600 dark:text-${color}-400 border border-${color}-500/20`}>
-        {level}
-      </span>
-    </div>
-
-    <div className="relative z-10">
-      <h3 className="text-3xl font-black mb-2 tracking-tight">{lang}</h3>
-      <p className="text-gray-500 dark:text-neutral-400 mb-8 text-sm leading-relaxed font-medium">
-        {desc}
-      </p>
-
-      <div className="space-y-4">
-        <div className="flex justify-between items-end">
-          <span className="text-[10px] font-black uppercase tracking-widest opacity-50">Proficiency</span>
-          <span className="text-lg font-mono font-bold">{progress}%</span>
-        </div>
-        <div className="w-full h-1.5 bg-gray-100 dark:bg-neutral-800 rounded-full overflow-hidden">
-          <motion.div
-            initial={{ width: 0 }}
-            whileInView={{ width: `${progress}%` }}
-            transition={{ duration: 1.5, ease: [0.76, 0, 0.24, 1], delay: delay + 0.3 }}
-            className={`h-full bg-${color}-500 shadow-[0_0_20px_rgba(var(--${color}-500),0.5)]`}
-          ></motion.div>
-        </div>
-      </div>
-    </div>
-  </motion.div>
-);
-
 export default function Languages() {
+  // This page is Japanese-only (content is fixed to JP regardless of the site toggle)
+  // eslint-disable-next-line no-unused-vars
   const { language } = useLanguage();
-  const t = translations[language].more_languages || {};
-  const t_en = t.en || {};
+  const t = translations.jp?.more_languages || {};
   const t_jp = t.jp || {};
-  const t_hi = t.hi || {};
 
   const floatingKanji = ["夢", "愛", "力", "心", "光", "和"];
 
@@ -107,56 +65,34 @@ export default function Languages() {
           >
             <FaLanguage className="text-4xl" />
           </motion.div>
-          <h1 className={`text-6xl md:text-8xl font-black mb-6 tracking-tighter ${language === 'jp' ? 'font-noto' : ''}`}>
+          <h1 className="text-6xl md:text-8xl font-black mb-6 tracking-tighter font-noto">
             {t.title}
           </h1>
-          <p className={`text-xl md:text-2xl text-gray-500 dark:text-neutral-500 max-w-2xl mx-auto font-medium ${language === 'jp' ? 'font-noto' : ''}`}>
+          <p className="text-xl md:text-2xl text-gray-500 dark:text-neutral-500 max-w-2xl mx-auto font-medium font-noto">
             {t.subtitle}
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-          {/* Main Languages */}
-          <div className="space-y-8">
-            <LanguageCard 
-              lang={t_en.name} 
-              level={t_en.level} 
-              desc={t_en.desc} 
-              progress={95} 
-              color="blue" 
-              delay={0.1} 
-              icon={FaGlobeAsia}
-            />
-            <LanguageCard 
-              lang={t_hi.name} 
-              level={t_hi.level} 
-              desc={t_hi.desc} 
-              progress={100} 
-              color="orange" 
-              delay={0.2} 
-              icon={FaGlobeAsia}
-            />
-          </div>
-
-          {/* Japanese Focus */}
+        {/* Japanese Only */}
+        <div className="max-w-5xl mx-auto">
           <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            className="bg-red-500 text-white p-12 rounded-[2.5rem] relative overflow-hidden flex flex-col justify-between shadow-2xl shadow-red-500/20 group"
+            className="bg-red-500 text-white p-12 md:p-16 rounded-[2.5rem] relative overflow-hidden flex flex-col justify-between shadow-2xl shadow-red-500/20 group"
           >
             <div className="absolute top-0 right-0 p-16 opacity-10 group-hover:scale-110 transition-transform duration-700 select-none pointer-events-none">
               <FaToriiGate className="text-[20rem]" />
             </div>
-            
+
             <div className="relative z-10">
               <div className="flex items-center gap-4 mb-8">
                  <div className="w-3 h-3 rounded-full bg-white animate-ping"></div>
-                 <span className="text-white font-black uppercase tracking-[0.3em] text-[10px]">Active Obsession</span>
+                 <span className="text-white font-black uppercase tracking-[0.3em] text-[10px]">Japanese Only</span>
               </div>
-              <h2 className={`text-5xl md:text-7xl font-black mb-6 tracking-tight ${language === 'jp' ? 'font-noto' : ''}`}>{t_jp.name}</h2>
-              <p className={`text-xl text-white/80 mb-12 leading-relaxed font-medium ${language === 'jp' ? 'font-noto' : ''}`}>{t_jp.desc}</p>
+              <h2 className="text-5xl md:text-7xl font-black mb-6 tracking-tight font-noto">{t_jp.name}</h2>
+              <p className="text-xl text-white/80 mb-12 leading-relaxed font-medium font-noto">{t_jp.desc}</p>
               
               <div className="bg-white/10 backdrop-blur-md border border-white/20 p-10 rounded-[2rem] mb-8 group-hover:bg-white/20 transition-colors duration-500">
                 <p className="text-[10px] text-center text-white/60 font-black uppercase tracking-[0.2em] mb-4">Kanji Study</p>
@@ -166,12 +102,50 @@ export default function Languages() {
             </div>
 
             <div className="flex flex-wrap gap-3 relative z-10">
-              {['Hiragana', 'Katakana', 'N5 Kanji', 'Grammar'].map((item, i) => (
-                <span key={item} className="px-6 py-2 bg-black/20 backdrop-blur-sm rounded-full text-xs font-black uppercase tracking-widest border border-white/10">
-                  {item}
-                </span>
+              {[
+                { label: 'Hiragana', href: '/more/languages/hiragana' },
+                { label: 'Katakana', href: '/more/languages/katakana' },
+                { label: 'N5 Kanji', href: '/more/languages/n5-kanji' },
+                { label: 'Grammar', href: '/more/languages/grammar' },
+                { label: 'Vocabulary', href: '/more/languages/vocabulary' },
+                { label: 'Listening', href: '/more/languages/listening' },
+                { label: 'JLPT Prep', href: '/more/languages/jlpt-prep' },
+                { label: 'Anime & Manga', href: '/more/languages/anime-manga' },
+                { label: 'Conversation', href: '/more/languages/conversation' },
+              ].map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="px-6 py-2 bg-black/20 backdrop-blur-sm rounded-full text-xs font-black uppercase tracking-widest border border-white/10 hover:bg-black/30 transition-colors"
+                >
+                  {item.label}
+                </Link>
               ))}
             </div>
+          </motion.div>
+        </div>
+
+        {/* Study materials / books download section */}
+        <div className="max-w-4xl mx-auto mt-16">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="bg-white dark:bg-neutral-900 border border-black/5 dark:border-white/10 rounded-[2rem] px-8 py-10 md:px-12 md:py-12 shadow-xl flex flex-col md:flex-row md:items-center md:justify-between gap-8"
+          >
+            <div>
+              <h3 className="text-2xl md:text-3xl font-black mb-3 tracking-tight">
+                Japanese Study Library
+              </h3>
+              <p className="text-sm md:text-base text-gray-600 dark:text-neutral-400 max-w-xl">
+                All reference books, PDFs, and notes I use for Japanese learning are organized here.
+                A full download bundle will be available soon.
+              </p>
+            </div>
+            <button className="px-8 py-3 rounded-full text-xs font-black uppercase tracking-[0.3em] bg-black text-white dark:bg-white dark:text-black hover:bg-neutral-800 dark:hover:bg-neutral-200 transition-colors">
+              All Books Download (Soon)
+            </button>
           </motion.div>
         </div>
       </div>

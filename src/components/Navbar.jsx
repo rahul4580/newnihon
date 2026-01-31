@@ -23,7 +23,6 @@ const Navbar = () => {
     { name: t.home, href: '/' },
     { name: t.about, href: '/about' },
     { name: t.more, href: '/more' },
-    { name: t.contact, href: '/#contact' },
   ];
 
   return (
