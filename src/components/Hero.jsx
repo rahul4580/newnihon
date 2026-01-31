@@ -91,14 +91,14 @@ const Hero = () => {
            transition={{ delay: 0.2, duration: 1, ease: [0.76, 0, 0.24, 1] }}
            className="relative flex justify-center items-center order-1 md:order-2"
         >
-          <div className="relative w-[320px] h-[450px] md:w-[480px] md:h-[600px] overflow-hidden rounded-[3rem] group ring-1 ring-black/10 dark:ring-white/10 shadow-2xl">
+          <div className="relative w-[250px] h-[350px] md:w-[320px] md:h-[450px] overflow-hidden rounded-[3rem] group ring-1 ring-black/10 dark:ring-white/10 shadow-2xl">
               <Image 
                   src={lkj} 
                   alt="Rahul" 
                   fill
                   // Move focal point slightly right so the face isn't cropped to the left
                   style={{ objectFit: 'cover', objectPosition: '65% 50%' }}
-                  sizes="(min-width: 768px) 480px, 320px"
+                  sizes="(min-width: 768px) 320px, 250px"
                   priority
                   className="z-10 grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-1000 ease-out" 
               />
@@ -125,7 +125,7 @@ const Hero = () => {
               rotate: [12, 15, 12]
             }}
             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute -bottom-10 -left-20 z-40 bg-white dark:bg-neutral-900 border border-black/10 dark:border-white/10 p-6 rounded-3xl shadow-2xl hidden md:block"
+            className="absolute -bottom-6 -left-12 z-40 bg-white dark:bg-neutral-900 border border-black/10 dark:border-white/10 p-4 rounded-3xl shadow-2xl hidden md:block"
           >
              <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-2xl bg-black dark:bg-white flex items-center justify-center text-white dark:text-black font-black text-xl italic">
