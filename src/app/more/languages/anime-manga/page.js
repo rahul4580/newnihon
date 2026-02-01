@@ -4,6 +4,7 @@ import React from 'react';
 import { motion } from 'motion/react';
 import Navbar from '../../../../components/Navbar';
 import Footer from '../../../../components/Footer';
+import { FaChevronLeft } from 'react-icons/fa';
 
 export default function AnimeMangaPage() {
   return (
@@ -11,6 +12,12 @@ export default function AnimeMangaPage() {
       <Navbar />
 
       <div className="container mx-auto px-6 pt-32 pb-32">
+        <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="mb-8">
+           <a href="/more/languages" className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest opacity-40 hover:opacity-100 transition-opacity">
+             <FaChevronLeft /> Back to Languages
+           </a>
+        </motion.div>
+        
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

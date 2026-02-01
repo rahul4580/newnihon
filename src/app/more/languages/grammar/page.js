@@ -9,7 +9,7 @@ import { GRAMMAR_DATA } from '../../../../utils/grammarData';
 import { PARTICLE_DATA } from '../../../../utils/particleData';
 
 export default function GrammarPage() {
-  const [view, setView] = useState('dashboard'); // 'dashboard', 'learn', 'quiz', 'results', 'particle_master', 'particle_learn', 'particle_quiz'
+  const [view, setView] = useState('dashboard'); // 'dashboard', 'learn', 'quiz', 'results', 'particle_master', 'particle_learn', 'particle_quiz', 'particle_results'
   const [activeChapter, setActiveChapter] = useState(null);
   const [currentPatternIdx, setCurrentPatternIdx] = useState(0);
   const [quizIdx, setQuizIdx] = useState(0);
@@ -168,11 +168,43 @@ export default function GrammarPage() {
     setQuizState({ score: 0, history: [], feedback: null });
   };
 
+  const handleParticleAnswer = (option) => {
+    if (quizState.feedback) return;
+    
+    const correctAns = activeParticle.quiz[particleQuizIdx].ans;
+    const isCorrect = option === correctAns;
+    
+    setQuizState(prev => ({
+      ...prev,
+      feedback: isCorrect ? 'correct' : 'incorrect',
+      score: isCorrect ? prev.score + 1 : prev.score,
+      history: [...prev.history, { q: activeParticle.quiz[particleQuizIdx].q, wasCorrect: isCorrect }]
+    }));
+
+    if (isCorrect) playSound(option);
+
+    setTimeout(() => {
+      if (particleQuizIdx < 1) {
+        setParticleQuizIdx(idx => idx + 1);
+        setQuizState(prev => ({ ...prev, feedback: null }));
+      } else {
+        setView('particle_results');
+      }
+    }, 1500);
+  };
+
   return (
     <div className="bg-[#fafafa] dark:bg-black min-h-screen text-black dark:text-white transition-colors duration-500 overflow-hidden selection:bg-rose-500 selection:text-white">
       <Navbar />
       
       <div className="container mx-auto px-6 pt-32 pb-32 relative z-10">
+        
+        {/* Back Button */}
+        <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="mb-8">
+           <a href="/more/languages" className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest opacity-40 hover:opacity-100 transition-opacity">
+             <FaChevronLeft /> Back to Languages
+           </a>
+        </motion.div>
         
         {/* VIEW: DASHBOARD */}
         {view === 'dashboard' && (
@@ -385,6 +417,7 @@ export default function GrammarPage() {
 
                 <div className="flex justify-between items-center mb-10 relative z-10">
                    <div>
+                      <button onClick={() => setView('learn')} className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest opacity-40 hover:opacity-100 transition-opacity mb-4"><FaChevronLeft /> Back to Lesson</button>
                       <h2 className="text-[10px] font-black uppercase tracking-[0.3em] opacity-30 mb-0.5">Mastery Quiz</h2>
                       <p className="text-[11px] font-black uppercase tracking-widest text-rose-500">Lesson {activeChapter.chapter === 'Daily' ? 'Daily Challenge' : `${activeChapter.chapter}: ${activeChapter.title}`}</p>
                    </div>
@@ -562,6 +595,112 @@ export default function GrammarPage() {
              </div>
           </div>
         )}
+
+
+         {/* VIEW: PARTICLE_QUIZ */}
+         {view === 'particle_quiz' && activeParticle && (
+           <div className="max-w-4xl mx-auto w-full">
+              <div className="p-8 md:p-10 rounded-[2.5rem] bg-white dark:bg-neutral-950 border border-black/5 shadow-22 mb-10 relative overflow-hidden">
+                 {/* Background Pattern */}
+                 <div className="absolute top-0 right-0 p-12 rotate-12 opacity-[0.03] select-none pointer-events-none text-rose-500">
+                     <FaStar className="text-[20rem]" />
+                 </div>
+
+                 <div className="flex justify-between items-center mb-10 relative z-10">
+                    <div>
+                       <button onClick={() => setView('particle_learn')} className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest opacity-40 hover:opacity-100 transition-opacity mb-4"><FaChevronLeft /> Back to Lesson</button>
+                       <h2 className="text-[10px] font-black uppercase tracking-[0.3em] opacity-30 mb-0.5">Particle Mastery Quiz</h2>
+                       <p className="text-[11px] font-black uppercase tracking-widest text-rose-500">Particle: {activeParticle.label}</p>
+                    </div>
+                    <div className="text-right">
+                       <div className="text-[9px] font-black uppercase opacity-20 mb-1">Pass Requirement: 2/2</div>
+                       <div className="flex gap-1 justify-end">
+                          {[...Array(2)].map((_, i) => (
+                            <div key={i} className={`h-1 w-4 rounded-full transition-all duration-500 ${i < particleQuizIdx ? (quizState.history[i]?.wasCorrect ? 'bg-green-500' : 'bg-red-500') : 'bg-gray-100 dark:bg-neutral-800'}`}></div>
+                          ))}
+                       </div>
+                    </div>
+                 </div>
+
+                 <div className="text-center py-8 relative z-10">
+                    <div className="mb-8">
+                       <span className="px-4 py-1.5 rounded-lg bg-gray-100 dark:bg-neutral-900 text-[9px] font-black uppercase tracking-[0.3em]">Question {particleQuizIdx + 1}</span>
+                    </div>
+                    <h3 className="text-2xl md:text-plus-4xl font-medium leading-relaxed font-noto mb-12 whitespace-pre-wrap">
+                       {activeParticle.quiz[particleQuizIdx].q.split('___').map((part, i) => (
+                         <React.Fragment key={i}>
+                           {part}
+                           {i === 0 && (
+                             <span className={`inline-flex items-center justify-center min-w-[100px] h-12 md:h-14 mx-3 rounded-xl border-2 transition-all duration-500 ${
+                               quizState.feedback === 'correct' ? 'bg-green-100 border-green-500 text-green-600 scale-105' : 
+                               quizState.feedback === 'incorrect' ? 'bg-red-100 border-red-500 text-red-600 animate-shake' : 
+                               'bg-rose-500/5 border-rose-500 border-dashed text-rose-500'
+                             }`}>
+                                {quizState.feedback ? activeParticle.quiz[particleQuizIdx].ans : '?'}
+                             </span>
+                           )}
+                         </React.Fragment>
+                       ))}
+                    </h3>
+                 </div>
+              </div>
+
+               <div className="grid grid-cols-2 md:grid-cols-4 gap-3 w-full">
+                 {activeParticle.quiz[particleQuizIdx].options.map((opt, i) => (
+                   <button 
+                     key={i} 
+                     onClick={() => handleParticleAnswer(opt)}
+                     disabled={!!quizState.feedback}
+                     className={`aspect-[1.4/1] rounded-3xl text-xl font-black transition-all border-2 flex items-center justify-center hover:scale-[1.03] active:scale-95 shadow-xl shadow-black/5 ${
+                       quizState.feedback === 'correct' && opt === activeParticle.quiz[particleQuizIdx].ans ? 'bg-green-500 text-white border-green-500' : 
+                       quizState.feedback === 'incorrect' && opt === activeParticle.quiz[particleQuizIdx].ans ? 'bg-green-500/20 border-green-500 text-green-500' :
+                       quizState.feedback === 'incorrect' && opt !== activeParticle.quiz[particleQuizIdx].ans ? 'opacity-20 grayscale' :
+                       'bg-white dark:bg-neutral-900 border-black/5 hover:border-rose-500 dark:text-neutral-200'
+                     }`}
+                   >
+                     {opt}
+                   </button>
+                 ))}
+              </div>
+           </div>
+         )}
+
+          {/* VIEW: PARTICLE_RESULTS */}
+         {view === 'particle_results' && activeParticle && (
+           <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="flex flex-col items-center text-center max-w-4xl mx-auto">
+              <div className="w-32 h-32 rounded-full bg-rose-500/10 flex items-center justify-center mb-8 border border-rose-500/20 relative">
+                 <FaTrophy className="text-6xl text-rose-500 animate-bounce" />
+                 <motion.div animate={{ rotate: 360 }} transition={{ duration: 10, repeat: Infinity, ease: "linear" }} className="absolute inset-0 border-2 border-dashed border-rose-500/30 rounded-full"></motion.div>
+              </div>
+              
+              <h2 className="text-5xl md:text-7xl font-black mb-4 tracking-tighter">
+                 {quizState.score === 2 ? <span className="text-green-500 uppercase tracking-widest">Mastered!</span> : <span className="text-gray-300">Great Effort</span>}
+              </h2>
+              <p className="text-sm text-gray-400 font-medium mb-12">Particle {activeParticle.label} proficiency test results.</p>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full mb-16">
+                 <div className="p-8 rounded-[2rem] bg-white dark:bg-neutral-900 border border-black/5 shadow-xl flex items-center gap-6">
+                    <div className="w-14 h-14 rounded-2xl bg-orange-100 text-orange-500 flex items-center justify-center flex-shrink-0"><FaStar className="text-2xl" /></div>
+                    <div className="text-left">
+                       <p className="text-[10px] font-black uppercase opacity-30 mb-0.5">Proficiency Score</p>
+                       <p className="text-3xl font-black">{quizState.score} / 2</p>
+                    </div>
+                 </div>
+                 <div className="p-8 rounded-[2rem] bg-white dark:bg-neutral-900 border border-black/5 shadow-xl flex items-center gap-6">
+                    <div className="w-14 h-14 rounded-2xl bg-rose-100 text-rose-500 flex items-center justify-center flex-shrink-0"><FaCheckCircle className="text-2xl" /></div>
+                    <div className="text-left">
+                       <p className="text-[10px] font-black uppercase opacity-30 mb-0.5">Status Update</p>
+                       <p className="text-3xl font-black text-rose-500">{quizState.score === 2 ? 'PARTICLE MASTERED' : 'TRY AGAIN'}</p>
+                    </div>
+                 </div>
+              </div>
+
+              <div className="flex gap-4">
+                 <button onClick={() => setView('particle_master')} className="px-10 py-5 rounded-3xl bg-black dark:bg-white text-white dark:text-black text-[10px] font-black uppercase tracking-[0.3em] hover:scale-105 transition-all shadow-2xl">Particle Master</button>
+                 <button onClick={() => { setParticleQuizIdx(0); setQuizState({ score: 0, history: [], feedback: null }); setView('particle_quiz'); }} className="px-10 py-5 rounded-3xl bg-rose-500 text-white text-[10px] font-black uppercase tracking-[0.3em] hover:scale-105 transition-all shadow-xl shadow-rose-500/20 flex items-center gap-3"><FaRedo className="text-[8px]" /> Retake Test</button>
+              </div>
+           </motion.div>
+         )}
 
         {/* VIEW: RESULTS */}
         {view === 'results' && activeChapter && (

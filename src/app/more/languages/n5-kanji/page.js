@@ -282,6 +282,13 @@ export default function N5KanjiPage() {
       <Navbar />
       <div className="container mx-auto px-6 pt-32 pb-32 relative z-10">
         
+        {/* Back Button */}
+        <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="mb-8">
+           <a href="/more/languages" className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest opacity-40 hover:opacity-100 transition-opacity">
+             <FaChevronLeft /> Back to Languages
+           </a>
+        </motion.div>
+        
         {/* Exam Level Picker View */}
         {mode === 'grid' && (
           <div className="max-w-6xl mx-auto">
