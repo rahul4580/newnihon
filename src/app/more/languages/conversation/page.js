@@ -2,17 +2,22 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Image from 'next/image';
 import Navbar from '../../../../components/Navbar'; // Adjust import if needed based on structure
 import Footer from '../../../../components/Footer';
-import { FaChevronLeft, FaPaperPlane, FaUser, FaCircle } from 'react-icons/fa';
+import { FaChevronLeft, FaPaperPlane, FaUser, FaCircle, FaPaperclip, FaTimes, FaFile, FaImage } from 'react-icons/fa';
 
 export default function ConversationPage() {
   const [username, setUsername] = useState('');
   const [isJoined, setIsJoined] = useState(false);
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState('');
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState('');
   const chatContainerRef = useRef(null);
   const inputRef = useRef(null);
+  const fileInputRef = useRef(null);
 
   // Polling for new messages
   useEffect(() => {
@@ -57,25 +62,86 @@ export default function ConversationPage() {
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
-    if (!inputText.trim()) return;
-
-    const textToSend = inputText;
-    setInputText(''); 
+    
+    if (!inputText.trim() && !selectedFile) return;
+    
+    setUploading(true);
+    setError('');
 
     try {
-      await fetch('/api/chat', {
+      const formData = new FormData();
+      formData.append('user', username);
+      formData.append('text', inputText);
+      
+      if (selectedFile) {
+        formData.append('file', selectedFile);
+      }
+
+      const response = await fetch('/api/chat', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          user: username,
-          text: textToSend,
-        }),
+        body: formData,
       });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to send message');
+      }
+
+      setInputText('');
+      setSelectedFile(null);
       fetchMessages();
       inputRef.current?.focus();
     } catch (error) {
+      setError(error.message);
       console.error('Failed to send message:', error);
+    } finally {
+      setUploading(false);
     }
+  };
+
+  const handleFileSelect = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Check file size (5MB limit)
+      if (file.size > 5 * 1024 * 1024) {
+        setError('File too large. Max size is 5MB.');
+        return;
+      }
+
+      // Check file type
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'application/pdf', 'text/plain'];
+      if (!allowedTypes.includes(file.type)) {
+        setError('Invalid file type. Only images, PDFs, and text files are allowed.');
+        return;
+      }
+
+      setSelectedFile(file);
+      setError('');
+    }
+  };
+
+  const removeSelectedFile = () => {
+    setSelectedFile(null);
+    setError('');
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  const getFileIcon = (fileType) => {
+    if (fileType?.startsWith('image/')) {
+      return <FaImage className="text-blue-500" />;
+    }
+    return <FaFile className="text-gray-500" />;
+  };
+
+  const formatFileSize = (bytes) => {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   };
 
   return (
@@ -193,7 +259,36 @@ export default function ConversationPage() {
                                 : 'bg-neutral-100 dark:bg-neutral-800 text-black dark:text-neutral-200 rounded-tl-none border border-neutral-200 dark:border-neutral-700'
                             }`}
                           >
-                            {msg.text}
+                            {msg.text && <div className="mb-2">{msg.text}</div>}
+                            
+                            {/* File Display */}
+                            {msg.fileUrl && (
+                              <div className="mt-2">
+                                {msg.fileType === 'image' ? (
+                                  <div className="relative max-w-xs">
+                                    <Image 
+                                      src={msg.fileUrl} 
+                                      alt={msg.fileName || 'Image'} 
+                                      width={300}
+                                      height={200}
+                                      className="rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                                      onClick={() => window.open(msg.fileUrl, '_blank')}
+                                    />
+                                  </div>
+                                ) : (
+                                  <div 
+                                    className="flex items-center gap-2 p-2 bg-black/10 dark:bg-white/10 rounded-lg cursor-pointer hover:bg-black/20 dark:hover:bg-white/20 transition-colors"
+                                    onClick={() => window.open(msg.fileUrl, '_blank')}
+                                  >
+                                    {getFileIcon(msg.fileType)}
+                                    <div className="flex-1 min-w-0">
+                                      <div className="text-xs font-medium truncate">{msg.fileName}</div>
+                                      <div className="text-xs opacity-70">Click to open</div>
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                            )}
                           </div>
                           <span className="text-[9px] text-neutral-400 mt-1 px-1 opacity-50">
                             {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
@@ -207,6 +302,33 @@ export default function ConversationPage() {
 
               {/* Input Area */}
               <div className="p-4 bg-gray-50 dark:bg-neutral-900 border-t border-neutral-200 dark:border-neutral-800">
+                {/* Error Display */}
+                {error && (
+                  <div className="mb-2 p-2 bg-red-100 dark:bg-red-900/30 border border-red-300 dark:border-red-700 rounded-lg text-red-700 dark:text-red-300 text-sm">
+                    {error}
+                  </div>
+                )}
+
+                {/* Selected File Preview */}
+                {selectedFile && (
+                  <div className="mb-2 p-2 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 rounded-lg">
+                    <div className="flex items-center gap-2">
+                      {getFileIcon(selectedFile.type)}
+                      <div className="flex-1 min-w-0">
+                        <div className="text-xs font-medium truncate">{selectedFile.name}</div>
+                        <div className="text-xs opacity-70">{formatFileSize(selectedFile.size)}</div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={removeSelectedFile}
+                        className="p-1 hover:bg-red-100 dark:hover:bg-red-900/50 rounded transition-colors"
+                      >
+                        <FaTimes className="text-red-500" />
+                      </button>
+                    </div>
+                  </div>
+                )}
+
                 <form onSubmit={handleSendMessage} className="flex gap-2">
                   <input
                     ref={inputRef}
@@ -215,13 +337,37 @@ export default function ConversationPage() {
                     onChange={(e) => setInputText(e.target.value)}
                     placeholder="Message..."
                     className="flex-grow bg-white dark:bg-black border border-neutral-300 dark:border-neutral-700 text-black dark:text-white px-4 py-3 rounded-xl focus:outline-none focus:border-blue-500 dark:focus:border-red-500 transition-colors placeholder:text-neutral-400"
+                    disabled={uploading}
                   />
+                  
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    onChange={handleFileSelect}
+                    accept="image/*,.pdf,.txt"
+                    className="hidden"
+                    disabled={uploading}
+                  />
+                  
+                  <button 
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="bg-neutral-200 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 p-3 rounded-xl hover:bg-neutral-300 dark:hover:bg-neutral-700 transition-colors disabled:opacity-50"
+                    disabled={uploading}
+                  >
+                    <FaPaperclip />
+                  </button>
+                  
                   <button 
                     type="submit" 
                     className="bg-black dark:bg-white text-white dark:text-black p-3 rounded-xl hover:opacity-80 transition-opacity disabled:opacity-50"
-                    disabled={!inputText.trim()}
+                    disabled={(!inputText.trim() && !selectedFile) || uploading}
                   >
-                    <FaPaperPlane />
+                    {uploading ? (
+                      <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                    ) : (
+                      <FaPaperPlane />
+                    )}
                   </button>
                 </form>
               </div>

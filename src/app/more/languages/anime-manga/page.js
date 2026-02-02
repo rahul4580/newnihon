@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { motion, AnimatePresence } from 'motion/react';
 import Navbar from '../../../../components/Navbar';
 import Footer from '../../../../components/Footer';
@@ -79,7 +80,7 @@ export default function AnimeMangaPage() {
                                 >
                                     {/* Thumbnail */}
                                     <div className="aspect-video bg-black relative overflow-hidden">
-                                         <img src={chapter.thumbnail} alt={chapter.title} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-500 grayscale group-hover:grayscale-0" />
+                                         <Image src={chapter.thumbnail} alt={chapter.title} fill className="object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-500 grayscale group-hover:grayscale-0" />
                                          <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors" />
                                          
                                          <div className="absolute top-2 right-2 px-2 py-1 bg-black/80 text-white rounded text-[10px] font-bold border border-white/10 uppercase tracking-wider">

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { motion, AnimatePresence } from 'motion/react';
 import Navbar from '../../../../components/Navbar';
 import Footer from '../../../../components/Footer';
@@ -142,9 +143,8 @@ export default function ReadingPage() {
                                 <div className={`absolute inset-0 bg-gradient-to-br ${chapter.color} opacity-20 group-hover:opacity-40 blur-xl transition-opacity duration-500 rounded-3xl`} />
                                 <div className="relative bg-white dark:bg-zinc-900 border border-black/5 dark:border-white/10 rounded-3xl flex flex-col shadow-xl overflow-hidden h-full">
                                      {/* Cover Image */}
-                                     {/* eslint-disable-next-line @next/next/no-img-element */}
                                      <div className="h-48 overflow-hidden relative">
-                                         <img src={chapter.coverImage} alt={chapter.title} className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" />
+                                         <Image src={chapter.coverImage} alt={chapter.title} fill className="object-cover transform group-hover:scale-110 transition-transform duration-700" />
                                          <div className="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition-colors" />
                                      </div>
                                      
@@ -190,11 +190,14 @@ export default function ReadingPage() {
                                 transition={{ duration: 0.5 }}
                                 className="relative rounded-[2rem] overflow-hidden shadow-2xl aspect-[4/3] border border-black/10 dark:border-white/10"
                             >
-                                <img 
-                                    src={selectedChapter.steps[activeStepIndex].image} 
-                                    alt={`Step ${activeStepIndex + 1}`} 
-                                    className="w-full h-full object-cover"
-                                />
+                                <div className="relative w-full h-full">
+                                    <Image 
+                                        src={selectedChapter.steps[activeStepIndex].image} 
+                                        alt={`Step ${activeStepIndex + 1}`} 
+                                        fill
+                                        className="object-cover"
+                                    />
+                                </div>
                                 <div className="absolute top-4 left-4 bg-black/50 backdrop-blur-md text-white px-4 py-2 rounded-full font-black uppercase tracking-widest text-xs">
                                     Step {activeStepIndex + 1} / {selectedChapter.steps.length}
                                 </div>

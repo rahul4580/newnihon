@@ -11,7 +11,6 @@ import Footer from '../../../components/Footer';
 
 export default function Languages() {
   // This page is Japanese-only (content is fixed to JP regardless of the site toggle)
-  // eslint-disable-next-line no-unused-vars
   const { language } = useLanguage();
   const t = translations.jp?.more_languages || {};
   const t_jp = t.jp || {};
