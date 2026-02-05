@@ -49,7 +49,7 @@ const ProjectCard = ({ title, category, description, technologies, className }) 
 
 const Projects = () => {
     const { language } = useLanguage();
-    const t = translations[language].projects;
+    const t = translations[language]?.projects || {};
     const container = useRef(null);
 
     useGSAP(() => {
@@ -93,18 +93,18 @@ const Projects = () => {
        <div className="max-w-7xl mx-auto">
            <div className="text-center mb-20">
                <div className={`inline-block border border-black/10 dark:border-white/10 rounded-full px-4 py-2 text-[10px] font-black uppercase tracking-[0.3em] mb-8 ${language === 'jp' ? 'font-noto' : ''}`}>
-                   {t.label}
+                   {t.label || 'Projects'}
                </div>
                <h2 className={`text-5xl md:text-7xl lg:text-8xl font-black mb-8 tracking-tighter leading-[0.9] ${language === 'jp' ? 'font-noto' : ''}`}>
-                    {language === 'en' ? <>Digital Experiences<br />& Data Narratives</> : t.title}
+                    {language === 'en' ? <>Digital Experiences<br />& Data Narratives</> : t.title || 'Projects'}
                </h2>
                <p className={`text-xl md:text-2xl text-gray-500 dark:text-neutral-400 max-w-3xl mx-auto font-medium leading-relaxed ${language === 'jp' ? 'font-noto' : ''}`}>
-                    {t.description}
+                    {t.description || 'Explore my latest projects and creative work'}
                </p>
            </div>
 
            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-6 lg:gap-8">
-                {projects.map((project, index) => (
+                {(projects || []).map((project, index) => (
                     <ProjectCard key={index} {...project} className={language === 'jp' ? 'font-noto' : ''} />
                 ))}
            </div>
@@ -115,7 +115,7 @@ const Projects = () => {
                     whileTap={{ scale: 0.95 }}
                     className={`px-10 py-5 bg-black dark:bg-white text-white dark:text-black font-black text-xs uppercase tracking-[0.3em] rounded-full hover:bg-neutral-800 dark:hover:bg-neutral-200 transition-colors shadow-xl ${language === 'jp' ? 'font-noto' : ''}`}
                 >
-                    {t.explore}
+                    {t.explore || 'Explore More'}
                 </motion.button>
            </div>
        </div>

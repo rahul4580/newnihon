@@ -24,7 +24,7 @@ const BentoCard = ({ children, className, delay = 0, title }) => (
 
 export default function About() {
   const { language } = useLanguage();
-  const t = translations[language].about;
+  const t = translations[language]?.about || {};
   
   return (
     <div className="bg-[#fafafa] dark:bg-black min-h-screen text-black dark:text-white selection:bg-blue-500 selection:text-white transition-colors duration-500 overflow-hidden">
@@ -48,18 +48,18 @@ export default function About() {
             className="inline-block px-5 py-2 rounded-full border border-black/5 dark:border-white/5 mb-10 bg-white dark:bg-neutral-900 shadow-xl"
           >
             <span className="text-[10px] font-black uppercase tracking-[0.2em]">
-              {t.hero_badge}
+              {t.hero_badge || 'About Me'}
             </span>
           </motion.div>
           
           <h1 className={`text-7xl md:text-[9rem] font-black mb-10 leading-[0.85] tracking-tighter ${language === 'jp' ? 'font-noto' : ''}`}>
-            {t.title.split(' ').map((word, i) => (
+            {(t.title || 'About Me').split(' ').map((word, i) => (
               <span key={i} className={i === 1 ? "text-gray-300 dark:text-neutral-800" : ""}>{word} </span>
             ))}
           </h1>
           
           <p className={`text-2xl md:text-3xl text-gray-500 dark:text-neutral-500 max-w-3xl leading-snug font-medium ${language === 'jp' ? 'font-noto' : ''}`}>
-            {t.subtitle}
+            {t.subtitle || 'Passionate developer creating exceptional digital experiences'}
           </p>
         </motion.div>
 
@@ -73,9 +73,9 @@ export default function About() {
             </div>
             
             <div className="relative z-10">
-              <h3 className={`text-4xl md:text-5xl font-black mb-8 max-w-xl leading-tight ${language === 'jp' ? 'font-noto' : ''}`}>{t.intro.title}</h3>
+              <h3 className={`text-4xl md:text-5xl font-black mb-8 max-w-xl leading-tight ${language === 'jp' ? 'font-noto' : ''}`}>{t.intro?.title || 'Hello, I\'m a Developer'}</h3>
               <p className={`text-xl md:text-2xl text-gray-500 dark:text-neutral-400 leading-relaxed font-medium ${language === 'jp' ? 'font-noto' : ''}`}>
-                {t.intro.text}
+                {t.intro?.text || 'I create beautiful, functional web applications with modern technologies.'}
               </p>
             </div>
 
@@ -92,12 +92,12 @@ export default function About() {
             <div className="w-24 h-24 rounded-[2rem] bg-white text-red-500 flex items-center justify-center mb-8 shadow-2xl rotate-3 group-hover:rotate-0 transition-transform">
               <FaGlobe className="text-4xl" />
             </div>
-            <h3 className={`text-2xl font-black mb-4 ${language === 'jp' ? 'font-noto' : ''}`}>{t.language.title}</h3>
+            <h3 className={`text-2xl font-black mb-4 ${language === 'jp' ? 'font-noto' : ''}`}>{t.language?.title || 'Languages'}</h3>
             <span className="inline-block px-4 py-1.5 bg-black/20 backdrop-blur-md rounded-full text-[10px] font-black uppercase tracking-widest mb-4">
-              {t.language.level}
+              {t.language?.level || 'Professional'}
             </span>
             <p className={`text-sm text-white/80 font-medium leading-relaxed ${language === 'jp' ? 'font-noto' : ''}`}>
-              {t.language.text}
+              {t.language?.text || 'Fluent in multiple programming languages and frameworks.'}
             </p>
           </BentoCard>
 
@@ -109,15 +109,15 @@ export default function About() {
              
              <div className="relative z-10">
                <h3 className={`text-3xl font-black mb-8 flex items-center gap-3 ${language === 'jp' ? 'font-noto' : ''}`}>
-                 {t.story.title.toUpperCase()}
+                 {t.story?.title?.toUpperCase() || 'STORY'}
                </h3>
                <p className={`text-lg text-white/60 leading-relaxed mb-10 font-medium ${language === 'jp' ? 'font-noto' : ''}`}>
-                 {t.story.text}
+                 {t.story?.text || 'My journey through development and continuous learning.'}
                </p>
                
                <div className="p-8 rounded-3xl bg-white/5 border border-white/10 group-hover:border-orange-500/30 transition-colors duration-500">
-                  <p className="text-[10px] font-black uppercase tracking-widest text-orange-500 mb-4">{t.story.will_of_d.title}</p>
-                  <p className={`text-xl italic font-serif leading-relaxed ${language === 'jp' ? 'font-noto' : ''}`}>&quot;{t.story.will_of_d.quote.replace(/"/g, '')}&quot;</p>
+                  <p className="text-[10px] font-black uppercase tracking-widest text-orange-500 mb-4">{t.story?.will_of_d?.title || 'Will of D.'}</p>
+                  <p className={`text-xl italic font-serif leading-relaxed ${language === 'jp' ? 'font-noto' : ''}`}>&quot;{(t.story?.will_of_d?.quote || 'Inherited will, the swelling of the great waves, dreams of the people. These are things that cannot be extinguished!').replace(/"/g, '')}&quot;</p>
                   <p className="mt-4 text-[10px] font-black uppercase tracking-widest opacity-30 text-right">— Eiichiro Oda</p>
                </div>
              </div>
@@ -137,9 +137,9 @@ export default function About() {
                    </div>
                 </div>
                 <div>
-                  <h3 className={`text-4xl font-black mb-6 tracking-tighter ${language === 'jp' ? 'font-noto' : ''}`}>{t.goals.title}</h3>
+                  <h3 className={`text-4xl font-black mb-6 tracking-tighter ${language === 'jp' ? 'font-noto' : ''}`}>{t.goals?.title || 'Goals'}</h3>
                   <p className={`text-xl text-white/80 leading-relaxed font-medium ${language === 'jp' ? 'font-noto' : ''}`}>
-                    {t.goals.text}
+                    {t.goals?.text || 'Building innovative solutions and pushing the boundaries of web development.'}
                   </p>
                 </div>
              </div>
@@ -149,7 +149,7 @@ export default function About() {
 
         {/* Skills Quick View */}
         <div className="mt-40 grid md:grid-cols-3 gap-16 max-w-6xl mx-auto">
-          {t.skills_list.map((skill, i) => (
+          {(t.skills_list || ['Frontend Development', 'Backend Architecture', 'Full-Stack Solutions']).map((skill, i) => (
             <motion.div 
               key={i}
               initial={{ opacity: 0, y: 30 }}

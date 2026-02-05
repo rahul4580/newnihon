@@ -1,6 +1,5 @@
 import { Geist, Geist_Mono, Noto_Sans_JP } from "next/font/google";
 import "./globals.css";
-import { ClerkProvider } from "@clerk/nextjs";
 import ClientWrapper from "../components/ClientWrapper";
 
 const geistSans = Geist({
@@ -36,11 +35,7 @@ export const metadata = {
 };
 
 function RootLayout({ children }) {
-  const hasClerkKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY && 
-    process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY.startsWith('pk_') && 
-    !process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY.includes('placeholder');
-
-  const AppContent = () => (
+  return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} ${notoSansJP.variable} antialiased selection:bg-blue-500 selection:text-white`}>
         <ClientWrapper>
@@ -49,16 +44,6 @@ function RootLayout({ children }) {
       </body>
     </html>
   );
-
-  if (hasClerkKey) {
-    return (
-      <ClerkProvider>
-        <AppContent />
-      </ClerkProvider>
-    );
-  }
-
-  return <AppContent />;
 }
 
 export default RootLayout;

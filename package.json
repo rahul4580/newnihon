@@ -9,8 +9,9 @@
     "lint": "npx eslint ."
   },
   "dependencies": {
-    "@clerk/nextjs": "^6.36.10",
     "@gsap/react": "^2.1.2",
+    "@react-pdf-viewer/core": "^3.12.0",
+    "@react-pdf-viewer/default-layout": "^3.12.0",
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.5.0",
     "animejs": "^4.2.0",
@@ -28,9 +29,11 @@
     "next-auth": "^5.0.0-beta.26",
     "nodemailer": "^6.9.16",
     "ogl": "^1.0.11",
+    "pdfjs-dist": "^5.4.624",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "react-icons": "^5.5.0",
+    "react-pdf": "^10.3.0",
     "svix": "^1.84.1",
     "tailwind-merge": "^3.3.1",
     "three": "^0.182.0"

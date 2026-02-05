@@ -46,7 +46,7 @@ const LoveCard = ({ icon: Icon, title, description, index, language }) => {
 
 const WhatILove = () => {
   const { language } = useLanguage();
-  const t = translations[language].philosophy;
+  const t = translations[language]?.philosophy || {};
   const sectionRef = useRef(null);
   const triggerRef = useRef(null);
 
@@ -116,7 +116,7 @@ const WhatILove = () => {
                 <span className="text-gray-300 dark:text-neutral-800">LOVE.</span>
              </h2>
              <p className={`text-xl text-gray-500 dark:text-neutral-500 font-medium max-w-sm ${language === 'jp' ? 'font-noto' : ''}`}>
-                {t.description}
+                {t.description || 'Passionate about creating exceptional digital experiences'}
              </p>
           </div>
           

@@ -7,7 +7,7 @@ import { translations } from '../utils/translations';
 
 function Work() {
     const { language } = useLanguage();
-    const t = translations[language].about.story;
+    const t = translations[language]?.about?.story || {};
 
     return (
         <section
@@ -31,7 +31,7 @@ function Work() {
                 className="inline-block px-4 py-1.5 rounded-full border border-black/5 dark:border-white/10 mb-8 bg-gray-50 dark:bg-neutral-900/50 backdrop-blur-sm"
               >
                 <span className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500 dark:text-neutral-400">
-                  {t.title}
+                  {t.title || 'Work'}
                 </span>
               </motion.div>
 
@@ -46,7 +46,7 @@ function Work() {
                   The journey <span className="text-gray-400 dark:text-neutral-600">isn't just about</span> the destination.
                 </h2>
                 <p className={`text-xl md:text-2xl text-gray-600 dark:text-neutral-400 leading-relaxed mb-16 ${language === 'jp' ? 'font-noto' : ''}`}>
-                  {t.text}
+                  {t.text || 'Every project is a story of innovation, creativity, and continuous learning.'}
                 </p>
               </motion.div>
 
@@ -65,12 +65,12 @@ function Work() {
 
                 <div className="relative z-10">
                   <h3 className="text-sm font-black uppercase tracking-[0.4em] mb-8 text-orange-500 dark:text-orange-400">
-                    {t.will_of_d.title}
+                    {t.will_of_d?.title || 'Will of D.'}
                   </h3>
                   
                   <blockquote className="relative">
                     <p className={`text-2xl md:text-4xl font-bold italic tracking-tight leading-snug mb-6 ${language === 'jp' ? 'font-noto' : ''}`}>
-                      {t.will_of_d.quote}
+                      {t.will_of_d?.quote || 'Inherited will, the swelling of the great waves, dreams of the people. These are things that cannot be extinguished!'}
                     </p>
                     <footer className="text-gray-400 dark:text-neutral-500 text-xs font-bold uppercase tracking-widest">
                       — Eiichiro Oda

@@ -61,7 +61,7 @@ const SkillCard = ({ title, skills, progress, icon: Icon, delay }) => (
 
 const Skills = () => {
   const { language } = useLanguage();
-  const t = translations[language].skills;
+  const t = translations[language]?.skills || {};
 
   return (
     <section id="skills" className="py-32 px-6 md:px-20 bg-[#fafafa] dark:bg-black transition-colors duration-500 relative">
@@ -76,7 +76,7 @@ const Skills = () => {
                <span className="text-gray-300 dark:text-neutral-800">MATRIX.</span>
             </h2>
             <p className={`text-xl text-gray-500 dark:text-neutral-500 font-medium leading-tight ${language === 'jp' ? 'font-noto' : ''}`}>
-               {t.subtitle}
+               {t.subtitle || 'Full-stack development expertise with modern technologies'}
             </p>
           </div>
           
@@ -90,28 +90,28 @@ const Skills = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <SkillCard 
-              title={t.frontend} 
+              title={t.frontend || 'Frontend'} 
               skills={['React', 'Next.js', 'TS', 'Tailwind']}
               progress={95}
               icon={SiReact}
               delay={0.1}
           />
           <SkillCard 
-              title={t.backend}
+              title={t.backend || 'Backend'}
               skills={['Node', 'Express', 'Mongo', 'SQL']}
               progress={90}
               icon={SiNodedotjs}
               delay={0.2}
           />
           <SkillCard 
-              title={t.data}
+              title={t.data || 'Data'}
               skills={['Python', 'Pandas', 'NumPy', 'D3']}
               progress={85}
               icon={SiPython}
               delay={0.3}
           />
           <SkillCard 
-              title={t.tools}
+              title={t.tools || 'Tools'}
               skills={['Docker', 'Git', 'Vercel', 'Figma']}
               progress={80}
               icon={SiDocker}
@@ -132,12 +132,12 @@ const Skills = () => {
                 <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
                 <span className="text-[10px] font-black uppercase tracking-widest opacity-60">Status: Battle Tested</span>
              </div>
-             <h3 className={`text-4xl md:text-5xl font-black mb-2 tracking-tighter ${language === 'jp' ? 'font-noto' : ''}`}>{t.results.toUpperCase()}</h3>
-             <p className={`text-white/60 dark:text-black/60 font-medium ${language === 'jp' ? 'font-noto' : ''}`}>{t.results_desc}</p>
+             <h3 className={`text-4xl md:text-5xl font-black mb-2 tracking-tighter ${language === 'jp' ? 'font-noto' : ''}`}>{t.results?.toUpperCase() || 'RESULTS'}</h3>
+             <p className={`text-white/60 dark:text-black/60 font-medium ${language === 'jp' ? 'font-noto' : ''}`}>{t.results_desc || 'Delivering exceptional results across all projects'}</p>
           </div>
 
           <button className={`relative z-10 px-10 py-5 bg-white text-black dark:bg-black dark:text-white font-black text-xs uppercase tracking-[0.3em] rounded-full hover:scale-105 transition-transform ${language === 'jp' ? 'font-noto' : ''}`}>
-             {t.view_projects}
+             {t.view_projects || 'View Projects'}
           </button>
         </motion.div>
       </div>

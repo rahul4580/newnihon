@@ -24,7 +24,7 @@ const BlueprintNode = ({ title, capabilities, icon: Icon, index }) => (
     </div>
 
     <div className="space-y-8 relative">
-       {capabilities.map((cap, i) => (
+       {(capabilities || []).map((cap, i) => (
          <div key={i} className="relative pl-8 group/item">
             <div className="absolute left-0 top-3 w-2 h-2 rounded-full border border-black/20 dark:border-white/20 group-hover/item:bg-black dark:group-hover/item:bg-white transition-colors"></div>
             <div className="absolute left-[3px] top-5 bottom-[-20px] w-px bg-black/5 dark:bg-white/5 last:hidden"></div>
@@ -46,13 +46,13 @@ const BlueprintNode = ({ title, capabilities, icon: Icon, index }) => (
 
 const WhatICanDo = () => {
   const { language } = useLanguage();
-  const t = translations[language].whatICanDo;
+  const t = translations[language]?.whatICanDo || {};
 
   const stack = [
-    { title: 'MongoDB', icon: SiMongodb, capabilities: t.mongodb },
-    { title: 'Express', icon: SiNodedotjs, capabilities: t.express },
-    { title: 'React', icon: SiReact, capabilities: t.react },
-    { title: 'Node', icon: SiNodedotjs, capabilities: t.node }
+    { title: 'MongoDB', icon: SiMongodb, capabilities: t.mongodb || ['Database Design', 'Indexing', 'Aggregation'] },
+    { title: 'Express', icon: SiNodedotjs, capabilities: t.express || ['REST APIs', 'Middleware', 'Authentication'] },
+    { title: 'React', icon: SiReact, capabilities: t.react || ['Components', 'Hooks', 'State Management'] },
+    { title: 'Node', icon: SiNodedotjs, capabilities: t.node || ['Runtime', 'Modules', 'Event Loop'] }
   ];
 
   return (
@@ -71,7 +71,7 @@ const WhatICanDo = () => {
              <span className="text-gray-300 dark:text-neutral-800">SYSTEMS.</span>
           </h2>
           <p className={`text-2xl text-gray-500 dark:text-neutral-500 font-medium max-w-3xl leading-snug ${language === 'jp' ? 'font-noto' : ''}`}>
-             {t.subtitle}
+             {t.subtitle || 'Full-stack development with modern technologies and best practices'}
           </p>
         </div>
 
@@ -83,8 +83,8 @@ const WhatICanDo = () => {
 
         <div className="mt-32 flex flex-col md:flex-row items-center justify-between gap-12 py-20 border-t border-black/5 dark:border-white/5">
            <div className="max-w-xl">
-              <h3 className={`text-5xl font-black mb-6 tracking-tighter ${language === 'jp' ? 'font-noto' : ''}`}>{t.cta_title}</h3>
-              <p className={`text-xl text-gray-500 dark:text-neutral-500 font-medium ${language === 'jp' ? 'font-noto' : ''}`}>{t.cta_description}</p>
+              <h3 className={`text-5xl font-black mb-6 tracking-tighter ${language === 'jp' ? 'font-noto' : ''}`}>{t.cta_title || 'Ready to Build Something Amazing?'}</h3>
+              <p className={`text-xl text-gray-500 dark:text-neutral-500 font-medium ${language === 'jp' ? 'font-noto' : ''}`}>{t.cta_description || 'Let\'s collaborate and bring your ideas to life with cutting-edge technology.'}</p>
            </div>
            
            <motion.button
@@ -92,7 +92,7 @@ const WhatICanDo = () => {
               whileTap={{ scale: 0.95 }}
               className={`px-12 py-6 bg-black text-white dark:bg-white dark:text-black font-black text-xs uppercase tracking-[0.3em] rounded-full shadow-2xl transition-all ${language === 'jp' ? 'font-noto' : ''}`}
            >
-              {t.cta_button}
+              {t.cta_button || 'Get In Touch'}
            </motion.button>
         </div>
       </div>

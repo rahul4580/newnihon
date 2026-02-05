@@ -93,15 +93,15 @@ function Services() {
             <div className="max-w-7xl mx-auto">
                 <div className="mb-24 text-center">
                     <div className="inline-block px-4 py-2 bg-blue-500 text-white rounded-full text-[10px] font-black uppercase tracking-[0.3em] mb-8">
-                        {t.label}
+                        {t.label || 'Services'}
                     </div>
                     <h2 className={`text-6xl md:text-8xl font-black tracking-tighter dark:text-white uppercase ${language === 'jp' ? 'font-noto' : ''}`}>
                         {language === 'en' ? (
                           <>
-                            {t.title.split(' ')[0]}<br/>
-                            <span className="text-gray-300 dark:text-neutral-800">{t.title.split(' ')[1]}</span>
+                            {(t.title || 'Services').split(' ')[0]}<br/>
+                            <span className="text-gray-300 dark:text-neutral-800">{(t.title || 'Services').split(' ')[1] || ''}</span>
                           </>
-                        ) : t.title}
+                        ) : t.title || 'Services'}
                     </h2>
                 </div>
                 

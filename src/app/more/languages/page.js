@@ -107,7 +107,7 @@ export default function Languages() {
                 { label: 'N5 Kanji', href: '/more/languages/n5-kanji' },
                 { label: 'Grammar', href: '/more/languages/grammar' },
                 { label: 'Vocabulary', href: '/more/languages/vocabulary' },
-                { label: 'Listening', href: '/more/languages/listening' },
+                { label: 'Nihon Bot', href: '/more/languages/listening' },
                 { label: 'Stories / Reading', href: '/more/languages/jlpt-prep' },
                 { label: 'Anime & Manga', href: '/more/languages/anime-manga' },
                 { label: 'Conversation', href: '/more/languages/conversation' },
@@ -153,3 +153,6 @@ export default function Languages() {
     </div>
   );
 }
+
+
+

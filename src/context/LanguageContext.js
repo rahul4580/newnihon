@@ -18,6 +18,7 @@ export const LanguageProvider = ({ children }) => {
   const toggleLanguage = (lang) => {
     // If a specific language is provided, use it; otherwise toggle
     const newLang = lang ? lang : (language === 'en' ? 'jp' : 'en');
+    console.log('Toggling language from', language, 'to', newLang);
     setLanguage(newLang);
     localStorage.setItem('language', newLang);
   };

@@ -41,19 +41,19 @@ const BlueprintNode = ({ title, capabilities, icon: Icon, index }) => (
 
 const DataAnalysisCapabilities = () => {
   const { language } = useLanguage();
-  const t = translations[language].dataAnalysis;
+  const t = translations[language]?.dataAnalysis || {};
 
   const dataStack = [
-    { title: 'Python', icon: SiPython, capabilities: t.python },
-    { title: 'Databases', icon: SiMysql, capabilities: t.sql },
-    { title: 'Visualization', icon: SiTableau, capabilities: t.visualization },
-    { title: 'Modeling', icon: SiPandas, capabilities: t.modeling }
+    { title: 'Python', icon: SiPython, capabilities: t.python || ['Data Processing', 'Statistical Analysis', 'Machine Learning'] },
+    { title: 'Databases', icon: SiMysql, capabilities: t.sql || ['SQL Queries', 'Database Design', 'Data Mining'] },
+    { title: 'Visualization', icon: SiTableau, capabilities: t.visualization || ['Charts', 'Dashboards', 'Interactive Reports'] },
+    { title: 'Modeling', icon: SiPandas, capabilities: t.modeling || ['Predictive Models', 'Statistical Modeling', 'Data Science'] }
   ];
 
   return (
-    <section id="data-analysis" className="py-32 px-6 md:px-20 bg-[#fafafa] dark:bg-black transition-colors duration-500 overflow-hidden relative">
+    <section id="data-analysis" className="py-20 px-6 md:px-20 bg-[#fafafa] dark:bg-black transition-colors duration-500 overflow-hidden relative">
       <div className="max-w-7xl mx-auto">
-        <div className="mb-32">
+        <div className="mb-20">
           <motion.div 
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -61,12 +61,12 @@ const DataAnalysisCapabilities = () => {
           >
              Data Science
           </motion.div>
-          <h2 className={`text-6xl md:text-[10rem] font-black leading-[0.8] tracking-tighter mb-10 ${language === 'jp' ? 'font-noto' : ''}`}>
+          <h2 className={`text-5xl md:text-7xl lg:text-8xl font-black leading-[0.8] tracking-tighter mb-10 ${language === 'jp' ? 'font-noto' : ''}`}>
              ANALYTIC<br/>
              <span className="text-gray-300 dark:text-neutral-800">POWER.</span>
           </h2>
           <p className={`text-2xl text-gray-400 dark:text-neutral-500 font-medium max-w-3xl leading-snug ${language === 'jp' ? 'font-noto' : ''}`}>
-             {t.subtitle}
+             {t.subtitle || 'Transforming raw data into actionable insights through advanced analytics and visualization'}
           </p>
         </div>
 
@@ -76,17 +76,17 @@ const DataAnalysisCapabilities = () => {
           ))}
         </div>
 
-        <div className="mt-32 p-12 bg-white dark:bg-neutral-900 border border-black/5 dark:border-white/5 rounded-[4rem] flex flex-col md:flex-row justify-between items-center gap-12 shadow-2xl">
+        <div className="mt-20 p-12 bg-white dark:bg-neutral-900 border border-black/5 dark:border-white/5 rounded-[4rem] flex flex-col md:flex-row justify-between items-center gap-12 shadow-2xl">
            <div className="max-w-xl">
-              <h3 className={`text-4xl font-black mb-4 tracking-tighter ${language === 'jp' ? 'font-noto' : ''}`}>{t.cta_title}</h3>
-              <p className={`text-lg text-gray-500 dark:text-neutral-500 font-medium ${language === 'jp' ? 'font-noto' : ''}`}>{t.cta_description}</p>
+              <h3 className={`text-4xl font-black mb-4 tracking-tighter ${language === 'jp' ? 'font-noto' : ''}`}>{t.cta_title || 'Need Data Analysis?'}</h3>
+              <p className={`text-lg text-gray-500 dark:text-neutral-500 font-medium ${language === 'jp' ? 'font-noto' : ''}`}>{t.cta_description || 'Let\'s transform your data into powerful insights and drive informed decisions.'}</p>
            </div>
            
            <motion.button
               whileHover={{ scale: 1.05 }}
               className={`px-12 py-6 bg-blue-500 text-white font-black text-xs uppercase tracking-[0.3em] rounded-full shadow-2xl shadow-blue-500/20 transition-all ${language === 'jp' ? 'font-noto' : ''}`}
            >
-              {t.cta_button}
+              {t.cta_button || 'Get Started'}
            </motion.button>
         </div>
       </div>

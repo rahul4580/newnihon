@@ -9,7 +9,7 @@ import { FaGithub, FaLinkedin, FaArrowRight } from 'react-icons/fa';
 
 export default function Contact() {
   const { language } = useLanguage();
-  const t = translations[language].contact;
+  const t = translations[language]?.contact || {};
   const [formStatus, setFormStatus] = useState('');
 
   async function handleSubmit(event) {

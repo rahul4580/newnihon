@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'motion/react';
@@ -5,12 +7,11 @@ import { useLanguage } from '../context/LanguageContext';
 import { useTheme } from '../context/ThemeContext';
 import { translations } from '../utils/translations';
 import { FaSun, FaMoon, FaBars, FaTimes } from 'react-icons/fa';
-import { SignedIn, SignedOut, UserButton, SignInButton } from "@clerk/nextjs";
 
 const Navbar = () => {
   const { language, toggleLanguage } = useLanguage();
   const { theme, toggleTheme } = useTheme();
-  const t = translations[language].nav;
+  const t = translations[language]?.nav || {};
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -38,9 +39,9 @@ const Navbar = () => {
   }, [isMobileMenuOpen]);
 
   const links = [
-    { name: t.home, href: '/' },
-    { name: t.about, href: '/about' },
-    { name: t.more, href: '/more' },
+    { name: t.home || 'Home', href: '/' },
+    { name: t.about || 'About', href: '/about' },
+    { name: t.more || 'More', href: '/more' },
   ];
 
   return (
@@ -93,74 +94,45 @@ const Navbar = () => {
         
         {/* Actions */}
         <div className="flex items-center gap-3 md:gap-6">
-          <div className="hidden md:flex items-center gap-6">
-              {typeof window !== 'undefined' && process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY && 
-               process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY.startsWith('pk_') && 
-               !process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY.includes('placeholder') ? (
-                <>
-                  <SignedIn>
-                    <UserButton appearance={{
-                      elements: {
-                        userButtonAvatarBox: "w-10 h-10 rounded-xl",
-                      }
-                    }} />
-                  </SignedIn>
-                  <SignedOut>
-                    <SignInButton mode="modal">
-                      <button className={`text-[10px] font-black uppercase tracking-[0.3em] px-6 py-3 rounded-xl border transition-all ${
-                        isScrolled || theme === 'dark' 
-                          ? 'border-black/10 text-black hover:bg-black hover:text-white dark:border-white/10 dark:text-white dark:hover:bg-white dark:hover:text-black' 
-                          : 'border-white/20 text-white hover:bg-white hover:text-black'
-                      } ${isScrolled ? '' : 'mix-blend-difference'}`}>
-                        Access
-                      </button>
-                    </SignInButton>
-                  </SignedOut>
-                </>
-              ) : null}
-
-              <div className="w-px h-6 bg-black/10 dark:bg-white/10"></div>
-
-              <div className="flex gap-4">
-                <button
-                    onClick={() => toggleLanguage()}
-                    aria-label="Toggle language"
-                    className={`text-[10px] font-black uppercase tracking-widest w-10 h-10 flex items-center justify-center rounded-full transition-all border ${
-                      isScrolled
-                        ? 'border-black/10 dark:border-white/10 text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/5'
-                        : 'border-black/10 dark:border-white/10 text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/5'
-                    }`}
-                >
-                    {language === 'en' ? 'JP' : 'EN'}
-                </button>
-
-                <button
-                    onClick={() => toggleTheme()}
-                    className={`w-10 h-10 flex items-center justify-center rounded-full border transition-all ${
-                      isScrolled
-                        ? 'border-black/10 dark:border-white/10 text-black dark:text-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black'
-                        : 'border-black/10 dark:border-white/10 text-black dark:text-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black'
-                    }`}
-                    aria-label="Toggle Theme"
-                >
-                    {theme === 'dark' ? <FaSun className="text-sm" /> : <FaMoon className="text-sm" />}
-                </button>
-              </div>
+          <div className="hidden md:flex items-center gap-4">
+            <button
+              onClick={() => {
+                console.log('Language toggle clicked, current language:', language);
+                toggleLanguage();
+              }}
+              className={`text-[10px] font-black uppercase tracking-[0.3em] px-4 py-2 rounded-lg transition-all ${
+                isScrolled || theme === 'dark' 
+                  ? 'border border-black/10 text-black hover:bg-black hover:text-white dark:border-white/10 dark:text-white dark:hover:bg-white dark:hover:text-black' 
+                  : 'border border-white/20 text-white hover:bg-white hover:text-black dark:border-black/20 dark:text-black dark:hover:bg-black dark:hover:text-white'
+              } ${isScrolled ? '' : 'mix-blend-difference'}`}
+            >
+              {language === 'en' ? 'JP' : 'EN'}
+            </button>
+            <button
+              onClick={toggleTheme}
+              className={`p-3 rounded-xl transition-all ${
+                isScrolled || theme === 'dark' 
+                  ? 'border border-black/10 text-black hover:bg-black hover:text-white dark:border-white/10 dark:text-white dark:hover:bg-white dark:hover:text-black' 
+                  : 'border border-white/20 text-white hover:bg-white hover:text-black dark:border-black/20 dark:text-black dark:hover:bg-black dark:hover:text-white'
+              } ${isScrolled ? '' : 'mix-blend-difference'}`}
+            >
+              {theme === 'dark' ? <FaSun className="w-4 h-4" /> : <FaMoon className="w-4 h-4" />}
+            </button>
           </div>
-
-          <button
-            type="button"
-            onClick={() => setIsMobileMenuOpen(true)}
-            aria-label="Open menu"
-            className={`md:hidden w-10 h-10 flex items-center justify-center rounded-full border transition-all ${
-              isScrolled
-                ? 'border-black/10 dark:border-white/10 text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/5'
-                : 'border-black/10 dark:border-white/10 text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/5'
-            }`}
-          >
-            <FaBars className="text-sm" />
-          </button>
         </div>
+
+        <button
+          type="button"
+          onClick={() => setIsMobileMenuOpen(true)}
+          aria-label="Open menu"
+          className={`md:hidden w-10 h-10 flex items-center justify-center rounded-full border transition-all ${
+            isScrolled
+              ? 'border-black/10 dark:border-white/10 text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/5'
+              : 'border-black/10 dark:border-white/10 text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/5'
+          }`}
+        >
+          <FaBars className="text-sm" />
+        </button>
       </div>
 
       <AnimatePresence>
@@ -234,27 +206,6 @@ const Navbar = () => {
                       {theme === 'dark' ? <FaSun className="text-sm" /> : <FaMoon className="text-sm" />}
                   </button>
                 </div>
-
-                {typeof window !== 'undefined' && process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY &&
-                 process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY.startsWith('pk_') &&
-                 !process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY.includes('placeholder') ? (
-                  <div className="flex items-center gap-4">
-                    <SignedIn>
-                      <UserButton appearance={{
-                        elements: {
-                          userButtonAvatarBox: "w-10 h-10 rounded-xl",
-                        }
-                      }} />
-                    </SignedIn>
-                    <SignedOut>
-                      <SignInButton mode="modal">
-                        <button className="text-[10px] font-black uppercase tracking-[0.3em] px-6 py-3 rounded-xl border transition-all border-black/10 text-black hover:bg-black hover:text-white dark:border-white/10 dark:text-white dark:hover:bg-white dark:hover:text-black">
-                          Access
-                        </button>
-                      </SignInButton>
-                    </SignedOut>
-                  </div>
-                ) : null}
               </div>
             </motion.div>
           </motion.div>

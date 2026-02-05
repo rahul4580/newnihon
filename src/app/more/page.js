@@ -34,11 +34,11 @@ const BentoCard = ({ children, className, delay = 0, href }) => {
 
 export default function More() {
   const { language } = useLanguage();
-  const t = translations[language].more;
+  const t = translations[language]?.more || {};
   // Fallback if translations aren't loaded yet for new keys
-  const t_lang = translations[language].more_languages || { title: "Languages", subtitle: "Connecting worlds" };
-  const t_books = translations[language].more_books || { title: "Books", subtitle: "Reading list" };
-  const t_arts = translations[language].more_articles || { title: "Articles", subtitle: "Thoughts & Blogs" };
+  const t_lang = translations[language]?.more_languages || { title: "Languages", subtitle: "Connecting worlds" };
+  const t_books = translations[language]?.more_books || { title: "Books", subtitle: "Reading list" };
+  const t_arts = translations[language]?.more_articles || { title: "Articles", subtitle: "Thoughts & Blogs" };
 
   const containerRef = useRef(null);
   
@@ -55,26 +55,26 @@ export default function More() {
            className="inline-block px-4 py-2 rounded-full border border-black/10 dark:border-white/10 mb-6 bg-gray-100 dark:bg-neutral-900"
          >
            <span className="text-sm font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400">
-             {t.hero_badge}
+             {t.hero_badge || 'Explore More'}
            </span>
          </motion.div>
         
         <motion.h1 
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
           className={`text-7xl md:text-[8rem] lg:text-[9.5rem] font-black mb-10 leading-[0.85] tracking-tighter ${language === 'jp' ? 'font-noto' : ''}`}
         >
-          {t.title}
+          {t.title || 'More'}
         </motion.h1>
          
          <motion.p 
-           initial={{ opacity: 0, y: 20 }}
+           initial={{ opacity: 0, y: 30 }}
            animate={{ opacity: 1, y: 0 }}
            transition={{ duration: 0.8, delay: 0.4 }}
            className={`text-2xl md:text-3xl text-gray-600 dark:text-neutral-400 max-w-3xl mx-auto leading-relaxed ${language === 'jp' ? 'font-noto' : ''}`}
          >
-           {t.subtitle}
+           {t.subtitle || 'Discover more content, resources, and insights'}
          </motion.p>
       </div>
 

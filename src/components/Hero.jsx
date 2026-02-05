@@ -10,7 +10,7 @@ import Link from 'next/link';
 
 const Hero = () => {
   const { language } = useLanguage();
-  const t = translations[language].hero;
+  const t = translations[language]?.hero || {};
 
   return (
     <section className="min-h-screen flex flex-col items-center justify-center px-8 md:px-20 pt-24 pb-12 bg-white dark:bg-black text-black dark:text-white relative overflow-hidden transition-colors duration-500">
