@@ -2,7 +2,7 @@
 
 import React, { useState, useCallback, useEffect } from 'react';
 import { FaTimes, FaSearchPlus, FaSearchMinus, FaSync, FaDownload, FaTrash, FaEdit } from 'react-icons/fa';
-import { addNote, getNotes, subscribeToNotes, updateNote, deleteNote } from '../lib/firebase';
+import { addNote, getNotes, subscribeToNotes, updateNote, deleteNote } from '@/lib/firebase';
 
 const BookReaderSimple = ({ bookUrl, bookTitle, bookId, onClose }) => {
   // Demo user - no Clerk needed

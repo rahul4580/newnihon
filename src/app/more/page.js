@@ -6,7 +6,7 @@ import { useLanguage } from '../../context/LanguageContext';
 import { translations } from '../../utils/translations';
 import Navbar from '../../components/Navbar';
 import Link from 'next/link';
-import { FaBookOpen, FaPenFancy, FaLanguage } from 'react-icons/fa';
+import { FaBookOpen, FaPenFancy, FaLanguage, FaRegStickyNote } from 'react-icons/fa';
 import Footer from '../../components/Footer';
 
 const BentoCard = ({ children, className, delay = 0, href }) => {
@@ -39,6 +39,7 @@ export default function More() {
   const t_lang = translations[language]?.more_languages || { title: "Languages", subtitle: "Connecting worlds" };
   const t_books = translations[language]?.more_books || { title: "Books", subtitle: "Reading list" };
   const t_arts = translations[language]?.more_articles || { title: "Articles", subtitle: "Thoughts & Blogs" };
+  const t_notes = translations[language]?.more_notes || { title: "Notes", subtitle: "Notion-style workspace" };
 
   const containerRef = useRef(null);
   
@@ -125,6 +126,21 @@ export default function More() {
              </div>
              <div className="relative z-10 mt-auto">
                 <div className="inline-block border-b border-black dark:border-white pb-1 text-xs md:text-sm font-black tracking-[0.2em] uppercase">Latest: 2026/01</div>
+             </div>
+          </BentoCard>
+
+          <BentoCard href="/more/notion" delay={0.4} className="min-h-[360px] flex flex-col justify-between hover:bg-purple-50 dark:hover:bg-purple-950/20 md:col-span-3">
+             <div className="absolute -top-8 -right-4 text-[7rem] md:text-[9rem] text-gray-100 dark:text-neutral-800 rotate-6 group-hover:rotate-0 transition-transform duration-500">
+               <FaRegStickyNote />
+             </div>
+             <div className="relative z-10 max-w-3xl">
+               <h3 className={`text-3xl md:text-5xl font-black mb-3 tracking-tight ${language === 'jp' ? 'font-noto' : ''}`}>{t_notes.title}</h3>
+               <p className={`text-base md:text-lg text-gray-500 dark:text-gray-400 ${language === 'jp' ? 'font-noto' : ''}`}>{t_notes.subtitle}</p>
+             </div>
+             <div className="flex gap-3 relative z-10 mt-4">
+                <span className="px-4 py-2 bg-black text-white dark:bg-white dark:text-black rounded-full text-xs font-black tracking-[0.15em]">PAGES</span>
+                <span className="px-4 py-2 bg-gray-200 dark:bg-neutral-800 rounded-full text-xs font-black tracking-[0.15em]">AUTO-SAVE</span>
+                <span className="px-4 py-2 bg-gray-200 dark:bg-neutral-800 rounded-full text-xs font-black tracking-[0.15em]">FIREBASE</span>
              </div>
           </BentoCard>
 

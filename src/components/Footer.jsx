@@ -33,7 +33,7 @@ export default function Footer() {
       {/* Massive Background Marquee */}
       <div className="absolute top-0 left-0 w-full overflow-hidden opacity-[0.02] pointer-events-none select-none py-10">
         <h1 className="text-[30vw] font-black whitespace-nowrap leading-none uppercase tracking-tighter">
-          RAHUL // SYSTEM // RAHUL // SYSTEM //
+          DINAKRAMAM // DINAKRAMAM //
         </h1>
       </div>
 

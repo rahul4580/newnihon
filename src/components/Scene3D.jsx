@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef } from 'react';
+import React, { useRef, Suspense } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Float, Stars, TorusKnot, Environment } from '@react-three/drei';
 
@@ -9,9 +9,11 @@ function MovingShape() {
 
   useFrame((state) => {
     const time = state.clock.getElapsedTime();
-    meshRef.current.rotation.x = time * 0.2;
-    meshRef.current.rotation.y = time * 0.3;
-    meshRef.current.position.y = Math.sin(time) * 0.1;
+    if (meshRef.current) {
+      meshRef.current.rotation.x = time * 0.2;
+      meshRef.current.rotation.y = time * 0.3;
+      meshRef.current.position.y = Math.sin(time) * 0.1;
+    }
   });
 
   return (
@@ -33,11 +35,13 @@ export default function Scene3D() {
   return (
     <div className="absolute inset-0 z-0 pointer-events-none">
       <Canvas camera={{ position: [0, 0, 5], fov: 45 }}>
-        <Environment preset="city" />
-        <ambientLight intensity={0.5} />
-        <pointLight position={[10, 10, 10]} intensity={1} />
-        <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
-        <MovingShape />
+        <Suspense fallback={null}>
+          <Environment preset="city" />
+          <ambientLight intensity={0.5} />
+          <pointLight position={[10, 10, 10]} intensity={1} />
+          <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
+          <MovingShape />
+        </Suspense>
       </Canvas>
     </div>
   );

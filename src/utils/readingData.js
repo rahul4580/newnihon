@@ -103,5 +103,100 @@ export const READING_DATA = [
         answer: 0 // Index of correct answer "八時"
       }
     ]
+  },
+  {
+    id: 2,
+    title: "Chapter 2: University Life",
+    jpTitle: "第2課: 学校 (Gakkou)",
+    description: "Follow Maria to the university and learn about her studies.",
+    level: "N5",
+    color: "from-blue-400 to-indigo-500",
+    coverImage: "/reading/ch2/ChatGPT%20Image%20Feb%205,%202026,%2003_02_09%20PM.png",
+    steps: [
+      {
+        id: 1,
+        image: "/reading/ch2/ChatGPT%20Image%20Feb%205,%202026,%2003_02_09%20PM.png",
+        text: "マリアさんは　学生です。",
+        translation: "Maria is a student.",
+        grammarPoint: "～は 学生です (Is a student)",
+        words: [
+          { jp: "マリアさん", romaji: "Maria-san", en: "Maria", type: "noun" },
+          { jp: "は", romaji: "wa", en: "topic marker", type: "particle" },
+          { jp: "学生", romaji: "gakusei", en: "student", type: "noun" },
+          { jp: "です", romaji: "desu", en: "to be/is", type: "verb" }
+        ]
+      },
+      {
+        id: 2,
+        image: "/reading/ch2/ChatGPT%20Image%20Feb%205,%202026,%2003_02_13%20PM.png",
+        text: "大学で　日本語を　勉強します。",
+        translation: "She studies Japanese at the university.",
+        grammarPoint: "～で 勉強します (Study at...)",
+        words: [
+          { jp: "大学", romaji: "daigaku", en: "university", type: "noun" },
+          { jp: "で", romaji: "de", en: "at (place of action)", type: "particle" },
+          { jp: "日本語", romaji: "nihongo", en: "Japanese language", type: "noun" },
+          { jp: "を", romaji: "wo", en: "object marker", type: "particle" },
+          { jp: "勉強します", romaji: "benkyou shimasu", en: "study", type: "verb" }
+        ]
+      },
+      {
+        id: 3,
+        image: "/reading/ch2/ChatGPT%20Image%20Feb%205,%202026,%2003_02_28%20PM.png",
+        text: "月曜日から　金曜日まで　クラスに　行きます。",
+        translation: "She goes to class from Monday to Friday.",
+        grammarPoint: "～から ～まで (From... until...)",
+        words: [
+          { jp: "月曜日", romaji: "getsuyoubi", en: "Monday", type: "noun" },
+          { jp: "から", romaji: "kara", en: "from", type: "particle" },
+          { jp: "金曜日", romaji: "kinyoubi", en: "Friday", type: "noun" },
+          { jp: "まで", romaji: "made", en: "until", type: "particle" },
+          { jp: "クラス", romaji: "kurasu", en: "class", type: "noun" },
+          { jp: "に", romaji: "ni", en: "to (destination)", type: "particle" },
+          { jp: "行きます", romaji: "ikimasu", en: "go", type: "verb" }
+        ]
+      },
+      {
+        id: 4,
+        image: "/reading/ch2/ChatGPT%20Image%20Feb%205,%202026,%2003_02_31%20PM.png",
+        text: "日本語は　少し　難しいですが、頑張ります。",
+        translation: "Japanese is a bit difficult, but I'll do my best.",
+        grammarPoint: "～ですが (Difficult, but...)",
+        words: [
+          { jp: "日本語", romaji: "nihongo", en: "Japanese language", type: "noun" },
+          { jp: "は", romaji: "wa", en: "topic marker", type: "particle" },
+          { jp: "少し", romaji: "sukoshi", en: "a little", type: "adverb" },
+          { jp: "難しい", romaji: "muzukashii", en: "difficult", type: "adjective" },
+          { jp: "ですが", romaji: "desuga", en: "but/however", type: "conjunction" },
+          { jp: "頑張ります", romaji: "ganbarimasu", en: "do one's best", type: "verb" }
+        ]
+      }
+    ],
+    quiz: [
+      {
+        question: "マリアさんは　何ですか。",
+        meaning: "What is Maria?",
+        options: ["先生", "学生", "田中さん", "大学"],
+        answer: 1 // 学生
+      },
+      {
+        question: "マリアさんは　どこで　勉強しますか。",
+        meaning: "Where does Maria study?",
+        options: ["家", "クラス", "大学", "仕事"],
+        answer: 2 // 大学
+      },
+      {
+        question: "マリアさんは　月曜日から　いつまで　クラスに　行きますか。",
+        meaning: "Until when does Maria go to class from Monday?",
+        options: ["火曜日", "水曜日", "木曜日", "金曜日"],
+        answer: 3 // 金曜日
+      },
+      {
+        question: "日本語は　どうですか。",
+        meaning: "How is Japanese?",
+        options: ["簡単です", "難しいです", "面白いです", "静かです"],
+        answer: 1 // 難しいです
+      }
+    ]
   }
 ];

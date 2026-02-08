@@ -1,5 +1,7 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, addDoc, getDocs, query, orderBy, where, doc, updateDoc, deleteDoc, serverTimestamp, onSnapshot } from 'firebase/firestore';
+import { getFirestore, enableIndexedDbPersistence, collection, addDoc, getDoc, getDocs, query, orderBy, where, doc, updateDoc, deleteDoc, setDoc, serverTimestamp, onSnapshot, arrayUnion, arrayRemove, increment } from 'firebase/firestore';
+import { getStorage, ref, uploadBytes, uploadBytesResumable, getDownloadURL, deleteObject } from 'firebase/storage';
+import { getAuth, signInAnonymously, updateProfile } from 'firebase/auth';
 
 const firebaseConfig = {
   apiKey: "AIzaSyDiWYxNNDEnytSjry3DXFzXRcyNaTyTqzg",
@@ -11,12 +13,168 @@ const firebaseConfig = {
   measurementId: "G-4F699J6CKY"
 };
 
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+export const db = getFirestore(app);
+export const storage = getStorage(app);
+export const auth = getAuth(app);
+
+if (typeof window !== 'undefined') {
+  enableIndexedDbPersistence(db).catch((err) => {
+    if (err?.code === 'failed-precondition') {
+      console.warn('Firestore persistence not enabled (multiple tabs).');
+      return;
+    }
+    if (err?.code === 'unimplemented') {
+      console.warn('Firestore persistence not supported in this browser/environment.');
+      return;
+    }
+    console.warn('Firestore persistence enable failed:', err);
+  });
+}
+
+const isOfflineFirestoreError = (error) => {
+  const code = error?.code || '';
+  const message = String(error?.message || '').toLowerCase();
+  return code === 'unavailable' || message.includes('client is offline');
+};
+
+let signInPromise = null;
+
+const ensureSignedIn = async () => {
+  if (auth.currentUser) return auth.currentUser;
+  if (signInPromise) return signInPromise;
+
+  signInPromise = (async () => {
+    try {
+      const cred = await signInAnonymously(auth);
+      return cred.user;
+    } catch (error) {
+      if (error.code === 'auth/admin-restricted-operation') {
+        console.error('CRITICAL: Anonymous Authentication is disabled in your Firebase Console.');
+        console.info('To fix: Go to Firebase Console > Authentication > Sign-in Method > Enable "Anonymous".');
+      }
+      throw error;
+    } finally {
+      signInPromise = null;
+    }
+  })();
+
+  return signInPromise;
+};
+
+const storageRefFromDownloadUrl = (url) => {
+  if (!url || typeof url !== 'string' || !url.includes('firebasestorage.googleapis.com')) return null;
+  try {
+    const u = new URL(url);
+    // Extract the full path after '/o/' and before any parameters
+    const decodedPath = decodeURIComponent(u.pathname.split('/o/')[1]);
+    return ref(storage, decodedPath);
+  } catch (e) {
+    console.warn('Failed to parse storage URL:', e);
+    return null;
+  }
+};
+
+// Media Upload functions
+export const compressImage = (file, maxWidth = 1000, quality = 0.5) => {
+  return new Promise((resolve) => {
+    if (!file || !file.type.startsWith('image/')) {
+      resolve(file);
+      return;
+    }
+
+    // Set a timeout to prevent hanging if image processing fails
+    const timeout = setTimeout(() => {
+      console.warn('Image compression timed out, uploading original file.');
+      resolve(file);
+    }, 5000);
+
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onerror = () => {
+      clearTimeout(timeout);
+      resolve(file);
+    };
+    reader.onload = (event) => {
+      const img = new Image();
+      img.src = event.target.result;
+      img.onerror = () => {
+        clearTimeout(timeout);
+        resolve(file);
+      };
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        let width = img.width;
+        let height = img.height;
+
+        if (width > maxWidth) {
+          height = (maxWidth / width) * height;
+          width = maxWidth;
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+
+        canvas.toBlob((blob) => {
+          clearTimeout(timeout);
+          if (!blob) {
+            resolve(file);
+            return;
+          }
+          const compressedFile = new File([blob], file.name, {
+            type: 'image/jpeg',
+            lastModified: Date.now(),
+          });
+          resolve(compressedFile);
+        }, 'image/jpeg', quality);
+      };
+    };
+  });
+};
+
+export const uploadMedia = async (file, folder = 'articles', onProgress = () => {}) => {
+  try {
+    await ensureSignedIn();
+    console.log(`Starting optimized upload for ${file.name} to ${folder}...`);
+    const fileToUpload = file.type.startsWith('image/') ? await compressImage(file) : file;
+    const storageRef = ref(storage, `${folder}/${Date.now()}_${file.name}`);
+    
+    return new Promise((resolve, reject) => {
+      const uploadTask = uploadBytesResumable(storageRef, fileToUpload);
+
+      uploadTask.on('state_changed', 
+        (snapshot) => {
+          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          onProgress(progress);
+          console.log(`Upload is ${progress}% done`);
+        }, 
+        (error) => {
+          console.error('Upload failed:', error);
+          reject(error);
+        }, 
+        async () => {
+          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+          console.log(`Upload successful: ${downloadURL}`);
+          resolve({
+            url: downloadURL,
+            type: file.type.startsWith('video/') ? 'video' : 'image'
+          });
+        }
+      );
+    });
+  } catch (error) {
+    console.error('Error in uploadMedia:', error);
+    throw error;
+  }
+};
 
 // Notes functions
 export const addNote = async (bookId, userId, noteText, pageNumber = 1) => {
   try {
+    await ensureSignedIn();
     const docRef = await addDoc(collection(db, 'notes'), {
       bookId,
       userId,
@@ -37,7 +195,6 @@ export const getNotes = async (bookId, userId = null) => {
     const notesQuery = userId 
       ? query(collection(db, 'notes'), where('bookId', '==', bookId), where('userId', '==', userId), orderBy('createdAt', 'desc'))
       : query(collection(db, 'notes'), where('bookId', '==', bookId), orderBy('createdAt', 'desc'));
-    
     const querySnapshot = await getDocs(notesQuery);
     return querySnapshot.docs.map(doc => ({
       id: doc.id,
@@ -49,10 +206,9 @@ export const getNotes = async (bookId, userId = null) => {
   }
 };
 
-export const subscribeToNotes = (bookId, userId = null, callback) => {
-  const notesQuery = userId 
-    ? query(collection(db, 'notes'), where('bookId', '==', bookId), where('userId', '==', userId), orderBy('createdAt', 'desc'))
-    : query(collection(db, 'notes'), where('bookId', '==', bookId), orderBy('createdAt', 'desc'));
+// Subscribe to real-time notes updates
+export const subscribeToNotes = (bookId, callback) => {
+  const notesQuery = query(collection(db, 'notes'), where('bookId', '==', bookId), orderBy('createdAt', 'desc'));
   
   return onSnapshot(notesQuery, (querySnapshot) => {
     const notes = querySnapshot.docs.map(doc => ({
@@ -63,6 +219,7 @@ export const subscribeToNotes = (bookId, userId = null, callback) => {
   });
 };
 
+// Update note
 export const updateNote = async (noteId, updates) => {
   try {
     const noteRef = doc(db, 'notes', noteId);
@@ -76,6 +233,7 @@ export const updateNote = async (noteId, updates) => {
   }
 };
 
+// Delete note
 export const deleteNote = async (noteId) => {
   try {
     const noteRef = doc(db, 'notes', noteId);
@@ -89,12 +247,13 @@ export const deleteNote = async (noteId) => {
 // Ratings functions
 export const addRating = async (bookId, userId, rating, comment = '', userName = null) => {
   try {
+    await ensureSignedIn();
     const docRef = await addDoc(collection(db, 'ratings'), {
       bookId,
       userId,
-      userName: userName || 'You',
       rating,
       comment,
+      userName,
       createdAt: serverTimestamp()
     });
     return docRef.id;
@@ -118,6 +277,7 @@ export const getRatings = async (bookId) => {
   }
 };
 
+// Subscribe to real-time updates
 export const subscribeToRatings = (bookId, callback) => {
   const ratingsQuery = query(collection(db, 'ratings'), where('bookId', '==', bookId), orderBy('createdAt', 'desc'));
   
@@ -130,4 +290,270 @@ export const subscribeToRatings = (bookId, callback) => {
   });
 };
 
-export { db, collection, addDoc, getDocs, query, orderBy, where, doc, updateDoc, deleteDoc, serverTimestamp };
+// Books functions
+export const addBook = async (bookData) => {
+  try {
+    await ensureSignedIn();
+    const docRef = await addDoc(collection(db, 'books'), {
+      ...bookData,
+      createdAt: serverTimestamp()
+    });
+    return docRef.id;
+  } catch (error) {
+    console.error('Error adding book:', error);
+    throw error;
+  }
+};
+
+export const getBooks = async () => {
+  try {
+    const booksQuery = query(collection(db, 'books'), orderBy('createdAt', 'desc'));
+    const querySnapshot = await getDocs(booksQuery);
+    return querySnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+  } catch (error) {
+    console.error('Error getting books:', error);
+    throw error;
+  }
+};
+
+// Articles functions
+export const addArticle = async (articleData) => {
+  try {
+    await ensureSignedIn();
+    const docRef = await addDoc(collection(db, 'articles'), {
+      ...articleData,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+      likes: [],
+      comments: [],
+      shares: 0
+    });
+    return docRef.id;
+  } catch (error) {
+    console.error('Error adding article:', error);
+    throw error;
+  }
+};
+
+export const updateArticle = async (articleId, updates) => {
+  try {
+    await ensureSignedIn();
+    if (updates?.mediaUrl) {
+      try {
+        const currentSnap = await getDoc(doc(db, 'articles', articleId));
+        const current = currentSnap.exists() ? currentSnap.data() : null;
+        const oldUrl = current?.mediaUrl;
+        const newUrl = updates.mediaUrl;
+        if (oldUrl && oldUrl !== newUrl) {
+          const oldRef = storageRefFromDownloadUrl(oldUrl);
+          if (oldRef) await deleteObject(oldRef);
+        }
+      } catch (e) {
+        console.warn('Failed to cleanup old article media:', e);
+      }
+    }
+
+    const articleRef = doc(db, 'articles', articleId);
+    await updateDoc(articleRef, {
+      ...updates,
+      updatedAt: serverTimestamp()
+    });
+  } catch (error) {
+    console.error('Error updating article:', error);
+    throw error;
+  }
+};
+
+export const deleteArticle = async (articleId) => {
+  try {
+    await ensureSignedIn();
+    try {
+      const snap = await getDoc(doc(db, 'articles', articleId));
+      const data = snap.exists() ? snap.data() : null;
+      if (data?.mediaUrl) {
+        const mediaRef = storageRefFromDownloadUrl(data.mediaUrl);
+        if (mediaRef) await deleteObject(mediaRef);
+      }
+    } catch (e) {
+      console.warn('Failed to delete article media from Storage:', e);
+    }
+
+    const articleRef = doc(db, 'articles', articleId);
+    await deleteDoc(articleRef);
+  } catch (error) {
+    console.error('Error deleting article:', error);
+    throw error;
+  }
+};
+
+export const toggleLikeArticle = async (articleId, userId, isLiked) => {
+  try {
+    await ensureSignedIn();
+    const articleRef = doc(db, 'articles', articleId);
+    await updateDoc(articleRef, {
+      likes: isLiked ? arrayRemove(userId) : arrayUnion(userId)
+    });
+  } catch (error) {
+    console.error('Error toggling like:', error);
+    throw error;
+  }
+};
+
+export const addCommentToArticle = async (articleId, commentData) => {
+  try {
+    await ensureSignedIn();
+    const articleRef = doc(db, 'articles', articleId);
+    await updateDoc(articleRef, {
+      comments: arrayUnion({
+        ...commentData,
+        createdAt: new Date().toISOString()
+      })
+    });
+  } catch (error) {
+    console.error('Error adding comment:', error);
+    throw error;
+  }
+};
+
+export const cleanupExpiredArticles = async (expirationDate) => {
+  try {
+    const q = query(collection(db, 'articles'), where('createdAt', '<', expirationDate));
+    const snapshot = await getDocs(q);
+    const deletePromises = snapshot.docs.map(doc => deleteDoc(doc.ref));
+    await Promise.all(deletePromises);
+  } catch (error) {
+    console.error('Error cleaning up articles:', error);
+    throw error;
+  }
+};
+
+export const shareArticle = async (articleId) => {
+  try {
+    await ensureSignedIn();
+    const articleRef = doc(db, 'articles', articleId);
+    await updateDoc(articleRef, {
+      shares: increment(1)
+    });
+  } catch (error) {
+    console.error('Error sharing article:', error);
+    throw error;
+  }
+};
+
+export const getArticles = async () => {
+  try {
+    const articlesQuery = query(collection(db, 'articles'), orderBy('createdAt', 'desc'));
+    const querySnapshot = await getDocs(articlesQuery);
+    return querySnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+  } catch (error) {
+    console.error('Error getting articles:', error);
+    throw error;
+  }
+};
+
+// User Profile functions
+export const upsertUserProfile = async (userData) => {
+  if (!userData.id) throw new Error('User ID is required for upsert.');
+  try {
+    await ensureSignedIn();
+
+    try {
+      const displayName = userData?.name || undefined;
+      const photoURL = userData?.profilePic || undefined;
+      if (auth.currentUser && (displayName || photoURL)) {
+        await updateProfile(auth.currentUser, {
+          displayName,
+          photoURL
+        });
+      }
+    } catch (e) {
+      console.warn('Failed to update Firebase Auth profile:', e);
+    }
+
+    const userRef = doc(db, 'users', userData.id);
+    await setDoc(userRef, {
+      ...userData,
+      updatedAt: serverTimestamp()
+    }, { merge: true });
+  } catch (error) {
+    console.error('Error upserting user profile:', error);
+    throw error;
+  }
+};
+
+export const getUserProfile = async (userId) => {
+  if (!userId) return null;
+  try {
+    const userRef = doc(db, 'users', userId);
+    const snap = await getDoc(userRef);
+    return snap.exists() ? { id: snap.id, ...snap.data() } : null;
+  } catch (error) {
+    if (isOfflineFirestoreError(error)) return null;
+    console.error('Error getting user profile:', error);
+    throw error;
+  }
+};
+
+// Notion-style pages
+export const createNotionPage = async (data = {}) => {
+  try {
+    await ensureSignedIn();
+    const docRef = await addDoc(collection(db, 'notionPages'), {
+      title: data.title || 'Untitled',
+      content: data.content || '',
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+      ownerUid: auth.currentUser?.uid || null
+    });
+    return docRef.id;
+  } catch (error) {
+    console.error('Error creating notion page:', error);
+    throw error;
+  }
+};
+
+export const updateNotionPage = async (pageId, updates) => {
+  try {
+    await ensureSignedIn();
+    const pageRef = doc(db, 'notionPages', pageId);
+    await updateDoc(pageRef, {
+      ...updates,
+      updatedAt: serverTimestamp()
+    });
+  } catch (error) {
+    console.error('Error updating notion page:', error);
+    throw error;
+  }
+};
+
+export const deleteNotionPage = async (pageId) => {
+  try {
+    await ensureSignedIn();
+    await deleteDoc(doc(db, 'notionPages', pageId));
+  } catch (error) {
+    console.error('Error deleting notion page:', error);
+    throw error;
+  }
+};
+
+export const subscribeToNotionPages = (callback) => {
+  const q = query(collection(db, 'notionPages'), orderBy('updatedAt', 'desc'));
+  return onSnapshot(q, (snapshot) => {
+    const pages = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+    callback(pages);
+  });
+};
+
+export const subscribeToNotionPage = (pageId, callback) => {
+  const pageRef = doc(db, 'notionPages', pageId);
+  return onSnapshot(pageRef, (snap) => {
+    if (!snap.exists()) return callback(null);
+    callback({ id: snap.id, ...snap.data() });
+  });
+};

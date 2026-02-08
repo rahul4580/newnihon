@@ -7,6 +7,7 @@ import { useLanguage } from '../context/LanguageContext';
 import { useTheme } from '../context/ThemeContext';
 import { translations } from '../utils/translations';
 import { FaSun, FaMoon, FaBars, FaTimes } from 'react-icons/fa';
+import Image from 'next/image';
 
 const Navbar = () => {
   const { language, toggleLanguage } = useLanguage();
@@ -63,11 +64,18 @@ const Navbar = () => {
         
         {/* Logo */}
         <Link href="/" className="group flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-black dark:bg-white flex items-center justify-center text-white dark:text-black font-black text-xl transition-all group-hover:rotate-12 group-hover:scale-110">
-            R
+          <div className="relative w-12 h-12 rounded-xl overflow-hidden transition-all group-hover:rotate-6 group-hover:scale-110">
+            <Image 
+              src="/logo.png" 
+              alt="Dinakramam Logo" 
+              width={48}
+              height={48}
+              className="w-full h-full object-cover"
+              priority
+            />
           </div>
-          <span className="hidden sm:block text-sm font-black uppercase tracking-[0.3em] text-black dark:text-white transition-colors">
-            System
+          <span className="hidden sm:block text-xs font-black uppercase tracking-[0.3em] text-black dark:text-white transition-colors">
+            Dinakramam
           </span>
         </Link>
 
@@ -156,11 +164,17 @@ const Navbar = () => {
             >
               <div className="flex items-center justify-between px-6 py-6 border-b border-black/10 dark:border-white/10">
                 <Link href="/" className="flex items-center gap-3" onClick={() => setIsMobileMenuOpen(false)}>
-                  <div className="w-10 h-10 rounded-xl bg-black dark:bg-white flex items-center justify-center text-white dark:text-black font-black text-xl">
-                    R
+                  <div className="relative w-10 h-10 rounded-xl overflow-hidden">
+                    <Image 
+                      src="/logo.png" 
+                      alt="Logo" 
+                      width={40}
+                      height={40}
+                      className="w-full h-full object-cover" 
+                    />
                   </div>
-                  <span className="text-sm font-black uppercase tracking-[0.3em] text-black dark:text-white">
-                    System
+                  <span className="text-xs font-black uppercase tracking-[0.3em] text-black dark:text-white">
+                    Dinakramam
                   </span>
                 </Link>
                 <button

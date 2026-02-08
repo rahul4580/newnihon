@@ -1,7 +1,6 @@
 'use client';
 import { motion } from 'motion/react';
 import Image from 'next/image';
-import lkj from '../../public/lkj.png'; 
 import Scene3D from './Scene3D';
 import { useLanguage } from '../context/LanguageContext';
 import { translations } from '../utils/translations';
@@ -93,8 +92,8 @@ const Hero = () => {
         >
           <div className="relative w-[250px] h-[350px] md:w-[320px] md:h-[450px] overflow-hidden rounded-[3rem] group ring-1 ring-black/10 dark:ring-white/10 shadow-2xl">
               <Image 
-                  src={lkj} 
-                  alt="Rahul" 
+                  src="/logo.png" 
+                  alt="Dinakramam Logo" 
                   fill
                   // Move focal point slightly right so the face isn't cropped to the left
                   style={{ objectFit: 'cover', objectPosition: '65% 50%' }}

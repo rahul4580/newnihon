@@ -7,8 +7,8 @@ import { translations } from '../utils/translations';
 import { FaBookOpen, FaSearch, FaFilter, FaTimes, FaStar } from 'react-icons/fa';
 import BookCard from './BookCard';
 import BookReaderSimple from './BookReaderSimple';
-import { booksData, categories } from '../data/books';
-import { addRating, getRatings, subscribeToRatings } from '../lib/firebase';
+import { booksData, categories } from '@/data/books';
+import { addRating, getRatings, subscribeToRatings } from '@/lib/firebase';
 
 export default function BooksClient() {
   const { language } = useLanguage();

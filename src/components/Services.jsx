@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { useLanguage } from '../context/LanguageContext';
 import { translations } from '../utils/translations';
 
@@ -107,17 +108,17 @@ function Services() {
                 
                 <div className="flex flex-wrap justify-center gap-12">
                     <FlipCard
-                      icon={<img src="https://img.icons8.com/color/96/react-native.png" alt="Front End" className="w-12 h-12" />}
+                      icon={<Image src="https://img.icons8.com/color/96/react-native.png" alt="Front End" width={48} height={48} className="w-12 h-12" />}
                       title={t?.frontend?.title || 'Front End'}
                       skills={t?.frontend?.skills || ['React.js', 'Next.js', 'Tailwind CSS']}
                     />
                     <FlipCard
-                      icon={<img src="https://img.icons8.com/color/96/nodejs.png" alt="Back End" className="w-12 h-12" />}
+                      icon={<Image src="https://img.icons8.com/color/96/nodejs.png" alt="Back End" width={48} height={48} className="w-12 h-12" />}
                       title={t?.backend?.title || 'Back End'}
                       skills={t?.backend?.skills || ['Node.js', 'Express', 'API Design']}
                     />
                     <FlipCard
-                      icon={<img src="https://img.icons8.com/color/96/python.png" alt="Data Science" className="w-12 h-12" />}
+                      icon={<Image src="https://img.icons8.com/color/96/python.png" alt="Data Science" width={48} height={48} className="w-12 h-12" />}
                       title={t?.data?.title || 'Statistics'}
                       skills={t?.data?.skills || ['Python', 'Pandas', 'SQL']}
                     />

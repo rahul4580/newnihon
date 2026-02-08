@@ -18,17 +18,17 @@ const notoSansJP = Noto_Sans_JP({
 });
 
 export const metadata = {
-  title: "Rahul Kumar | Intelligence System",
-  description: "Advanced Full-Stack Developer & System Architect specializing in the MERN stack, Data Science, and Cinematic Digital Experiences.",
+  title: "Dinakramam",
+  description: "Dinakramam - Digital Portfolio & Insights",
   icons: {
-    icon: '/favicon.png',
-    apple: '/favicon.png',
+    icon: '/logo.png',
+    apple: '/logo.png',
   },
   openGraph: {
-    title: "Rahul Kumar | Intelligence System",
-    description: "Crafting the future of digital intelligence through code and design.",
-    url: "https://rahulkumar.dev", // Placeholder, user will update
-    siteName: "Rahul Kumar Portfolio",
+    title: "Dinakramam",
+    description: "Dinakramam - Digital Portfolio & Insights",
+    url: "https://dinakramam.vercel.app",
+    siteName: "Dinakramam",
     locale: "en_US",
     type: "website",
   }

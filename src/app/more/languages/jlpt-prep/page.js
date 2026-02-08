@@ -48,6 +48,7 @@ export default function ReadingPage() {
     setQuizScore(0);
     setCurrentQuizIndex(0);
     setShowQuizResult(false);
+    setActiveWord(null);
   };
 
   const handleNextStep = () => {
@@ -192,7 +193,7 @@ export default function ReadingPage() {
                             >
                                 <div className="relative w-full h-full">
                                     <Image 
-                                        src={selectedChapter.steps[activeStepIndex].image} 
+                                        src={selectedChapter.steps[activeStepIndex].image}
                                         alt={`Step ${activeStepIndex + 1}`} 
                                         fill
                                         className="object-cover"
