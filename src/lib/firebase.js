@@ -1,16 +1,27 @@
 import { initializeApp } from 'firebase/app';
+import { getAnalytics, isSupported } from "firebase/analytics";
 import { getFirestore, enableIndexedDbPersistence, collection, addDoc, getDoc, getDocs, query, orderBy, where, doc, updateDoc, deleteDoc, setDoc, serverTimestamp, onSnapshot, arrayUnion, arrayRemove, increment } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, uploadBytesResumable, getDownloadURL, deleteObject } from 'firebase/storage';
-import { getAuth, signInAnonymously, updateProfile } from 'firebase/auth';
+import { 
+  getAuth, 
+  signInAnonymously, 
+  signInWithPopup, 
+  GoogleAuthProvider, 
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+  updateProfile 
+} from 'firebase/auth';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDiWYxNNDEnytSjry3DXFzXRcyNaTyTqzg",
-  authDomain: "rahul-79a9f.firebaseapp.com",
-  projectId: "rahul-79a9f",
-  storageBucket: "rahul-79a9f.firebasestorage.app",
-  messagingSenderId: "333910964548",
-  appId: "1:333910964548:web:bce4b24ee065332e94ff11",
-  measurementId: "G-4F699J6CKY"
+  apiKey: "AIzaSyBYEo4o-7E26euG4DnGthoGzpbw1e-WtA0",
+  authDomain: "rahul-a3af4.firebaseapp.com",
+  databaseURL: "https://rahul-a3af4-default-rtdb.firebaseio.com",
+  projectId: "rahul-a3af4",
+  storageBucket: "rahul-a3af4.firebasestorage.app",
+  messagingSenderId: "200265465858",
+  appId: "1:200265465858:web:8533662b73c4b467aa271b",
+  measurementId: "G-4EH784L5Y8"
 };
 
 // Initialize Firebase
@@ -18,6 +29,19 @@ const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
 export const auth = getAuth(app);
+export const googleProvider = new GoogleAuthProvider();
+
+export const logout = () => signOut(auth);
+
+let analytics;
+if (typeof window !== 'undefined') {
+  isSupported().then((supported) => {
+    if (supported) {
+      analytics = getAnalytics(app);
+    }
+  });
+}
+export { analytics };
 
 if (typeof window !== 'undefined') {
   enableIndexedDbPersistence(db).catch((err) => {
@@ -50,9 +74,25 @@ const ensureSignedIn = async () => {
       const cred = await signInAnonymously(auth);
       return cred.user;
     } catch (error) {
-      if (error.code === 'auth/admin-restricted-operation') {
-        console.error('CRITICAL: Anonymous Authentication is disabled in your Firebase Console.');
-        console.info('To fix: Go to Firebase Console > Authentication > Sign-in Method > Enable "Anonymous".');
+      // Handle various auth configuration errors
+      if (
+        error?.code === 'auth/admin-restricted-operation' ||
+        error?.code === 'auth/operation-not-allowed' ||
+        error?.code === 'auth/configuration-not-found'
+      ) {
+        // Firebase Auth not configured - use fallback user
+        console.warn('Firebase Auth not configured - using fallback user mode');
+        
+        // Create a fallback user object for basic functionality
+        const fallbackUser = {
+          uid: 'fallback-user-' + Math.random().toString(36).substr(2, 9),
+          isAnonymous: true,
+          displayName: 'Guest User',
+          isFallback: true
+        };
+        
+        console.warn('Using fallback user for basic functionality. Some features may be limited.');
+        return fallbackUser;
       }
       throw error;
     } finally {
@@ -62,6 +102,8 @@ const ensureSignedIn = async () => {
 
   return signInPromise;
 };
+
+export { ensureSignedIn };
 
 const storageRefFromDownloadUrl = (url) => {
   if (!url || typeof url !== 'string' || !url.includes('firebasestorage.googleapis.com')) return null;
@@ -466,14 +508,18 @@ export const upsertUserProfile = async (userData) => {
     try {
       const displayName = userData?.name || undefined;
       const photoURL = userData?.profilePic || undefined;
-      if (auth.currentUser && (displayName || photoURL)) {
+      if (auth.currentUser && (displayName || photoURL) && !auth.currentUser?.isFallback) {
         await updateProfile(auth.currentUser, {
           displayName,
           photoURL
         });
       }
     } catch (e) {
-      console.warn('Failed to update Firebase Auth profile:', e);
+      if (e?.code === 'auth/configuration-not-found' || e?.code === 'auth/requires-recent-login') {
+        console.warn('Firebase Auth profile update failed - using Firestore only');
+      } else {
+        console.warn('Failed to update Firebase Auth profile:', e);
+      }
     }
 
     const userRef = doc(db, 'users', userData.id);
@@ -503,13 +549,13 @@ export const getUserProfile = async (userId) => {
 // Notion-style pages
 export const createNotionPage = async (data = {}) => {
   try {
-    await ensureSignedIn();
+    const user = await ensureSignedIn();
     const docRef = await addDoc(collection(db, 'notionPages'), {
       title: data.title || 'Untitled',
       content: data.content || '',
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
-      ownerUid: auth.currentUser?.uid || null
+      ownerUid: user?.uid || null
     });
     return docRef.id;
   } catch (error) {

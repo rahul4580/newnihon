@@ -1,401 +1,644 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Navbar from '../../../components/Navbar';
-import Footer from '../../../components/Footer';
-import { motion, AnimatePresence } from 'motion/react';
-import { FaPhone, FaVideo, FaVideoSlash, FaMicrophone, FaMicrophoneSlash, FaPhoneSlash, FaCopy, FaArrowLeft } from 'react-icons/fa';
+import { motion } from 'framer-motion';
+import { 
+  Mic, MicOff, Video, VideoOff, PhoneOff, Copy, ArrowLeft,
+  User, MonitorUp, Settings, Signal, AlertTriangle, Wifi, LogOut
+} from 'lucide-react';
 import { db } from '@/lib/firebase';
-import { collection, addDoc, onSnapshot, doc, getDoc, updateDoc, setDoc } from 'firebase/firestore';
+import { 
+  collection, addDoc, onSnapshot, doc, 
+  setDoc, deleteDoc, 
+  query, where, serverTimestamp 
+} from 'firebase/firestore';
+import { useUser, useAuth, SignIn, ClerkLoaded, ClerkLoading } from "@clerk/nextjs";
 
-const servers = {
+// WebRTC Configuration
+const rtcConfig = {
   iceServers: [
-    {
-      urls: ['stun:stun1.l.google.com:19302', 'stun:stun2.l.google.com:19302'],
-    },
+    { urls: ['stun:stun1.l.google.com:19302', 'stun:stun2.l.google.com:19302'] },
   ],
   iceCandidatePoolSize: 10,
 };
 
-export default function VideoCallPage() {
+export default function MultiUserVideoCall() {
+  // Clerk Hooks
+  const { user, isLoaded, isSignedIn } = useUser();
+  const { signOut } = useAuth();
   const router = useRouter();
-  const [stream, setStream] = useState(null);
-  const [remoteStream, setRemoteStream] = useState(null);
-  const [pc, setPc] = useState(null);
-  const [callId, setCallId] = useState('');
-  const [inputCallId, setInputCallId] = useState('');
-  const [status, setStatus] = useState('idle'); // idle, calling, joined
-  const [muted, setMuted] = useState(false);
-  const [cameraOff, setCameraOff] = useState(false);
-  const unsubscribes = useRef([]);
 
-  const localVideoRef = useRef(null);
-  const remoteVideoRef = useRef(null);
+  // State
+  const [isInCall, setIsInCall] = useState(false);
+  const [roomId, setRoomId] = useState('');
+  
+  // Local state derived from Clerk or user input
+  const [userName, setUserName] = useState('');
+  const [userId, setUserId] = useState('');
 
+  const [localStream, setLocalStream] = useState(null);
+  const [peers, setPeers] = useState({}); 
+  const [isMuted, setIsMuted] = useState(false);
+  const [isVideoOff, setIsVideoOff] = useState(false);
+
+  // Remove custom authStatus/authError since Clerk handles this mainly
+  
+  // Refs
+  const pcsRef = useRef({}); 
+  const cleanupRefs = useRef([]);
+
+  const streamRef = useRef(null); // Ref to hold stream for cleanup
+
+  // --- Effects ---
+
+  // If user ended a call previously, force a one-time reload on next visit
   useEffect(() => {
-    return () => {
-      unsubscribes.current.forEach(fn => fn());
-      if (stream) {
-        stream.getTracks().forEach(track => track.stop());
+    if (typeof window === 'undefined') return;
+    const shouldReload = sessionStorage.getItem('videoCall:forceReload') === '1';
+    if (shouldReload) {
+      sessionStorage.removeItem('videoCall:forceReload');
+      window.location.reload();
+    }
+  }, []);
+
+  // Sync Clerk User -> Local State
+  useEffect(() => {
+    if (isLoaded && isSignedIn && user) {
+        setUserId(user.id);
+        setUserName(prev => prev || user.fullName || user.firstName || `User ${user.id.slice(0,4)}`);
+    }
+  }, [isLoaded, isSignedIn, user]);
+
+  const leaveCall = useCallback(async () => {
+    try {
+      // Stop all media tracks
+      if (localStream) {
+        localStream.getTracks().forEach(track => track.stop());
       }
-      if (pc) {
-        pc.close();
+
+      // Cleanup listeners
+      cleanupRefs.current.forEach(fn => fn());
+      cleanupRefs.current = [];
+
+      // Close peer connections
+      Object.values(pcsRef.current).forEach(pc => pc.close());
+      pcsRef.current = {};
+
+      // Remove from Firestore
+      if (roomId && userId) {
+        await deleteDoc(doc(db, 'rooms', roomId, 'participants', userId));
+      }
+    } catch (e) {
+      console.error("Error cleaning up:", e);
+    } finally {
+      // Reset state
+      setIsInCall(false);
+      setRoomId('');
+      setPeers({});
+      setLocalStream(null);
+
+      // Mark to reload this page on next visit, then go back to /more
+      if (typeof window !== 'undefined') {
+        sessionStorage.setItem('videoCall:forceReload', '1');
+      }
+      router.replace('/more');
+    }
+  }, [roomId, userId, localStream, router]);
+
+  // Initialize Local Stream & CLEANUP
+  useEffect(() => {
+    const startCamera = async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ 
+            video: true, 
+            audio: true 
+        });
+        setLocalStream(stream);
+        streamRef.current = stream; // Store in ref for cleanup
+      } catch (err) {
+        console.error("Error accessing media:", err);
       }
     };
-  }, [stream, pc]);
+    startCamera();
 
-  const startLocalStream = async () => {
+    // CLEANUP FUNCTION: Stops camera when component unmounts (navigating away)
+    return () => {
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach(track => track.stop());
+        console.log("Camera tracks stopped.");
+      }
+    };
+  }, []);
+
+
+
+  // --- Handlers ---
+
+  const createRoom = async () => {
+    if (!isSignedIn) return alert('Authentication Error: Not connected');
+    if (!userName) return alert("Please enter your name");
+    if (!localStream) return alert("Camera not ready");
+
     try {
-      const localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-      const remoteStream = new MediaStream();
-
-      setStream(localStream);
-      setRemoteStream(remoteStream);
-
-      if (localVideoRef.current) localVideoRef.current.srcObject = localStream;
-      if (remoteVideoRef.current) remoteVideoRef.current.srcObject = remoteStream;
-
-      return { localStream, remoteStream };
-    } catch (err) {
-      console.error('Error accessing media devices:', err);
-      alert('Could not access camera/microphone. Please check permissions.');
+        const roomRef = doc(collection(db, 'rooms'));
+        await setDoc(roomRef, { createdAt: serverTimestamp() });
+        setRoomId(roomRef.id);
+        joinRoomLogic(roomRef.id, localStream);
+    } catch (e) {
+        alert("Failed to create room: " + e.message);
     }
   };
 
-  const createCall = async () => {
-    const { localStream, remoteStream } = await startLocalStream();
-    const peerConnection = new RTCPeerConnection(servers);
-    setPc(peerConnection);
-
-    localStream.getTracks().forEach((track) => {
-      peerConnection.addTrack(track, localStream);
-    });
-
-    peerConnection.ontrack = (event) => {
-      event.streams[0].getTracks().forEach((track) => {
-        remoteStream.addTrack(track);
-      });
-    };
-
-    const callDoc = doc(collection(db, 'calls'));
-    const offerCandidates = collection(callDoc, 'offerCandidates');
-    const answerCandidates = collection(callDoc, 'answerCandidates');
-
-    setCallId(callDoc.id);
-
-    peerConnection.onicecandidate = (event) => {
-      if (event.candidate) {
-        addDoc(offerCandidates, event.candidate.toJSON());
-      }
-    };
-
-    const offerDescription = await peerConnection.createOffer();
-    await peerConnection.setLocalDescription(offerDescription);
-
-    const offer = {
-      sdp: offerDescription.sdp,
-      type: offerDescription.type,
-    };
-
-    await setDoc(callDoc, { offer });
-
-    const unsubCall = onSnapshot(callDoc, (snapshot) => {
-      const data = snapshot.data();
-      if (!peerConnection.currentRemoteDescription && data?.answer) {
-        const answerDescription = new RTCSessionDescription(data.answer);
-        peerConnection.setRemoteDescription(answerDescription);
-      }
-    });
-
-    const unsubAnswer = onSnapshot(answerCandidates, (snapshot) => {
-      snapshot.docChanges().forEach((change) => {
-        if (change.type === 'added') {
-          const candidate = new RTCIceCandidate(change.doc.data());
-          peerConnection.addIceCandidate(candidate);
-        }
-      });
-    });
-
-    unsubscribes.current.push(unsubCall, unsubAnswer);
-    setStatus('calling');
+  const joinRoom = async () => {
+    if (!isSignedIn) return alert('Authentication Error: Not connected');
+    if (!roomId) return alert("Enter Room ID");
+    if (!userName) return alert("Enter Name");
+    if (!localStream) return alert("Camera not ready");
+    
+    joinRoomLogic(roomId, localStream);
   };
 
-  const joinCall = async () => {
-    const { localStream, remoteStream } = await startLocalStream();
-    const peerConnection = new RTCPeerConnection(servers);
-    setPc(peerConnection);
+  // ... (joinRoomLogic remains mostly the same, ensuring userId is used) ...
 
-    localStream.getTracks().forEach((track) => {
-      peerConnection.addTrack(track, localStream);
-    });
+  // ... (rest of logic) ...
 
-    peerConnection.ontrack = (event) => {
-      event.streams[0].getTracks().forEach((track) => {
-        remoteStream.addTrack(track);
-      });
-    };
 
-    const callDoc = doc(db, 'calls', inputCallId);
-    const offerCandidates = collection(callDoc, 'offerCandidates');
-    const answerCandidates = collection(callDoc, 'answerCandidates');
 
-    peerConnection.onicecandidate = (event) => {
-      if (event.candidate) {
-        addDoc(answerCandidates, event.candidate.toJSON());
-      }
-    };
 
-    const callData = (await getDoc(callDoc)).data();
-    if (!callData) {
-      alert('Invalid Room ID');
+
+  const joinRoomLogic = async (roomID, stream) => {
+    if (!userId) {
+      console.warn('Cannot join room: userId is not set');
+      alert('User authentication required. Please refresh the page.');
       return;
     }
+    setIsInCall(true);
 
-    const offerDescription = callData.offer;
-    await peerConnection.setRemoteDescription(new RTCSessionDescription(offerDescription));
+    try {
+        // 1. Add self to participants
+        const participantRef = doc(db, 'rooms', roomID, 'participants', userId);
+        await setDoc(participantRef, { 
+          userName, 
+          joinedAt: serverTimestamp(),
+        });
 
-    const answerDescription = await peerConnection.createAnswer();
-    await peerConnection.setLocalDescription(answerDescription);
+        // 2. Listen to other participants
+        const participantsRef = collection(db, 'rooms', roomID, 'participants');
+        const unsubParticipants = onSnapshot(participantsRef, (snapshot) => {
+          snapshot.docChanges().forEach(async (change) => {
+            const peerId = change.doc.id;
+            const peerData = change.doc.data();
 
-    const answer = {
-      type: answerDescription.type,
-      sdp: answerDescription.sdp,
+            if (peerId === userId) return; 
+
+            if (change.type === 'added') {
+              if (!pcsRef.current[peerId]) {
+                if (userId > peerId) {
+                    createPeerConnection(peerId, stream, true, roomID);
+                } else {
+                    createPeerConnection(peerId, stream, false, roomID);
+                }
+              }
+              
+              setPeers(prev => ({
+                ...prev,
+                [peerId]: { ...prev[peerId], userName: peerData.userName }
+              }));
+            } 
+            
+            if (change.type === 'removed') {
+               if (pcsRef.current[peerId]) {
+                 pcsRef.current[peerId].close();
+                 delete pcsRef.current[peerId];
+               }
+               setPeers(prev => {
+                 const newPeers = { ...prev };
+                 delete newPeers[peerId];
+                 return newPeers;
+               });
+            }
+          });
+        });
+
+        // 3. Listen for Signals
+        if (!userId) {
+          console.warn('Cannot listen for signals: userId is not set');
+          return;
+        }
+        
+        const signalsRef = collection(db, 'rooms', roomID, 'signals');
+        const q = query(signalsRef, where('to', '==', userId));
+        const unsubSignals = onSnapshot(q, (snapshot) => {
+          snapshot.docChanges().forEach(async (change) => {
+            if (change.type === 'added') {
+              const data = change.doc.data();
+              const senderId = data.from;
+              deleteDoc(change.doc.ref);
+
+              const pc = pcsRef.current[senderId] || createPeerConnection(senderId, stream, false, roomID);
+
+              if (data.type === 'offer') {
+                 await pc.setRemoteDescription(new RTCSessionDescription(data.offer));
+                 const answer = await pc.createAnswer();
+                 await pc.setLocalDescription(answer);
+                 await sendSignal(roomID, senderId, { type: 'answer', answer });
+              } else if (data.type === 'answer') {
+                 await pc.setRemoteDescription(new RTCSessionDescription(data.answer));
+              } else if (data.type === 'candidate') {
+                 if (pc.remoteDescription) {
+                    await pc.addIceCandidate(new RTCIceCandidate(data.candidate));
+                 }
+              }
+            }
+          });
+        });
+
+
+        cleanupRefs.current.push(unsubParticipants, unsubSignals);
+
+    } catch (e) {
+        console.error("Join Error:", e);
+        alert("Failed to join room properly: " + e.message);
+    }
+  };
+
+  const createPeerConnection = (targetPeerId, stream, isInitiator, activeRoomId) => {
+    if (pcsRef.current[targetPeerId]) return pcsRef.current[targetPeerId];
+
+    const pc = new RTCPeerConnection(rtcConfig);
+    pcsRef.current[targetPeerId] = pc;
+
+    stream.getTracks().forEach(track => pc.addTrack(track, stream));
+
+    pc.ontrack = (event) => {
+      const remoteStream = event.streams[0];
+      setPeers(prev => ({
+        ...prev,
+        [targetPeerId]: { ...prev[targetPeerId], stream: remoteStream }
+      }));
     };
 
-    await updateDoc(callDoc, { answer });
+    pc.onicecandidate = (event) => {
+      if (event.candidate) {
+        sendSignal(activeRoomId, targetPeerId, { type: 'candidate', candidate: event.candidate.toJSON() });
+      }
+    };
 
-    const unsubOffer = onSnapshot(offerCandidates, (snapshot) => {
-      snapshot.docChanges().forEach((change) => {
-        if (change.type === 'added') {
-          const data = change.doc.data();
-          peerConnection.addIceCandidate(new RTCIceCandidate(data));
-        }
-      });
-    });
+    if (isInitiator) {
+       const createOffer = async () => {
+         const offer = await pc.createOffer();
+         await pc.setLocalDescription(offer);
+         sendSignal(activeRoomId, targetPeerId, { type: 'offer', offer });
+       };
+       createOffer();
+    }
 
-    unsubscribes.current.push(unsubOffer);
-    setStatus('joined');
+    return pc;
   };
 
-  const hangup = () => {
-    unsubscribes.current.forEach(fn => fn());
-    unsubscribes.current = [];
-    if (pc) pc.close();
-    if (stream) stream.getTracks().forEach(t => t.stop());
-    setPc(null);
-    setStream(null);
-    setRemoteStream(null);
-    setStatus('idle');
-    setCallId('');
-    setInputCallId('');
+  const sendSignal = async (roomID, targetUserId, payload) => {
+     if (!userId) {
+       console.warn('Cannot send signal: userId is not set');
+       return;
+     }
+     try {
+       await addDoc(collection(db, 'rooms', roomID, 'signals'), {
+         ...payload,
+         from: userId,
+         to: targetUserId,
+         timestamp: serverTimestamp()
+       });
+     } catch(e) { console.error("Signal Error:", e); }
   };
+
+
+
 
   const toggleMute = () => {
-    if (stream) {
-      const audioTrack = stream.getAudioTracks()[0];
-      if (audioTrack) {
-        audioTrack.enabled = !audioTrack.enabled;
-        setMuted(!audioTrack.enabled);
-      }
+    if (localStream) {
+      localStream.getAudioTracks().forEach(t => t.enabled = !t.enabled);
+      setIsMuted(!isMuted);
     }
   };
 
-  const toggleCamera = () => {
-    if (stream) {
-      const videoTrack = stream.getVideoTracks()[0];
-      if (videoTrack) {
-        videoTrack.enabled = !videoTrack.enabled;
-        setCameraOff(!videoTrack.enabled);
-      }
+  const toggleVideo = () => {
+    if (localStream) {
+       localStream.getVideoTracks().forEach(t => t.enabled = !t.enabled);
+       setIsVideoOff(!isVideoOff);
     }
   };
+
+  const copyRoomId = () => {
+    navigator.clipboard.writeText(roomId);
+    alert("Room ID copied!");
+  };
+
+  // --- CLERK LOGIN SCREEN ---
+  if (!isLoaded) {
+     return (
+        <div className="min-h-screen bg-neutral-950 flex items-center justify-center text-white">
+           <div className="animate-pulse flex flex-col items-center gap-4">
+              <div className="w-12 h-12 rounded-full border-2 border-white/20 border-t-white animate-spin"></div>
+              <span>Connecting to Secure Auth...</span>
+           </div>
+        </div>
+     );
+  }
+
+  if (!isSignedIn && !isInCall) {
+      return (
+         <div className="min-h-screen bg-neutral-950 flex flex-col items-center justify-center p-4 relative overflow-hidden">
+             
+             {/* Background Effects */}
+             <div className="absolute top-0 left-0 w-full h-full bg-[url('/grid.svg')] opacity-20 pointer-events-none"></div>
+             <div className="absolute w-96 h-96 bg-purple-600/20 rounded-full blur-[100px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
+             
+             <div className="relative z-10 flex flex-col items-center gap-8">
+                 <div className="text-center space-y-2">
+                     <div className="w-16 h-16 bg-white/10 rounded-2xl mx-auto flex items-center justify-center mb-4 backdrop-blur-md border border-white/10">
+                         <User className="w-8 h-8 text-white" />
+                     </div>
+                     <h1 className="text-4xl font-black text-white tracking-tight">Welcome Back</h1>
+                     <p className="text-neutral-400">Secure Application Access</p>
+                 </div>
+
+                 <div className="bg-neutral-900/50 backdrop-blur-xl border border-white/10 p-2 rounded-[2rem] shadow-2xl">
+                    <SignIn 
+                      appearance={{
+                        elements: {
+                          rootBox: "w-full",
+                          card: "bg-transparent shadow-none w-full",
+                          headerTitle: "hidden",
+                          headerSubtitle: "hidden",
+                          socialButtonsBlockButton: "bg-white text-black hover:bg-neutral-200 border-none font-bold",
+                          formButtonPrimary: "bg-blue-600 hover:bg-blue-700 text-white font-bold",
+                          footerActionLink: "text-blue-400 hover:text-blue-300",
+                          formFieldLabel: "text-neutral-400",
+                          formFieldInput: "bg-black/40 border-white/10 text-white focus:border-blue-500",
+                          dividerLine: "bg-white/10",
+                          dividerText: "text-neutral-500",
+                        }
+                      }}
+                    />
+                 </div>
+             </div>
+         </div>
+      );
+  }
 
   return (
-    <div className="bg-white dark:bg-black min-h-screen text-black dark:text-white transition-colors duration-300">
-      <Navbar />
-
-      <div className="container mx-auto px-6 pt-32 pb-12 max-w-7xl">
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="flex items-center gap-6 mb-12"
-        >
-          <button 
-            onClick={() => router.back()}
-            className="w-12 h-12 rounded-2xl bg-white/50 dark:bg-white/5 border border-black/5 dark:border-white/10 flex items-center justify-center hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all group/back shadow-sm"
-          >
-            <FaArrowLeft className="group-hover/back:-translate-x-1 transition-transform" />
-          </button>
-          <div>
-            <h1 className="text-4xl md:text-5xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-blue-600 dark:from-purple-400 dark:to-blue-400">
-              Video Calling
-            </h1>
-            <p className="text-gray-400 dark:text-neutral-500 font-medium text-sm mt-1">
-              Private, real-time communication powered by WebRTC.
-            </p>
-          </div>
-        </motion.div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 h-[600px]">
-          {/* Main Video Views */}
-          <div className="relative rounded-[2.5rem] overflow-hidden bg-black border border-black/5 dark:border-white/5 shadow-2xl group/call shadow-black/20">
-            {/* Remote Video (Full Screen) */}
-            <video 
-              ref={remoteVideoRef} 
-              autoPlay 
-              playsInline 
-              className="w-full h-full object-cover"
-            />
-            {status === 'calling' && (
-              <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/60 backdrop-blur-sm">
-                <div className="w-20 h-20 rounded-full bg-purple-500/20 flex items-center justify-center animate-pulse mb-4">
-                  <FaPhone className="text-purple-500 text-3xl animate-bounce" />
-                </div>
-                <h3 className="text-xl font-black tracking-tight mb-2 text-white">Calling...</h3>
-                <p className="text-gray-400 text-sm">Waiting for someone to join the room.</p>
-              </div>
-            )}
-            {status === 'idle' && (
-              <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-50 dark:bg-neutral-900">
-                <div className="w-16 h-16 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center mb-4">
-                  <FaVideo className="text-gray-400 text-2xl" />
-                </div>
-                <p className="text-gray-500 text-sm font-bold uppercase tracking-widest">No Active Call</p>
-              </div>
-            )}
-
-            {/* Local Video (Floating) */}
-            <div className={`absolute bottom-6 right-6 w-48 h-32 rounded-3xl overflow-hidden border-4 border-black/20 dark:border-white/10 shadow-2xl transition-all duration-500 ${status === 'idle' ? 'scale-0' : 'scale-100'}`}>
-              <video 
-                ref={localVideoRef} 
-                autoPlay 
-                playsInline 
-                muted 
-                className="w-full h-full object-cover bg-neutral-800"
-              />
-            </div>
-
-            {/* Controls Overlay */}
-            <AnimatePresence>
-              {status !== 'idle' && (
-                <motion.div 
-                  initial={{ opacity: 0, y: 50 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 50 }}
-                  className="absolute bottom-10 left-1/2 -translate-x-1/2 flex items-center gap-4 px-8 py-4 bg-black/40 dark:bg-neutral-900/40 backdrop-blur-2xl rounded-[2rem] border border-white/10"
-                >
-                  <ControlButton 
-                    icon={muted ? <FaMicrophoneSlash /> : <FaMicrophone />} 
-                    active={muted} 
-                    onClick={toggleMute} 
-                    color="bg-white/10 hover:bg-white/20"
-                  />
-                  <ControlButton 
-                    icon={cameraOff ? <FaVideoSlash /> : <FaVideo />} 
-                    active={cameraOff} 
-                    onClick={toggleCamera} 
-                    color="bg-white/10 hover:bg-white/20"
-                  />
-                  <ControlButton 
-                    icon={<FaPhoneSlash />} 
-                    onClick={hangup} 
-                    color="bg-red-500 hover:bg-red-600 shadow-lg shadow-red-500/30"
-                  />
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-
-          {/* Signaling / Actions */}
-          <div className="flex flex-col gap-6">
-            <motion.div 
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="p-10 rounded-[2.5rem] bg-white dark:bg-neutral-900/40 border border-black/5 dark:border-white/5 backdrop-blur-2xl shadow-xl space-y-8"
+    <div className="bg-neutral-950 min-h-screen text-white overflow-hidden selection:bg-purple-500/30">
+      
+      {!isInCall && <Navbar />}
+      
+      {/* LOBBY View */}
+      {!isInCall ? (
+        <div className="container mx-auto px-4 min-h-screen flex flex-col justify-center items-center relative z-10 pt-20">
+          <div className="absolute top-24 left-4 md:left-10">
+            <button
+              type="button"
+              onClick={() => router.replace('/more')}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-neutral-900/70 text-neutral-200 text-xs font-bold uppercase tracking-widest hover:bg-white/10 transition-all"
             >
-              <div>
-                <h3 className="text-2xl font-black tracking-tight mb-2">Create a Call</h3>
-                <p className="text-gray-500 dark:text-gray-400 text-sm">Start a private meeting and share the ID with your partner.</p>
-                <button 
-                  onClick={createCall}
-                  disabled={status !== 'idle'}
-                  className="mt-6 w-full py-5 rounded-[1.25rem] bg-purple-600 text-white font-black text-sm hover:bg-purple-700 active:scale-95 transition-all shadow-xl shadow-purple-500/20 disabled:opacity-50 flex items-center justify-center gap-2"
-                >
-                  <FaVideo /> Start New Call
-                </button>
-              </div>
+              <ArrowLeft className="w-3.5 h-3.5" />
+              Back to More
+            </button>
+          </div>
+          
+          <div className="flex flex-col lg:flex-row gap-12 w-full max-w-6xl items-center justify-center">
+             
+             {/* Left: Camera Preview */}
+             <div className="w-full max-w-lg">
+                <div className="relative aspect-video rounded-3xl overflow-hidden border border-white/10 bg-neutral-900 shadow-2xl ring-1 ring-white/5">
+                   <VideoPlayer stream={localStream} isLocal={true} isVideoOff={isVideoOff} />
+                   
+                   <div className="absolute top-4 right-4 flex gap-2">
+                      <div className={`px-3 py-1 rounded-full backdrop-blur-md text-xs font-bold flex items-center gap-2 border ${localStream ? 'bg-black/60 border-white/10' : 'bg-red-500/20 border-red-500/50 text-red-200'}`}>
+                         {localStream ? (
+                             <><Signal className="w-3 h-3 text-green-500" /> Camera Ready</>
+                         ) : (
+                             <><AlertTriangle className="w-3 h-3" /> No Camera</>
+                         )}
+                      </div>
+                   </div>
 
-              {callId && (
-                <motion.div 
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="p-6 rounded-3xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-between"
-                >
-                  <div>
-                    <div className="text-[10px] font-black uppercase tracking-widest text-purple-600 mb-1">Your Room ID</div>
-                    <div className="font-mono font-bold text-sm tracking-tighter truncate max-w-[200px]">{callId}</div>
-                  </div>
-                  <button 
-                    onClick={() => {
-                        navigator.clipboard.writeText(callId);
-                        alert('ID Copied!');
-                    }}
-                    className="p-3 rounded-2xl bg-white dark:bg-black/40 border border-black/5 dark:border-white/5 hover:scale-110 active:scale-90 transition-all"
-                  >
-                    <FaCopy className="text-purple-600" />
-                  </button>
-                </motion.div>
-              )}
+                   {/* Auth Status Overlay */}
+                   <div className="absolute top-4 left-4">
+                       <div className="px-3 py-1 rounded-full bg-green-500/10 border border-green-500/20 text-green-400 text-xs font-bold flex items-center gap-2 backdrop-blur-md">
+                           <Wifi className="w-3 h-3" /> Connected
+                       </div>
+                   </div>
 
-              <div className="pt-8 border-t border-black/5 dark:border-white/5">
-                <h3 className="text-2xl font-black tracking-tight mb-2">Join a Call</h3>
-                <p className="text-gray-500 dark:text-gray-400 text-sm">Enter a Room ID shared by your partner to connect.</p>
-                <div className="mt-6 flex flex-col md:flex-row gap-3">
-                  <input 
-                    value={inputCallId}
-                    onChange={(e) => setInputCallId(e.target.value)}
-                    placeholder="Enter Room ID"
-                    className="flex-1 px-6 py-4 rounded-[1.25rem] bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 outline-none text-sm font-bold focus:border-purple-500/50 transition-all"
-                  />
-                  <button 
-                    onClick={joinCall}
-                    disabled={status !== 'idle' || !inputCallId}
-                    className="px-8 py-4 rounded-[1.25rem] bg-black text-white dark:bg-white dark:text-black font-black text-sm hover:opacity-90 active:scale-95 transition-all shadow-lg disabled:opacity-50"
-                  >
-                    Join
-                  </button>
+                   <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-4 px-6 py-3 bg-black/40 backdrop-blur-xl rounded-2xl border border-white/10">
+                      <button onClick={toggleMute} className={`p-3 rounded-xl transition-all ${isMuted ? 'bg-red-500 text-white' : 'bg-white/10 hover:bg-white/20'}`}>
+                         {isMuted ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
+                      </button>
+                      <button onClick={toggleVideo} className={`p-3 rounded-xl transition-all ${isVideoOff ? 'bg-red-500 text-white' : 'bg-white/10 hover:bg-white/20'}`}>
+                         {isVideoOff ? <VideoOff className="w-5 h-5" /> : <Video className="w-5 h-5" />}
+                      </button>
+                      <button className="p-3 rounded-xl bg-white/10 hover:bg-white/20 transition-all">
+                         <Settings className="w-5 h-5" />
+                      </button>
+                   </div>
                 </div>
-              </div>
-            </motion.div>
+                <p className="text-center text-neutral-500 text-sm mt-4 font-medium">Check your look. You&apos;re going to be great! ✨</p>
+             </div>
 
-            <div className="p-8 rounded-[2rem] bg-blue-500/5 border border-blue-500/10 flex items-start gap-4">
-              <div className="w-10 h-10 rounded-full bg-blue-500/20 flex-shrink-0 flex items-center justify-center">
-                 <span className="text-blue-500 font-black text-xs">i</span>
-              </div>
-              <div>
-                <div className="text-sm font-black tracking-tight mb-1 text-blue-600 dark:text-blue-400">Technical Note</div>
-                <p className="text-xs leading-relaxed text-gray-500 dark:text-gray-400">
-                  This system uses WebRTC for peer-to-peer data transfer and Firebase Firestore for connection signaling. Camera and microphone permissions are required to start or join a call.
-                </p>
-              </div>
-            </div>
+             {/* Right: Join Controls */}
+             <motion.div 
+               initial={{ opacity: 0, x: 20 }} 
+               animate={{ opacity: 1, x: 0 }}
+               className="w-full max-w-md bg-neutral-900/50 backdrop-blur-3xl p-8 rounded-[2.5rem] border border-white/5 shadow-2xl"
+             >
+                <div className="mb-8 flex justify-between items-start">
+                   <div>
+                       <h1 className="text-4xl font-black mb-2 bg-gradient-to-r from-white to-neutral-500 bg-clip-text text-transparent">Join Meeting</h1>
+                       <p className="text-neutral-400">Enter your details to start connecting.</p>
+                   </div>
+                   <button onClick={() => signOut()} className="p-2 hover:bg-white/10 rounded-full text-neutral-400" title="Logout">
+                       <LogOut className="w-5 h-5" />
+                   </button>
+                </div>
+
+                <div className="space-y-5">
+                   <div>
+                      <label className="text-xs font-bold uppercase tracking-wider text-neutral-500 ml-4 mb-2 block">Display Name</label>
+                      <input 
+                        value={userName}
+                        onChange={e => setUserName(e.target.value)}
+                        className="w-full bg-black/20 border border-white/10 rounded-2xl px-6 py-4 outline-none focus:border-purple-500 transition-all font-bold placeholder:text-neutral-700"
+                        placeholder="Your Name"
+                      />
+                   </div>
+
+                   <div className="grid grid-cols-2 gap-4">
+                      <button 
+                        onClick={createRoom}
+                        disabled={!localStream || !isSignedIn}
+                        className="p-6 rounded-2xl bg-white text-black font-black hover:scale-[1.02] active:scale-95 transition-all flex flex-col items-center gap-3 disabled:opacity-50 disabled:grayscale"
+                      >
+                         <div className="w-10 h-10 rounded-full bg-neutral-100 flex items-center justify-center">
+                            <MonitorUp className="w-5 h-5" />
+                         </div>
+                         <span>New Room</span>
+                      </button>
+                      
+                      <div className="flex flex-col gap-3">
+                        <input 
+                           value={roomId}
+                           onChange={e => setRoomId(e.target.value)}
+                           className="w-full flex-1 bg-black/20 border border-white/10 rounded-2xl px-4 outline-none focus:border-blue-500 transition-all text-sm text-center font-mono placeholder:text-neutral-700"
+                           placeholder="Room ID"
+                        />
+                        <button 
+                           onClick={joinRoom}
+                           disabled={!roomId || !localStream || !isSignedIn}
+                           className="w-full p-4 rounded-2xl bg-blue-600 text-white font-bold text-sm hover:bg-blue-500 disabled:opacity-50 transition-all"
+                        >
+                           Join
+                        </button>
+                      </div>
+                   </div>
+                </div>
+             </motion.div>
           </div>
         </div>
-      </div>
+      ) : (
+        /* ACTIVE CALL View */
+        <div className="h-screen flex flex-col relative bg-black">
+           
+           {/* Header */}
+           <div className="absolute top-0 left-0 right-0 p-6 z-50 flex justify-between items-center pointer-events-none">
+              <div className="pointer-events-auto flex items-center gap-3">
+                 <button
+                   type="button"
+                   onClick={leaveCall}
+                   className="flex items-center gap-2 px-4 py-2 mr-4 rounded-full border border-white/10 bg-neutral-900/80 backdrop-blur-md text-neutral-200 text-xs font-bold uppercase tracking-widest hover:bg-white/10 transition-all"
+                 >
+                   <ArrowLeft className="w-3.5 h-3.5" />
+                   Back to More
+                 </button>
+                 <button onClick={leaveCall} className="group flex items-center gap-2 pr-4 bg-neutral-900/80 backdrop-blur-md rounded-full border border-white/10 hover:border-red-500/50 transition-all overflow-hidden">
+                    <div className="p-2 bg-red-500/10 text-red-500 rounded-full group-hover:bg-red-500 group-hover:text-white transition-colors">
+                       <ArrowLeft className="w-4 h-4" />
+                    </div>
+                    <span className="text-xs font-bold text-neutral-400 group-hover:text-white">Leave</span>
+                 </button>
+                 
+                 <div className="bg-neutral-900/80 backdrop-blur-md pl-4 pr-2 py-2 rounded-full border border-white/10 flex items-center gap-3">
+                    <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse shadow-[0_0_10px_rgba(34,197,94,0.5)]"></span>
+                    <span className="font-mono text-xs font-bold tracking-wider text-neutral-300">{roomId}</span>
+                    <button onClick={copyRoomId} className="p-2 hover:bg-white/10 rounded-full text-neutral-400 hover:text-white transition-colors"><Copy className="w-3 h-3" /></button>
+                 </div>
+              </div>
+           </div>
 
-      <Footer />
+           {/* Grid Layout */}
+           <div className="flex-1 p-4 md:p-6 flex gap-6 overflow-hidden relative pt-24 pb-28">
+              <div className="flex-1 grid gap-4 md:gap-6 auto-rows-fr"
+                   style={{
+                      gridTemplateColumns: `repeat(auto-fit, minmax(Min(100%, 400px), 1fr))`
+                   }}
+              >
+                 {/* Local User Card */}
+                 <motion.div layout className="relative bg-neutral-900 rounded-[2rem] overflow-hidden border border-white/10 shadow-2xl group">
+                    <VideoPlayer stream={localStream} isLocal={true} isVideoOff={isVideoOff} />
+                    
+                    <div className="absolute inset-0 ring-1 ring-inset ring-white/5 data-[speaking=true]:ring-green-500/50 rounded-[2rem] transition-all"></div>
+                    
+                    <div className="absolute bottom-4 left-4 right-4 flex justify-between items-end">
+                       <div className="bg-black/60 backdrop-blur-md px-4 py-2 rounded-full border border-white/10 flex items-center gap-2">
+                          <span className="text-sm font-bold text-white">{userName} (You)</span>
+                          {isMuted && <MicOff className="w-3 h-3 text-red-500" />}
+                       </div>
+                    </div>
+                 </motion.div>
+
+                 {/* Peers */}
+                 {Object.entries(peers).map(([peerId, peer]) => (
+                    <motion.div layout key={peerId} className="relative bg-neutral-900 rounded-[2rem] overflow-hidden border border-white/10 shadow-2xl">
+                       <VideoPlayer stream={peer.stream} />
+                       
+                       <div className="absolute bottom-4 left-4 bg-black/60 backdrop-blur-md px-4 py-2 rounded-full border border-white/10">
+                          <span className="text-sm font-bold text-white">{peer.userName || 'Unknown'}</span>
+                       </div>
+                    </motion.div>
+                 ))}
+              </div>
+
+              
+           </div>
+
+           {/* Floating Control Dock */}
+           <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-3 p-3 bg-neutral-900/90 backdrop-blur-2xl rounded-[2rem] border border-white/10 shadow-[0_20px_40px_rgba(0,0,0,0.5)] z-50 hover:scale-105 transition-transform duration-300">
+               <ControlBtn 
+                 icon={isMuted ? <MicOff /> : <Mic />} 
+                 active={isMuted} 
+                 onClick={toggleMute}
+                 activeColor="bg-red-500 text-white"
+               />
+               <ControlBtn 
+                 icon={isVideoOff ? <VideoOff /> : <Video />} 
+                 active={isVideoOff} 
+                 onClick={toggleVideo}
+                 activeColor="bg-red-500 text-white"
+               />
+               <div className="w-px h-8 bg-white/10 mx-1"></div>
+               <button 
+                 onClick={leaveCall}
+                 className="w-12 h-12 rounded-2xl bg-red-500 text-white flex items-center justify-center shadow-lg shadow-red-500/20 hover:bg-red-600 transition-all"
+               >
+                  <PhoneOff className="w-5 h-5" />
+               </button>
+           </div>
+        </div>
+      )}
     </div>
   );
 }
 
-function ControlButton({ icon, onClick, active, color }) {
-  return (
-    <button 
+// Robust Video Player Component (unchanged)
+const VideoPlayer = ({ stream, isLocal, isVideoOff }) => {
+   const videoRef = useRef(null);
+   useEffect(() => {
+      if (videoRef.current && stream) {
+         videoRef.current.srcObject = stream;
+      }
+   }, [stream]);
+   return (
+      <div className="w-full h-full bg-neutral-900 relative">
+         <video 
+            ref={videoRef} 
+            autoPlay 
+            playsInline 
+            muted={isLocal} 
+            className={`w-full h-full object-cover ${isLocal ? 'transform -scale-x-100' : ''} ${isVideoOff ? 'opacity-0' : 'opacity-100'} transition-opacity duration-300`}
+         />
+         {!stream || isVideoOff ? (
+            <div className="absolute inset-0 flex flex-col items-center justify-center bg-neutral-800 text-neutral-600 gap-4">
+               <div className="w-20 h-20 rounded-full bg-black/20 flex items-center justify-center">
+                   <User className="w-8 h-8 opacity-50" />
+               </div>
+               <span className="text-xs font-bold uppercase tracking-widest opacity-50">Camera Off</span>
+            </div>
+         ) : null}
+      </div>
+   );
+};
+
+const ControlBtn = ({ icon, active, onClick, activeColor }) => (
+   <button 
       onClick={onClick}
-      className={`w-14 h-14 rounded-2xl flex items-center justify-center text-xl transition-all active:scale-90 ${color} ${active ? 'text-red-500' : 'text-white'}`}
-    >
-      {icon}
-    </button>
-  );
-}
+      className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-300 ${
+         active 
+         ? activeColor
+         : 'bg-white/5 text-white hover:bg-white/10'
+      }`}
+   >
+      {React.cloneElement(icon, { className: "w-5 h-5" })}
+   </button>
+);
+
+

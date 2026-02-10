@@ -5,11 +5,12 @@ import Image from 'next/image';
 import { motion, AnimatePresence } from 'motion/react';
 import Navbar from '../../../components/Navbar';
 import Footer from '../../../components/Footer';
+import Link from 'next/link';
 import { 
   FaPlus, FaEdit, FaTrash, FaHeart, FaComment, FaShare, 
   FaImage, FaVideo, FaUser, FaRegHeart, FaPaperPlane, 
   FaEllipsisH, FaGlobeAmericas, FaTimes, FaCamera, FaFilm,
-  FaCheckCircle, FaUserCircle
+  FaCheckCircle, FaUserCircle, FaArrowLeft
 } from 'react-icons/fa';
 import { useLanguage } from '../../../context/LanguageContext';
 import { translations } from '../../../utils/translations';
@@ -63,6 +64,16 @@ export default function ArticlesPage() {
 
   const fileInputRef = useRef(null);
   const onboardingPicRef = useRef(null);
+
+  // Check if user came from video call room
+  const [fromVideoCall, setFromVideoCall] = useState(false);
+
+  useEffect(() => {
+    const referrer = document.referrer;
+    if (referrer && (referrer.includes('video-call') || referrer.includes('room') || referrer.includes('meeting'))) {
+      setFromVideoCall(true);
+    }
+  }, []);
 
   // Initial Load: Restore from Local & Sync with Firestore
   useEffect(() => {
@@ -334,6 +345,27 @@ export default function ArticlesPage() {
   return (
     <div className="bg-[#f3f2ef] dark:bg-[#1a1c1e] min-h-screen text-[#191919] dark:text-[#e1e1e1] transition-colors duration-500 font-sans">
       <Navbar />
+      
+      {/* Back to More Button - Fixed Position */}
+      <motion.div
+        initial={{ opacity: 0, x: -50 }}
+        animate={{ opacity: 1, x: 0 }}
+        className="fixed top-32 left-12 z-40"
+      >
+        <button
+          onClick={() => {
+            if (fromVideoCall) {
+              window.location.href = '/more';
+            } else {
+              window.location.reload();
+            }
+          }}
+          className="group flex items-center gap-2 px-4 py-2 bg-white dark:bg-[#232629] text-black dark:text-white rounded-full shadow-lg border border-black/10 dark:border-white/10 hover:shadow-xl hover:scale-105 transition-all duration-300"
+        >
+          <FaArrowLeft className="text-sm group-hover:-translate-x-1 transition-transform duration-300" />
+          <span className="text-sm font-medium">{fromVideoCall ? 'Back to More' : 'Reload Page'}</span>
+        </button>
+      </motion.div>
       
       <div className="container mx-auto px-4 md:px-6 pt-24 pb-20 max-w-2xl">
         {/* Top Creation Bar */}

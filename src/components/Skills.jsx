@@ -112,7 +112,7 @@ const Skills = () => {
           />
           <SkillCard 
               title={t.tools || 'Tools'}
-              skills={['Docker', 'Git', 'Vercel', 'Figma']}
+              skills={['Docker', 'Git', 'Figma']}
               progress={80}
               icon={SiDocker}
               delay={0.4}

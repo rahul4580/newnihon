@@ -9,6 +9,7 @@
     "lint": "npx eslint ."
   },
   "dependencies": {
+    "@clerk/nextjs": "^6.37.3",
     "@gsap/react": "^2.1.2",
     "@react-pdf-viewer/core": "^3.12.0",
     "@react-pdf-viewer/default-layout": "^3.12.0",

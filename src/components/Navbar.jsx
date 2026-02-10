@@ -8,6 +8,7 @@ import { useTheme } from '../context/ThemeContext';
 import { translations } from '../utils/translations';
 import { FaSun, FaMoon, FaBars, FaTimes } from 'react-icons/fa';
 import Image from 'next/image';
+import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 
 const Navbar = () => {
   const { language, toggleLanguage } = useLanguage();
@@ -63,10 +64,10 @@ const Navbar = () => {
       >
         
         {/* Logo */}
-        <Link href="/" className="group flex items-center gap-3">
-          <div className="relative w-12 h-12 rounded-xl overflow-hidden transition-all group-hover:rotate-6 group-hover:scale-110">
+        <Link href="/" className="group flex items-center gap-4">
+          <div className="relative w-12 h-12 rounded-2xl overflow-hidden bg-white ring-1 ring-black/10 dark:ring-white/15 shadow-[0_10px_30px_rgba(0,0,0,0.22)] transition-all duration-300 group-hover:rotate-3 group-hover:scale-[1.06]">
             <Image 
-              src="/logo.png" 
+              src="/nihongo.jpg" 
               alt="Dinakramam Logo" 
               width={48}
               height={48}
@@ -74,8 +75,11 @@ const Navbar = () => {
               priority
             />
           </div>
-          <span className="hidden sm:block text-xs font-black uppercase tracking-[0.3em] text-black dark:text-white transition-colors">
-            Dinakramam
+          <span className="hidden sm:flex items-center gap-2 text-xs font-black uppercase tracking-[0.3em] text-black dark:text-white transition-colors">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-black via-black/70 to-black/40 dark:from-white dark:via-white/80 dark:to-white/50">
+              Dinakramam
+            </span>
+            <span className="w-1.5 h-1.5 rounded-full bg-red-600/90 dark:bg-red-500/90" aria-hidden />
           </span>
         </Link>
 
@@ -126,6 +130,30 @@ const Navbar = () => {
             >
               {theme === 'dark' ? <FaSun className="w-4 h-4" /> : <FaMoon className="w-4 h-4" />}
             </button>
+
+            {/* Auth Buttons */}
+            <SignedOut>
+              <SignInButton mode="modal">
+                <span
+                  className={`cursor-pointer text-[10px] font-black uppercase tracking-[0.3em] px-4 py-2 rounded-lg transition-all ${
+                    isScrolled || theme === 'dark' 
+                      ? 'border border-black/10 text-black hover:bg-black hover:text-white dark:border-white/10 dark:text-white dark:hover:bg-white dark:hover:text-black' 
+                      : 'border border-white/20 text-white hover:bg-white hover:text-black dark:border-black/20 dark:text-black dark:hover:bg-black dark:hover:text-white'
+                  } ${isScrolled ? '' : 'mix-blend-difference'}`}
+                >
+                  Sign In
+                </span>
+              </SignInButton>
+            </SignedOut>
+            <SignedIn>
+              <UserButton 
+                appearance={{
+                  elements: {
+                    userButtonAvatarBox: "w-8 h-8 rounded-full border border-black/10 dark:border-white/10",
+                  }
+                }}
+              />
+            </SignedIn>
           </div>
         </div>
 
@@ -164,9 +192,9 @@ const Navbar = () => {
             >
               <div className="flex items-center justify-between px-6 py-6 border-b border-black/10 dark:border-white/10">
                 <Link href="/" className="flex items-center gap-3" onClick={() => setIsMobileMenuOpen(false)}>
-                  <div className="relative w-10 h-10 rounded-xl overflow-hidden">
+                  <div className="relative w-10 h-10 rounded-2xl overflow-hidden bg-white ring-1 ring-black/10 dark:ring-white/15 shadow-[0_10px_30px_rgba(0,0,0,0.22)]">
                     <Image 
-                      src="/logo.png" 
+                      src="/nihongo.jpg" 
                       alt="Logo" 
                       width={40}
                       height={40}
@@ -203,7 +231,7 @@ const Navbar = () => {
                   ))}
                 </div>
 
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-4 flex-wrap">
                   <button
                       onClick={() => toggleLanguage()}
                       aria-label="Toggle language"
@@ -219,6 +247,20 @@ const Navbar = () => {
                   >
                       {theme === 'dark' ? <FaSun className="text-sm" /> : <FaMoon className="text-sm" />}
                   </button>
+
+                  {/* Mobile Auth */}
+                  <SignedOut>
+                    <SignInButton mode="modal">
+                      <span
+                        className="cursor-pointer text-[10px] font-black uppercase tracking-widest h-10 px-4 flex items-center justify-center rounded-full transition-all border border-black/10 dark:border-white/10 text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/5"
+                      >
+                        Sign In
+                      </span>
+                    </SignInButton>
+                  </SignedOut>
+                  <SignedIn>
+                    <UserButton />
+                  </SignedIn>
                 </div>
               </div>
             </motion.div>

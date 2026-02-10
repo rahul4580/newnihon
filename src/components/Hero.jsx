@@ -92,7 +92,7 @@ const Hero = () => {
         >
           <div className="relative w-[250px] h-[350px] md:w-[320px] md:h-[450px] overflow-hidden rounded-[3rem] group ring-1 ring-black/10 dark:ring-white/10 shadow-2xl">
               <Image 
-                  src="/logo.png" 
+                  src="/nihongo.jpg" 
                   alt="Dinakramam Logo" 
                   fill
                   // Move focal point slightly right so the face isn't cropped to the left

@@ -1,4 +1,7 @@
 import { Geist, Geist_Mono, Noto_Sans_JP } from "next/font/google";
+import {
+  ClerkProvider,
+} from "@clerk/nextjs";
 import "./globals.css";
 import ClientWrapper from "../components/ClientWrapper";
 
@@ -21,8 +24,8 @@ export const metadata = {
   title: "Dinakramam",
   description: "Dinakramam - Digital Portfolio & Insights",
   icons: {
-    icon: '/logo.png',
-    apple: '/logo.png',
+    icon: '/nihongo.jpg',
+    apple: '/nihongo.jpg',
   },
   openGraph: {
     title: "Dinakramam",
@@ -36,13 +39,16 @@ export const metadata = {
 
 function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} ${notoSansJP.variable} antialiased selection:bg-blue-500 selection:text-white`}>
-        <ClientWrapper>
-          {children}
-        </ClientWrapper>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <body className={`${geistSans.variable} ${geistMono.variable} ${notoSansJP.variable} antialiased selection:bg-blue-500 selection:text-white`}>
+          <ClientWrapper>
+
+            {children}
+          </ClientWrapper>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
 

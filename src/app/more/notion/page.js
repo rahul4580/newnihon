@@ -1,1332 +1,923 @@
 'use client';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import Navbar from '../../../components/Navbar';
-import Footer from '../../../components/Footer';
+
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useUser, SignIn, UserButton } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
-import { motion, AnimatePresence } from 'motion/react';
-import { FaPlus, FaTrash, FaRegStickyNote, FaChevronDown, FaChevronRight, FaImage, FaVideo, FaFile, FaArrowLeft } from 'react-icons/fa';
-import { uploadMedia } from '@/lib/firebase';
+import {
+  CheckSquare,
+  CalendarDays,
+  Calendar,
+  CheckCircle2,
+  Inbox,
+  Plus,
+  Sun,
+  Moon,
+  Search,
+  X,
+  Menu,
+  Flag,
+  Bell,
+  RefreshCw,
+} from 'lucide-react';
 
-const useDebouncedCallback = (cb, delayMs) => {
-  const cbRef = useRef(cb);
-  const timeoutRef = useRef(null);
+const TASK_PRIORITIES = ['High', 'Medium', 'Low'];
+const TASK_RECURRENCE = ['none', 'daily', 'weekly', 'monthly'];
+const DEFAULT_CATEGORIES = [
+  { id: 'work', name: 'Work', color: '#3b82f6' },
+  { id: 'study', name: 'Study', color: '#f59e0b' },
+  { id: 'personal', name: 'Personal', color: '#10b981' },
+];
 
-  useEffect(() => {
-    cbRef.current = cb;
-  }, [cb]);
-
-  return useMemo(() => {
-    return (...args) => {
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
-      timeoutRef.current = setTimeout(() => cbRef.current(...args), delayMs);
-    };
-  }, [delayMs]);
+const toInputDateTime = (iso) => {
+  if (!iso) return '';
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return '';
+  const pad = (n) => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
 };
 
-const STORAGE_KEY = 'notion_local_v1';
+const fromInputDateTime = (value) => {
+  if (!value) return '';
+  const d = new Date(value);
+  if (Number.isNaN(d.getTime())) return '';
+  return d.toISOString();
+};
+
+const addMonths = (date, months) => {
+  const d = new Date(date);
+  const day = d.getDate();
+  d.setMonth(d.getMonth() + months);
+  if (d.getDate() < day) d.setDate(0);
+  return d;
+};
+
+const addDays = (date, days) => {
+  const d = new Date(date);
+  d.setDate(d.getDate() + days);
+  return d;
+};
+
+const startOfDay = (date) => {
+  const d = new Date(date);
+  d.setHours(0, 0, 0, 0);
+  return d;
+};
+
+const startOfWeek = (date) => {
+  const d = startOfDay(date);
+  d.setDate(d.getDate() - d.getDay());
+  return d;
+};
+
+const getDayKey = (date) => {
+  const d = new Date(date);
+  if (Number.isNaN(d.getTime())) return '';
+  d.setHours(0, 0, 0, 0);
+  return d.toISOString().slice(0, 10);
+};
+
+const getWeekData = (tasks, startDate, endDate) => {
+  const week = [];
+  const current = new Date(startDate);
+  
+  while (current <= endDate) {
+    const dayKey = getDayKey(current);
+    const dayTasks = tasks.filter(t => {
+      if (t.updatedAt) {
+        const taskDate = new Date(t.updatedAt);
+        return getDayKey(taskDate) === dayKey;
+      }
+      return false;
+    });
+    
+    const completedTasks = dayTasks.filter(t => t.status === 'completed');
+    const totalTasks = dayTasks.length;
+    const completionRate = totalTasks > 0 ? Math.round((completedTasks.length / totalTasks) * 100) : 0;
+    
+    week.push({
+      date: new Date(current),
+      dayKey,
+      total: totalTasks,
+      completed: completedTasks.length,
+      percentage: completionRate,
+      level: getContributionLevel(completionRate)
+    });
+    
+    current.setDate(current.getDate() + 1);
+  }
+  
+  return week;
+};
+
+const getContributionLevel = (percentage) => {
+  if (percentage === 0) return 0;
+  if (percentage <= 25) return 1;
+  if (percentage <= 50) return 2;
+  if (percentage <= 75) return 3;
+  return 4;
+};
+
+const getYearData = (tasks) => {
+  const now = new Date();
+  const startDate = new Date(now.getFullYear(), 0, 1);
+  const endDate = new Date(now.getFullYear(), 11, 31);
+  return getWeekData(tasks, startDate, endDate);
+};
 
 const uid = () => `${Date.now()}_${Math.random().toString(16).slice(2)}`;
 
-const loadLocal = () => {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return null;
-    return JSON.parse(raw);
-  } catch {
-    return null;
-  }
-};
-
-const saveLocal = (next) => {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
-  } catch {
-    // ignore
-  }
-};
-
-const makeBlock = (type = 'paragraph', patch = {}) => ({
+const makeTask = (patch = {}) => ({
   id: uid(),
-  type,
-  text: '',
-  checked: false,
-  open: true,
+  title: '',
+  description: '',
+  dueAt: '',
+  reminderAt: '',
+  recurrence: 'none',
+  categoryId: 'work',
+  priority: 'Medium',
   color: '',
-  bgColor: '',
-  ...patch
-});
-
-const makePage = (patch = {}) => ({
-  id: uid(),
-  parentId: null,
-  title: 'Untitled',
-  icon: '📄',
-  coverUrl: '',
-  isFavorite: false,
-  isPinned: false,
-  kind: 'page',
-  db: null,
-  blocks: [makeBlock('h1', { text: 'Untitled' }), makeBlock('paragraph')],
+  status: 'todo',
+  reminded: false,
   createdAt: Date.now(),
   updatedAt: Date.now(),
-  ...patch
+  ...patch,
 });
-
-const makeDatabase = () => {
-  const statusPropId = uid();
-  const datePropId = uid();
-  const titlePropId = uid();
-  return {
-    properties: [
-      { id: titlePropId, name: 'Name', type: 'title' },
-      { id: statusPropId, name: 'Status', type: 'select', options: ['Backlog', 'In Progress', 'Done'] },
-      { id: datePropId, name: 'Date', type: 'date' }
-    ],
-    rows: [
-      {
-        id: uid(),
-        cells: {
-          [titlePropId]: 'First item',
-          [statusPropId]: 'Backlog',
-          [datePropId]: new Date().toISOString().slice(0, 10)
-        },
-        coverUrl: ''
-      }
-    ],
-    view: 'table'
-  };
-};
-
-const BLOCK_TYPES = [
-  { type: 'paragraph', label: 'Text' },
-  { type: 'h1', label: 'Heading 1' },
-  { type: 'h2', label: 'Heading 2' },
-  { type: 'h3', label: 'Heading 3' },
-  { type: 'bullet', label: 'Bulleted list' },
-  { type: 'number', label: 'Numbered list' },
-  { type: 'todo', label: 'To-do' },
-  { type: 'toggle', label: 'Toggle list' },
-  { type: 'quote', label: 'Quote' },
-  { type: 'code', label: 'Code block' },
-  { type: 'image', label: 'Image' },
-  { type: 'video', label: 'Video' },
-  { type: 'file', label: 'File' }
-];
-
-const getPageTitle = (page) => (page?.title || '').trim() || 'Untitled';
-
-const buildTree = (pages) => {
-  const byParent = new Map();
-  for (const p of pages) {
-    const k = p.parentId || 'root';
-    if (!byParent.has(k)) byParent.set(k, []);
-    byParent.get(k).push(p);
-  }
-  return byParent;
-};
-
-const getBreadcrumbs = (pages, selectedId) => {
-  const trail = [];
-  let curr = pages.find(p => p.id === selectedId);
-  while (curr) {
-    trail.unshift(curr);
-    curr = pages.find(p => p.id === curr.parentId);
-  }
-  return trail;
-};
 
 export default function NotionPage() {
   const router = useRouter();
-  const [saving, setSaving] = useState(false);
-  const [expanded, setExpanded] = useState({});
-  const [loading, setLoading] = useState(true);
-  const [store, setStore] = useState({ pages: [], selectedId: null });
+  const { user, isLoaded, isSignedIn } = useUser();
+  const [tasks, setTasks] = useState([]);
+  const [categories, setCategories] = useState(DEFAULT_CATEGORIES);
+  const [activeFilter, setActiveFilter] = useState('all');
+  const [search, setSearch] = useState('');
+  const [isDark, setIsDark] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [editingId, setEditingId] = useState(null);
+  const [draft, setDraft] = useState(makeTask());
+  const [notifPermission, setNotifPermission] = useState('default');
+  const [showContributions, setShowContributions] = useState(false);
+  const newCatRef = useRef(null);
 
-  const [slashOpen, setSlashOpen] = useState(false);
-  const [slashQuery, setSlashQuery] = useState('');
-  const [slashBlockId, setSlashBlockId] = useState(null);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [showSearch, setShowSearch] = useState(false);
-  const [dragId, setDragId] = useState(null);
-
-  const inputRefs = useRef(new Map());
-
-  const favorites = useMemo(() => store.pages.filter(p => p.isFavorite), [store.pages]);
-  const breadcrumbs = useMemo(() => getBreadcrumbs(store.pages, store.selectedId), [store.pages, store.selectedId]);
-
-  const filteredPages = useMemo(() => {
-    if (!searchQuery) return [];
-    return store.pages.filter(p => 
-      p.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-      (p.blocks || []).some(b => (b.text || '').toLowerCase().includes(searchQuery.toLowerCase()))
-    );
-  }, [store.pages, searchQuery]);
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
 
   useEffect(() => {
-    const loaded = loadLocal();
-    if (loaded?.pages?.length) {
-      setStore({
-        pages: loaded.pages,
-        selectedId: loaded.selectedId || loaded.pages[0].id
-      });
-      setExpanded(loaded.expanded || {});
-    } else {
-      const first = makePage();
-      const initial = { pages: [first], selectedId: first.id, expanded: {} };
-      saveLocal(initial);
-      setStore({ pages: initial.pages, selectedId: initial.selectedId });
-    }
-    setLoading(false);
+    if (typeof window === 'undefined') return;
+    const dark = window.localStorage.getItem('taskui:theme') === 'dark';
+    setIsDark(dark);
+    document.documentElement.classList.toggle('dark', dark);
   }, []);
 
-  const tree = useMemo(() => buildTree(store.pages), [store.pages]);
-  const selectedPage = useMemo(
-    () => store.pages.find((p) => p.id === store.selectedId) || null,
-    [store.pages, store.selectedId]
-  );
-
-  const persist = useDebouncedCallback((nextPages, nextSelectedId, nextExpanded) => {
-    saveLocal({
-      pages: nextPages,
-      selectedId: nextSelectedId,
-      expanded: nextExpanded
-    });
-  }, 250);
-
-  const updatePages = (updater) => {
-    setStore((prev) => {
-      const nextPages = updater(prev.pages);
-      persist(nextPages, prev.selectedId, expanded);
-      return { ...prev, pages: nextPages };
-    });
-  };
-
-  const setSelectedId = (id) => {
-    setStore((prev) => {
-      persist(prev.pages, id, expanded);
-      return { ...prev, selectedId: id };
-    });
-  };
-
-  const handleCreate = (parentId = null) => {
-    const page = makePage({ parentId });
-    updatePages((prev) => [page, ...prev]);
-    if (parentId) {
-      setExpanded((prev) => {
-        const next = { ...prev, [parentId]: true };
-        persist(store.pages, store.selectedId, next);
-        return next;
-      });
+  useEffect(() => {
+    if (!isLoaded || !user || !isSignedIn) {
+      setTasks([]);
+      setCategories(DEFAULT_CATEGORIES);
+      return;
     }
-    setSelectedId(page.id);
-  };
-
-  const handleCreateDatabase = (parentId = null) => {
-    const page = makePage({
-      parentId,
-      kind: 'database',
-      icon: '🗂️',
-      title: 'New database',
-      blocks: [],
-      db: makeDatabase()
-    });
-    updatePages((prev) => [page, ...prev]);
-    if (parentId) {
-      setExpanded((prev) => {
-        const next = { ...prev, [parentId]: true };
-        persist(store.pages, store.selectedId, next);
-        return next;
-      });
+    if (typeof window === 'undefined') return;
+    const key = `taskui:${user.id}`;
+    try {
+      const raw = window.localStorage.getItem(key);
+      const parsed = raw ? JSON.parse(raw) : { tasks: [], categories: DEFAULT_CATEGORIES };
+      setTasks(parsed.tasks || []);
+      setCategories(parsed.categories && parsed.categories.length ? parsed.categories : DEFAULT_CATEGORIES);
+    } catch {
+      setTasks([]);
+      setCategories(DEFAULT_CATEGORIES);
     }
-    setSelectedId(page.id);
-  };
+  }, [isLoaded, isSignedIn, user]);
 
-  const handleDelete = () => {
-    if (!selectedPage) return;
-    if (!confirm('Delete this page and its sub-pages?')) return;
-
-    const toDelete = new Set();
-    const walk = (id) => {
-      toDelete.add(id);
-      const kids = tree.get(id) || [];
-      for (const k of kids) walk(k.id);
-    };
-    walk(selectedPage.id);
-
-    updatePages((prev) => prev.filter((p) => !toDelete.has(p.id)));
-
-    const remaining = store.pages.filter((p) => !toDelete.has(p.id));
-    const nextSelected = remaining[0]?.id || null;
-    setSelectedId(nextSelected);
-  };
-
-  const updateSelectedPage = (patch) => {
-    if (!selectedPage) return;
-    updatePages((prev) =>
-      prev.map((p) =>
-        p.id === selectedPage.id
-          ? { ...p, ...patch, updatedAt: Date.now() }
-          : p
-      )
+  useEffect(() => {
+    if (!isLoaded || !user || !isSignedIn) return;
+    if (typeof window === 'undefined') return;
+    const key = `taskui:${user.id}`;
+    window.localStorage.setItem(
+      key,
+      JSON.stringify({ tasks, categories })
     );
-  };
+  }, [tasks, categories, isLoaded, isSignedIn, user]);
 
-  const updateSelectedDb = (patch) => {
-    if (!selectedPage || selectedPage.kind !== 'database') return;
-    updateSelectedPage({ db: { ...(selectedPage.db || {}), ...patch } });
-  };
+  useEffect(() => {
+    if (typeof window === 'undefined' || !('Notification' in window)) return;
+    setNotifPermission(Notification.permission);
+  }, []);
 
-  const focusBlock = (blockId) => {
-    const el = inputRefs.current.get(blockId);
-    if (el) {
-      el.focus();
-      const len = el.value?.length || 0;
-      try {
-        el.setSelectionRange(len, len);
-      } catch {
-        // ignore
+  useEffect(() => {
+    if (!tasks.length) return;
+    if (typeof window === 'undefined' || !('Notification' in window)) return;
+
+    const tick = () => {
+      const now = Date.now();
+      let changed = false;
+      const next = tasks.map((t) => {
+        if (t.status === 'completed' || t.reminded || !t.reminderAt) return t;
+        const at = new Date(t.reminderAt).getTime();
+        if (!Number.isFinite(at)) return t;
+        if (at <= now) {
+          changed = true;
+          try {
+            if (Notification.permission === 'granted') {
+              new Notification('Task Reminder', { body: t.title || 'Task reminder' });
+            }
+          } catch {}
+          return { ...t, reminded: true, updatedAt: Date.now() };
+        }
+        return t;
+      });
+      if (changed) setTasks(next);
+    };
+
+    const id = setInterval(tick, 60000);
+    return () => clearInterval(id);
+  }, [tasks]);
+
+  const filteredTasks = useMemo(() => {
+    let list = [...tasks];
+    const now = new Date();
+    if (activeFilter === 'today') {
+      const start = new Date(now);
+      start.setHours(0, 0, 0, 0);
+      const end = new Date(start);
+      end.setDate(end.getDate() + 1);
+      list = list.filter((t) => t.dueAt && new Date(t.dueAt) >= start && new Date(t.dueAt) < end);
+    } else if (activeFilter === 'week') {
+      const start = new Date(now);
+      start.setHours(0, 0, 0, 0);
+      const end = new Date(start);
+      end.setDate(end.getDate() + 7);
+      list = list.filter((t) => t.dueAt && new Date(t.dueAt) >= start && new Date(t.dueAt) < end);
+    } else if (activeFilter === 'completed') {
+      list = list.filter((t) => t.status === 'completed');
+    } else if (activeFilter !== 'all') {
+      list = list.filter((t) => t.categoryId === activeFilter);
+    } else {
+      list = list.filter((t) => t.status !== 'completed');
+    }
+
+    if (search.trim()) {
+      const q = search.toLowerCase();
+      list = list.filter((t) =>
+        (t.title || '').toLowerCase().includes(q) ||
+        (t.description || '').toLowerCase().includes(q)
+      );
+    }
+    return list;
+  }, [tasks, activeFilter, search]);
+
+  const taskCounts = useMemo(() => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const week = new Date(today);
+    week.setDate(week.getDate() + 7);
+
+    return {
+      all: tasks.filter((t) => t.status !== 'completed').length,
+      today: tasks.filter((t) => t.dueAt && new Date(t.dueAt) >= today && new Date(t.dueAt) < tomorrow && t.status !== 'completed').length,
+      week: tasks.filter((t) => t.dueAt && new Date(t.dueAt) >= today && new Date(t.dueAt) < week && t.status !== 'completed').length,
+      completed: tasks.filter((t) => t.status === 'completed').length,
+    };
+  }, [tasks]);
+
+  const contributionData = useMemo(() => {
+    return getYearData(tasks);
+  }, [tasks]);
+
+  const calculateCurrentStreak = () => {
+    let streak = 0;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    for (let i = contributionData.length - 1; i >= 0; i--) {
+      const day = contributionData[i];
+      const dayDate = new Date(day.date);
+      dayDate.setHours(0, 0, 0, 0);
+      
+      if (dayDate.getTime() === today.getTime() || dayDate.getTime() === today.getTime() - (86400000 * streak)) {
+        if (day.percentage > 0) {
+          streak++;
+        } else {
+          break;
+        }
+      } else {
+        break;
       }
     }
+    
+    return streak;
   };
 
-  const insertBlockAfter = (afterId, block) => {
-    if (!selectedPage) return;
-    const blocks = selectedPage.blocks || [];
-    const idx = blocks.findIndex((b) => b.id === afterId);
-    const next = [...blocks];
-    next.splice(idx + 1, 0, block);
-    updateSelectedPage({ blocks: next });
-    requestAnimationFrame(() => focusBlock(block.id));
+  const overallStats = useMemo(() => {
+    const totalTasks = tasks.length;
+    const completedTasks = tasks.filter(t => t.status === 'completed').length;
+    const completionRate = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+    const activeDays = contributionData.filter(d => d.total > 0).length;
+    const currentStreak = calculateCurrentStreak();
+    
+    return {
+      totalTasks,
+      completedTasks,
+      completionRate,
+      activeDays,
+      currentStreak,
+      totalDays: contributionData.length
+    };
+  }, [tasks, contributionData]);
+
+  const openNewTask = () => {
+    setEditingId(null);
+    setDraft(makeTask());
+    setDialogOpen(true);
   };
 
-  const openSlash = (blockId, query = '') => {
-    setSlashOpen(true);
-    setSlashQuery(query);
-    setSlashBlockId(blockId);
+  const openEditTask = (task) => {
+    setEditingId(task.id);
+    setDraft({ ...task });
+    setDialogOpen(true);
   };
 
-  const closeSlash = () => {
-    setSlashOpen(false);
-    setSlashQuery('');
-    setSlashBlockId(null);
+  const saveTask = () => {
+    if (!draft.title.trim()) return;
+    if (editingId) {
+      setTasks((prev) =>
+        prev.map((t) => (t.id === editingId ? { ...t, ...draft, updatedAt: Date.now() } : t))
+      );
+    } else {
+      setTasks((prev) => [{ ...draft, id: uid(), createdAt: Date.now(), updatedAt: Date.now() }, ...prev]);
+    }
+    setDialogOpen(false);
+    setEditingId(null);
+    setDraft(makeTask());
   };
 
-  const filteredSlashItems = useMemo(() => {
-    const q = slashQuery.trim().toLowerCase();
-    if (!q) return BLOCK_TYPES;
-    return BLOCK_TYPES.filter((x) => x.label.toLowerCase().includes(q) || x.type.includes(q));
-  }, [slashQuery]);
-
-  const applyBlockType = (blockId, type) => {
-    if (!selectedPage) return;
-    const next = (selectedPage.blocks || []).map((b) => {
-      if (b.id !== blockId) return b;
-      const text = (b.text || '').startsWith('/') ? (b.text || '').slice(1).trim() : b.text;
-      return { ...b, type, text };
-    });
-    updateSelectedPage({ blocks: next });
-    closeSlash();
-    requestAnimationFrame(() => focusBlock(blockId));
+  const deleteTask = (id) => {
+    setTasks((prev) => prev.filter((t) => t.id !== id));
   };
 
-  const updateBlock = (blockId, patch) => {
-    if (!selectedPage) return;
-    const next = (selectedPage.blocks || []).map((b) => (b.id === blockId ? { ...b, ...patch } : b));
-    updateSelectedPage({ blocks: next });
+  const toggleComplete = (task) => {
+    const completed = task.status !== 'completed';
+    let next = tasks.map((t) =>
+      t.id === task.id ? { ...t, status: completed ? 'completed' : 'todo', updatedAt: Date.now() } : t
+    );
+
+    if (completed && task.recurrence && task.recurrence !== 'none') {
+      const baseDue = task.dueAt ? new Date(task.dueAt) : new Date();
+      let nextDue = new Date(baseDue);
+      if (task.recurrence === 'daily') nextDue.setDate(nextDue.getDate() + 1);
+      if (task.recurrence === 'weekly') nextDue.setDate(nextDue.getDate() + 7);
+      if (task.recurrence === 'monthly') nextDue = addMonths(nextDue, 1);
+
+      let nextReminder = '';
+      if (task.reminderAt && task.dueAt) {
+        const delta = new Date(task.dueAt).getTime() - new Date(task.reminderAt).getTime();
+        if (Number.isFinite(delta)) {
+          nextReminder = new Date(nextDue.getTime() - delta).toISOString();
+        }
+      }
+
+      const newTask = makeTask({
+        title: task.title,
+        description: task.description,
+        dueAt: nextDue.toISOString(),
+        reminderAt: nextReminder,
+        recurrence: task.recurrence,
+        categoryId: task.categoryId,
+        priority: task.priority,
+        color: task.color,
+      });
+      next = [newTask, ...next];
+    }
+
+    setTasks(next);
   };
 
-  const moveBlock = (fromId, toId) => {
-    if (!selectedPage) return;
-    const blocks = [...(selectedPage.blocks || [])];
-    const fromIdx = blocks.findIndex((b) => b.id === fromId);
-    const toIdx = blocks.findIndex((b) => b.id === toId);
-    if (fromIdx < 0 || toIdx < 0 || fromIdx === toIdx) return;
-    const [item] = blocks.splice(fromIdx, 1);
-    blocks.splice(toIdx, 0, item);
-    updateSelectedPage({ blocks });
+  const addCategory = (name) => {
+    const trimmed = name.trim();
+    if (!trimmed) return;
+    const colors = ['#6366f1', '#ec4899', '#f59e0b', '#10b981', '#3b82f6', '#8b5cf6'];
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    const newCat = { id: uid(), name: trimmed, color };
+    setCategories((prev) => [...prev, newCat]);
+    setActiveFilter(newCat.id);
   };
 
-  return (
-    <div className="bg-white dark:bg-black min-h-screen text-black dark:text-white transition-colors duration-300">
-      <Navbar />
+  const toggleTheme = () => {
+    const next = !isDark;
+    setIsDark(next);
+    if (typeof window !== 'undefined') {
+      window.localStorage.setItem('taskui:theme', next ? 'dark' : 'light');
+    }
+    document.documentElement.classList.toggle('dark', next);
+  };
 
-      <div className="container mx-auto px-6 pt-32 pb-12 max-w-7xl">
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12"
-        >
-          <div>
-            <div className="flex items-center gap-6 mb-4">
-              <button 
-                onClick={() => router.back()}
-                className="w-12 h-12 rounded-2xl bg-white/50 dark:bg-white/5 border border-black/5 dark:border-white/10 flex items-center justify-center hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all group/back shadow-sm"
-              >
-                <FaArrowLeft className="group-hover/back:-translate-x-1 transition-transform" />
-              </button>
-              <div className="flex items-center gap-4">
-                <span className="inline-flex items-center justify-center w-14 h-14 rounded-[2rem] bg-gradient-to-br from-purple-500 to-indigo-600 text-white shadow-lg shadow-purple-500/20">
-                  <FaRegStickyNote size={24} />
-                </span>
-                <div>
-                  <h1 className="text-4xl md:text-5xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-black to-gray-600 dark:from-white dark:to-gray-400">
-                    Workspace
-                  </h1>
-                  <p className="text-gray-400 dark:text-neutral-500 font-medium text-sm mt-1">
-                    Manage your thoughts, tasks, and media in one place.
-                  </p>
-                </div>
-              </div>
-            </div>
+  if (!isLoaded) {
+    return (
+      <div className="min-h-screen bg-white text-black dark:bg-black dark:text-white flex items-center justify-center">
+        <div className="animate-pulse">Loading Workspace...</div>
+      </div>
+    );
+  }
+
+  if (!isSignedIn) {
+    return (
+      <div className="min-h-screen bg-white text-black dark:bg-black dark:text-white flex items-center justify-center p-6">
+        <div className="w-full max-w-md">
+          <div className="text-center mb-6">
+            <h1 className="text-2xl font-black">Sign in to your workspace</h1>
+            <p className="text-black/60 dark:text-white/60 text-sm mt-2">Your data stays local on this device.</p>
           </div>
-
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => handleCreate(null)}
-              disabled={saving}
-              className="px-6 py-3 rounded-2xl bg-black text-white dark:bg-white dark:text-black font-black text-sm hover:scale-105 active:scale-95 transition-all shadow-xl shadow-black/10 dark:shadow-white/10 disabled:opacity-50 inline-flex items-center gap-2"
-            >
-              <FaPlus />
-              New Page
-            </button>
-            <button
-              onClick={() => handleCreateDatabase(null)}
-              disabled={saving}
-              className="px-6 py-3 rounded-2xl bg-white/50 dark:bg-white/5 text-black dark:text-white font-black text-sm hover:scale-105 active:scale-95 transition-all border border-black/5 dark:border-white/10 backdrop-blur-md disabled:opacity-50 inline-flex items-center gap-2"
-            >
-              <FaPlus />
-              Database
-            </button>
-          </div>
-        </motion.div>
-
-        <div className="grid grid-cols-1 md:grid-cols-[300px_1fr] gap-8">
-          {/* Sidebar */}
-          <div className="bg-white/40 dark:bg-neutral-900/40 backdrop-blur-2xl border border-black/5 dark:border-white/5 rounded-[2.5rem] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] dark:shadow-[0_32px_64px_-16px_rgba(0,0,0,0.3)] overflow-hidden flex flex-col h-[80vh]">
-            <div className="p-6 border-b border-black/5 dark:border-white/5 flex items-center justify-between">
-              <div className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">Library</div>
-              <button 
-                onClick={() => setShowSearch(!showSearch)}
-                className="p-1 px-2 rounded-lg bg-black/5 dark:bg-white/10 text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-black dark:hover:text-white transition-all shadow-sm"
-              >
-                Search
-              </button>
-            </div>
-
-            <div className="flex-1 overflow-y-auto p-2">
-              {showSearch && (
-                <div className="mb-4 px-2">
-                  <input 
-                    autoFocus
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Search pages..."
-                    className="w-full px-3 py-2 rounded-xl text-xs bg-white dark:bg-black border border-black/5 dark:border-white/5 outline-none"
-                  />
-                  {searchQuery && (
-                    <div className="mt-2 space-y-1">
-                      {filteredPages.length > 0 ? filteredPages.map(p => (
-                        <button 
-                          key={p.id}
-                          onClick={() => { setSelectedId(p.id); setShowSearch(false); setSearchQuery(''); }}
-                          className="w-full text-left px-3 py-2 rounded-lg text-xs hover:bg-white dark:hover:bg-white/5 transition-colors line-clamp-1"
-                        >
-                          {p.icon} {p.title}
-                        </button>
-                      )) : <div className="px-3 py-2 text-[10px] text-gray-400 italic">No results</div>}
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {favorites.length > 0 && !showSearch && (
-                <div className="mb-6">
-                  <div className="px-3 mb-2 text-[10px] font-black uppercase tracking-widest text-gray-400 opacity-50">Favorites</div>
-                  <div className="space-y-1">
-                    {favorites.map(p => (
-                      <button
-                        key={p.id}
-                        onClick={() => setSelectedId(p.id)}
-                        className={`w-full text-left px-3 py-2 rounded-xl text-xs font-bold transition-all ${
-                          p.id === store.selectedId ? 'bg-white dark:bg-neutral-800 shadow-sm' : 'hover:bg-white/40 dark:hover:bg-white/5 opacity-70'
-                        }`}
-                      >
-                        {p.icon} {p.title}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {!showSearch && (
-                <>
-                  <div className="px-3 mb-2 text-[10px] font-black uppercase tracking-widest text-gray-400 opacity-50">Private</div>
-                  <div className="space-y-1">
-                    {(tree.get('root') || []).map((p) => (
-                      <PageNode
-                        key={p.id}
-                        node={p}
-                        tree={tree}
-                        depth={0}
-                        selectedId={store.selectedId}
-                        expanded={expanded}
-                        onToggle={(id) =>
-                          setExpanded((prev) => {
-                            const next = { ...prev, [id]: !prev[id] };
-                            persist(store.pages, store.selectedId, next);
-                            return next;
-                          })
-                        }
-                        onSelect={(id) => setSelectedId(id)}
-                        onAddChild={(id) => handleCreate(id)}
-                        onAddDb={(id) => handleCreateDatabase(id)}
-                      />
-                    ))}
-                  </div>
-                </>
-              )}
-            </div>
-
-            <div className="p-4 border-t border-gray-200 dark:border-neutral-800">
-               <div className="text-[11px] text-gray-400 flex items-center justify-between">
-                 <span>{saving ? 'Saving…' : 'Saved to Local'}</span>
-               </div>
-            </div>
-          </div>
-
-          {/* Editor */}
-          <div className="bg-white dark:bg-neutral-950 border border-black/5 dark:border-white/5 rounded-[2.5rem] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] dark:shadow-[0_32px_64px_-16px_rgba(0,0,0,0.3)] overflow-hidden flex flex-col h-[80vh] relative">
-            <div className="p-5 border-b border-black/5 dark:border-white/5 flex items-center justify-between bg-white/50 dark:bg-neutral-950/50 backdrop-blur-md sticky top-0 z-10">
-              <div className="flex items-center gap-2 overflow-hidden mr-4">
-                {breadcrumbs.map((b, i) => (
-                  <React.Fragment key={b.id}>
-                    <button 
-                      onClick={() => setSelectedId(b.id)}
-                      className="text-[10px] font-bold uppercase tracking-wider text-gray-400 hover:text-black dark:hover:text-white transition-colors whitespace-nowrap"
-                    >
-                      {b.title}
-                    </button>
-                    {i < breadcrumbs.length - 1 && <span className="text-gray-300">/</span>}
-                  </React.Fragment>
-                ))}
-              </div>
-              <div className="flex items-center gap-2">
-                {selectedPage && (
-                  <button
-                    onClick={() => updateSelectedPage({ isFavorite: !selectedPage.isFavorite })}
-                    className={`p-2 rounded-lg text-xs transition-colors ${selectedPage.isFavorite ? 'text-yellow-500' : 'text-gray-400 hover:text-black dark:hover:text-white'}`}
-                  >
-                    {selectedPage.isFavorite ? '★' : '☆'}
-                  </button>
-                )}
-                <button
-                  onClick={handleDelete}
-                  disabled={!store.selectedId || saving}
-                  className="px-3 py-2 rounded-full bg-red-50 text-red-600 dark:bg-red-950/30 dark:text-red-300 text-xs font-black hover:bg-red-100 dark:hover:bg-red-950/50 disabled:opacity-50 inline-flex items-center gap-2"
-                >
-                  <FaTrash />
-                  Delete
-                </button>
-              </div>
-            </div>
-
-            <div className="flex-1 overflow-y-auto">
-              <AnimatePresence mode="wait">
-                {store.selectedId ? (
-                  <motion.div
-                    key={store.selectedId}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    className="p-8 md:p-12 lg:p-16 max-w-3xl mx-auto"
-                  >
-                    {/* Page Header (Icon & Cover) */}
-                    <div className="group relative mb-8">
-                       <div className="text-6xl mb-4 cursor-pointer hover:bg-gray-100 dark:hover:bg-white/5 w-fit p-2 rounded-2xl transition-all" title="Click to change icon">
-                          {selectedPage?.icon || '📄'}
-                       </div>
-                       <div className="flex items-end justify-between">
-                          <input
-                            value={selectedPage?.title || ''}
-                            onChange={(e) => updateSelectedPage({ title: e.target.value })}
-                            placeholder="Untitled"
-                            className="w-full text-4xl md:text-5xl font-black tracking-tight bg-transparent outline-none placeholder:text-gray-200 dark:placeholder:text-neutral-800"
-                          />
-                       </div>
-                    </div>
-                    {selectedPage?.kind === 'database' ? (
-                      <DatabaseView
-                        page={selectedPage}
-                        onUpdateDb={updateSelectedDb}
-                        onUpdatePage={updateSelectedPage}
-                      />
-                    ) : (
-                      <div className="space-y-1">
-                        {(selectedPage?.blocks || []).map((block, idx) => (
-                          <div
-                            key={block.id}
-                            className="group flex items-start gap-2 rounded-xl px-2 py-1 hover:bg-gray-50 dark:hover:bg-white/5"
-                            draggable
-                            onDragStart={() => setDragId(block.id)}
-                            onDragOver={(e) => e.preventDefault()}
-                            onDrop={() => {
-                              if (!dragId || dragId === block.id) return;
-                              moveBlock(dragId, block.id);
-                              setDragId(null);
-                            }}
-                          >
-                            <div className="pt-2 w-6 text-gray-300 group-hover:text-gray-400 select-none">
-                              ⋮
-                            </div>
-
-                            {block.type === 'todo' && (
-                              <input
-                                type="checkbox"
-                                checked={!!block.checked}
-                                onChange={(e) => updateBlock(block.id, { checked: e.target.checked })}
-                                className="mt-2"
-                              />
-                            )}
-
-                            {block.type === 'toggle' && (
-                              <button
-                                onClick={() => updateBlock(block.id, { open: !block.open })}
-                                className="mt-1.5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
-                                aria-label="toggle"
-                              >
-                                {block.open ? <FaChevronDown size={12} /> : <FaChevronRight size={12} />}
-                              </button>
-                            )}
-
-                            <BlockInput
-                              block={block}
-                              updateBlock={updateBlock}
-                              inputRef={(el) => {
-                                if (el) inputRefs.current.set(block.id, el);
-                              }}
-                              onChange={(text) => {
-                                updateBlock(block.id, { text });
-                                if (text.startsWith('/')) {
-                                  openSlash(block.id, text.slice(1));
-                                } else if (slashOpen && slashBlockId === block.id) {
-                                  closeSlash();
-                                }
-                              }}
-                              onKeyDown={(e) => {
-                                if (e.key === 'Enter' && !e.shiftKey) {
-                                  e.preventDefault();
-                                  insertBlockAfter(block.id, makeBlock('paragraph'));
-                                  return;
-                                }
-                                if (e.key === 'Backspace' && (block.text || '') === '' && (selectedPage?.blocks || []).length > 1) {
-                                  const prevId = selectedPage.blocks[idx - 1]?.id;
-                                  const nextBlocks = selectedPage.blocks.filter((b) => b.id !== block.id);
-                                  updateSelectedPage({ blocks: nextBlocks });
-                                  if (prevId) requestAnimationFrame(() => focusBlock(prevId));
-                                  return;
-                                }
-                                if (e.key === '/' && (block.text || '') === '') {
-                                  openSlash(block.id, '');
-                                }
-                                if (slashOpen && slashBlockId === block.id && e.key === 'Escape') {
-                                  closeSlash();
-                                }
-                              }}
-                            />
-                          </div>
-                        ))}
-                      </div>
-                    )}
-
-                    <AnimatePresence>
-                      {slashOpen && slashBlockId && (
-                        <motion.div
-                          initial={{ opacity: 0, y: 8 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: 8 }}
-                          className="mt-4 w-full max-w-md rounded-2xl border border-gray-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 shadow-xl overflow-hidden"
-                        >
-                          <div className="px-4 py-2 border-b border-gray-200 dark:border-neutral-800 text-[11px] font-black uppercase tracking-[0.25em] text-gray-400">
-                            Insert / Change block
-                          </div>
-                          <div className="max-h-64 overflow-y-auto">
-                            {filteredSlashItems.map((item) => (
-                              <button
-                                key={item.type}
-                                onClick={() => applyBlockType(slashBlockId, item.type)}
-                                className="w-full px-4 py-3 text-left hover:bg-gray-50 dark:hover:bg-white/5"
-                              >
-                                <div className="font-black text-sm">{item.label}</div>
-                                <div className="text-xs text-gray-400 mt-0.5">/{item.type}</div>
-                              </button>
-                            ))}
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    key="empty"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    className="p-10 text-center text-gray-400"
-                  >
-                    Select a page or create a new one.
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          </div>
+          <SignIn routing="hash" />
         </div>
       </div>
-
-      <Footer />
-    </div>
-  );
-}
-
-function PageNode({ node, tree, depth, selectedId, expanded, onToggle, onSelect, onAddChild, onAddDb }) {
-  const children = tree.get(node.id) || [];
-  const isExpanded = !!expanded[node.id];
-  const isSelected = selectedId === node.id;
+    );
+  }
 
   return (
-    <div>
-      <motion.div
-        initial={{ opacity: 0, x: -10 }}
-        animate={{ opacity: 1, x: 0 }}
-        className={`group flex items-center gap-3 px-3 py-2.5 rounded-2xl transition-all duration-300 ${
-          isSelected
-            ? 'bg-gradient-to-r from-purple-500/10 to-indigo-500/10 dark:from-purple-500/20 dark:to-indigo-500/20 border border-purple-500/20 dark:border-purple-400/20 shadow-sm shadow-purple-500/5'
-            : 'hover:bg-black/5 dark:hover:bg-white/5 border border-transparent'
-        }`}
-        style={{ marginLeft: `${depth * 16}px` }}
-      >
-        {children.length > 0 ? (
+    <div className="flex min-h-screen bg-white text-black dark:bg-black dark:text-white">
+      {isMobile && (
+        <div className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-black/70 backdrop-blur-lg border-b border-black/10 dark:border-white/10 px-4 py-3 flex items-center justify-between">
           <button
-            onClick={() => onToggle(node.id)}
-            className="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
-            aria-label="expand"
+            type="button"
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            className="w-9 h-9 rounded-lg border border-black/10 dark:border-white/10 flex items-center justify-center"
           >
-            {isExpanded ? <FaChevronDown size={12} /> : <FaChevronRight size={12} />}
+            {sidebarOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
           </button>
-        ) : (
-          <div className="w-6" />
-        )}
-
-        <button onClick={() => onSelect(node.id)} className="flex-1 text-left min-w-0">
-          <div className={`font-bold text-sm tracking-tight truncate ${isSelected ? 'text-purple-600 dark:text-purple-400' : 'text-gray-600 dark:text-gray-300'}`}>
-            {node.icon ? <span className="mr-2 text-base">{node.icon}</span> : ''}
-            {getPageTitle(node)}
-          </div>
-        </button>
-
-        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+          <span className="font-black">NihonTask</span>
           <button
-            onClick={() => onAddChild(node.id)}
-            className="p-1.5 rounded-lg text-gray-400 hover:text-black dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
-            aria-label="add subpage"
-            title="New Page"
+            type="button"
+            onClick={() => router.back()}
+            className="w-9 h-9 rounded-lg border border-black/10 dark:border-white/10 flex items-center justify-center"
+            aria-label="Back"
+            title="Back"
           >
-            <FaPlus size={10} />
+            <span className="text-sm font-black">←</span>
           </button>
-          <button
-            onClick={() => onAddDb(node.id)}
-            className="p-1.5 rounded-lg text-gray-400 hover:text-black dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
-            aria-label="add database"
-            title="New Database"
-          >
-            <span className="text-xs">🗂️</span>
-          </button>
-        </div>
-      </motion.div>
-
-      {children.length > 0 && isExpanded && (
-        <div className="mt-1 space-y-1">
-          {children.map((c) => (
-            <PageNode
-              key={c.id}
-              node={c}
-              tree={tree}
-              depth={depth + 1}
-              selectedId={selectedId}
-              expanded={expanded}
-              onToggle={onToggle}
-              onSelect={onSelect}
-              onAddChild={onAddChild}
-              onAddDb={onAddDb}
-            />
-          ))}
         </div>
       )}
-    </div>
-  );
-}
 
-function RangePill({ label, active, onClick }) {
-  return (
-    <button
-      onClick={onClick}
-      className={`px-4 py-2 rounded-xl text-xs font-bold transition-all duration-300 border ${
-        active
-          ? 'bg-black text-white dark:bg-white dark:text-black border-black dark:border-white shadow-lg shadow-black/10 dark:shadow-white/10 scale-105'
-          : 'bg-white/50 dark:bg-white/5 text-gray-500 dark:text-gray-400 border-black/5 dark:border-white/5 hover:border-black/10 dark:hover:border-white/10 hover:bg-white dark:hover:bg-white/10'
-      }`}
-    >
-      {label}
-    </button>
-  );
-}
-
-function DatabaseView({ page, onUpdateDb }) {
-  const db = page.db || { properties: [], rows: [], view: 'table' };
-
-  const titleProp = db.properties.find((p) => p.type === 'title') || db.properties[0];
-  const statusProp = db.properties.find((p) => p.type === 'select');
-  const dateProp = db.properties.find((p) => p.type === 'date');
-
-  const [range, setRange] = useState('all');
-  const [newName, setNewName] = useState('');
-  const [newStatus, setNewStatus] = useState(statusProp?.options?.[0] || 'Backlog');
-  const [newDate, setNewDate] = useState(() => {
-    const d = new Date();
-    d.setDate(d.getDate() + 1);
-    return d.toISOString().slice(0, 10);
-  });
-
-  const startOfDay = (d) => new Date(d.getFullYear(), d.getMonth(), d.getDate());
-  const parseISODate = (s) => {
-    if (!s || typeof s !== 'string') return null;
-    const d = new Date(`${s}T00:00:00`);
-    return Number.isNaN(d.getTime()) ? null : d;
-  };
-
-  const withinRange = useCallback((row) => {
-    if (range === 'all') return true;
-    if (!dateProp) return true;
-    const raw = (row.cells || {})[dateProp.id];
-    const d = parseISODate(raw);
-    if (!d) return false;
-
-    const today = startOfDay(new Date());
-    const target = startOfDay(d);
-    const diffDays = Math.round((target.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
-
-    if (range === 'today') return diffDays === 0;
-    if (range === 'tomorrow') return diffDays === 1;
-    if (range === 'week') return diffDays >= 0 && diffDays <= 7;
-    if (range === 'year') return target.getFullYear() === today.getFullYear();
-    return true;
-  }, [range, dateProp]);
-
-  const rows = useMemo(() => (db.rows || []).filter(withinRange), [db.rows, withinRange]);
-
-  const setView = (view) => onUpdateDb({ view });
-
-  const addRow = () => {
-    const id = uid();
-    const nextRow = {
-      id,
-      cells: {
-        ...(titleProp ? { [titleProp.id]: 'New item' } : {}),
-        ...(statusProp ? { [statusProp.id]: statusProp.options?.[0] || 'Backlog' } : {}),
-        ...(dateProp ? { [dateProp.id]: new Date().toISOString().slice(0, 10) } : {})
-      },
-      coverUrl: ''
-    };
-    onUpdateDb({ rows: [nextRow, ...(db.rows || [])] });
-  };
-
-  const addTask = () => {
-    if (!titleProp) return;
-    const name = newName.trim();
-    if (!name) return;
-    const id = uid();
-    const nextRow = {
-      id,
-      cells: {
-        [titleProp.id]: name,
-        ...(statusProp ? { [statusProp.id]: newStatus } : {}),
-        ...(dateProp ? { [dateProp.id]: newDate } : {})
-      },
-      coverUrl: ''
-    };
-    onUpdateDb({ rows: [nextRow, ...(db.rows || [])] });
-    setNewName('');
-  };
-
-  const updateCell = (rowId, propId, value) => {
-    const rows = (db.rows || []).map((r) =>
-      r.id === rowId ? { ...r, cells: { ...(r.cells || {}), [propId]: value } } : r
-    );
-    onUpdateDb({ rows });
-  };
-
-  const views = [
-    { id: 'table', label: 'Table' },
-    { id: 'board', label: 'Board' },
-    { id: 'calendar', label: 'Calendar' },
-    { id: 'timeline', label: 'Timeline' },
-    { id: 'list', label: 'List' },
-    { id: 'gallery', label: 'Gallery' }
-  ];
-
-  return (
-    <div className="mt-6">
-      <div className="flex flex-col gap-4 mb-5">
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="rounded-[2.5rem] border border-black/5 dark:border-white/5 bg-white/60 dark:bg-neutral-900/40 backdrop-blur-2xl p-8 shadow-2xl shadow-black/5 dark:shadow-white/20"
-        >
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-            <div>
-              <div className="text-[10px] font-black uppercase tracking-[0.3em] text-purple-500 mb-2">Task Planner</div>
-              <h3 className="text-xl font-black tracking-tight">Focus your day.</h3>
-              <p className="text-sm text-gray-400 mt-1">Plan tomorrow, next week, or the full year ahead.</p>
+      {(!isMobile || sidebarOpen) && (
+        <>
+          {isMobile && (
+            <div className="fixed inset-0 z-40 bg-black/40" onClick={() => setSidebarOpen(false)} />
+          )}
+          <aside className={`${isMobile ? 'fixed left-0 top-0 z-50 h-full' : ''} w-72 h-screen flex flex-col border-r border-black/10 dark:border-white/10 bg-white dark:bg-black`}>
+            <div className="p-4 flex items-center gap-2.5 border-b border-black/10 dark:border-white/10">
+              <div className="h-8 w-8 rounded-lg bg-black text-white dark:bg-white dark:text-black flex items-center justify-center">
+                <CheckSquare className="h-4 w-4" />
+              </div>
+              <span className="text-lg font-black tracking-tight">NihonTask</span>
             </div>
-            <div className="inline-flex flex-wrap items-center gap-2 p-1.5 bg-black/5 dark:bg-white/5 rounded-2xl">
-              <RangePill label="All" active={range === 'all'} onClick={() => setRange('all')} />
-              <RangePill label="Today" active={range === 'today'} onClick={() => setRange('today')} />
-              <RangePill label="Tomorrow" active={range === 'tomorrow'} onClick={() => setRange('tomorrow')} />
-              <RangePill label="Week" active={range === 'week'} onClick={() => setRange('week')} />
-              <RangePill label="Year" active={range === 'year'} onClick={() => setRange('year')} />
+
+            <div className="flex-1 px-3 py-4 overflow-y-auto">
+              <div className="space-y-1">
+                {[
+                  { id: 'all', label: 'All Tasks', icon: Inbox, count: taskCounts.all },
+                  { id: 'today', label: 'Today', icon: CalendarDays, count: taskCounts.today },
+                  { id: 'week', label: 'This Week', icon: Calendar, count: taskCounts.week },
+                  { id: 'completed', label: 'Completed', icon: CheckCircle2, count: taskCounts.completed },
+                  { id: 'contributions', label: 'Contributions', icon: CheckSquare, count: overallStats.activeDays },
+                ].map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => { 
+                      if (item.id === 'contributions') {
+                        setShowContributions(!showContributions);
+                      } else {
+                        setActiveFilter(item.id); 
+                      }
+                      if (isMobile) setSidebarOpen(false); 
+                    }}
+                    className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold transition-colors ${
+                      (item.id === 'contributions' ? showContributions : activeFilter === item.id) ? 'bg-black text-white dark:bg-white dark:text-black' : 'hover:bg-black/5 dark:hover:bg-white/5'
+                    }`}
+                  >
+                    <item.icon className="h-4 w-4 shrink-0" />
+                    <span className="flex-1 text-left">{item.label}</span>
+                    {item.count > 0 && (
+                      <span className="text-[10px] px-2 py-0.5 rounded-full border border-black/10 dark:border-white/10">
+                        {item.count}
+                      </span>
+                    )}
+                  </button>
+                ))}
+              </div>
+
+              <div className="mt-6">
+                <div className="flex items-center justify-between px-3 mb-2">
+                  <span className="text-xs font-black uppercase tracking-widest text-black/50 dark:text-white/50">Categories</span>
+                  <button
+                    type="button"
+                    onClick={() => newCatRef.current?.focus()}
+                    className="text-black/50 dark:text-white/50 hover:text-black dark:hover:text-white transition-colors"
+                  >
+                    <Plus className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+
+                <div className="px-3 mb-2 flex gap-2">
+                  <input
+                    ref={newCatRef}
+                    placeholder="Add category"
+                    className="h-8 text-xs w-full rounded-lg border border-black/10 dark:border-white/10 bg-white dark:bg-black px-2"
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        addCategory(e.currentTarget.value);
+                        e.currentTarget.value = '';
+                      }
+                    }}
+                  />
+                  <button
+                    type="button"
+                    className="h-8 px-2 rounded-lg border border-black/10 dark:border-white/10 text-xs"
+                    onClick={() => {
+                      if (newCatRef.current) {
+                        addCategory(newCatRef.current.value);
+                        newCatRef.current.value = '';
+                      }
+                    }}
+                  >
+                    Add
+                  </button>
+                </div>
+
+                <div className="space-y-0.5">
+                  {categories.map((cat) => (
+                    <button
+                      key={cat.id}
+                      onClick={() => { setActiveFilter(cat.id); if (isMobile) setSidebarOpen(false); }}
+                      className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors ${
+                        activeFilter === cat.id ? 'bg-black text-white dark:bg-white dark:text-black font-semibold' : 'hover:bg-black/5 dark:hover:bg-white/5'
+                      }`}
+                    >
+                      <div className="h-3 w-3 rounded-full shrink-0" style={{ backgroundColor: cat.color }} />
+                      <span className="flex-1 text-left truncate">{cat.name}</span>
+                    </button>
+                  ))}
+                  {categories.length === 0 && (
+                    <p className="px-3 py-2 text-xs text-black/50 dark:text-white/50">No categories yet</p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="p-3 border-t border-black/10 dark:border-white/10 space-y-2">
+              <button
+                onClick={toggleTheme}
+                className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
+              >
+                {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+                <span>{isDark ? 'Light Mode' : 'Dark Mode'}</span>
+              </button>
+              <div className="flex items-center justify-between px-3 py-1">
+                <div className="text-xs text-black/50 dark:text-white/50 truncate">{user?.emailAddresses?.[0]?.emailAddress || 'Signed in'}</div>
+                <UserButton />
+              </div>
+            </div>
+          </aside>
+        </>
+      )}
+
+      <main className={`flex-1 flex flex-col overflow-hidden ${isMobile ? 'pt-14' : ''}`}>
+        <header className="px-6 py-4 border-b border-black/10 dark:border-white/10 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => router.back()}
+              className="h-9 w-9 rounded-lg border border-black/10 dark:border-white/10 flex items-center justify-center hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
+              aria-label="Back"
+              title="Back"
+            >
+              <span className="text-sm font-black">←</span>
+            </button>
+            <div>
+              <h1 className="text-2xl font-black tracking-tight">
+                {activeFilter === 'all' && 'All Tasks'}
+                {activeFilter === 'today' && 'Today'}
+                {activeFilter === 'week' && 'This Week'}
+                {activeFilter === 'completed' && 'Completed'}
+                {categories.find((c) => c.id === activeFilter)?.name || ''}
+              </h1>
+              <p className="text-sm text-black/50 dark:text-white/50 mt-0.5">
+                {filteredTasks.length} task{filteredTasks.length !== 1 ? 's' : ''}
+              </p>
             </div>
           </div>
-
-          <div className="mt-8 grid grid-cols-1 md:grid-cols-[1fr_auto_auto_auto] gap-3">
-            <input
-              value={newName}
-              onChange={(e) => setNewName(e.target.value)}
-              placeholder="What needs to be done?"
-              className="px-6 py-4 rounded-[1.25rem] bg-white dark:bg-black/40 border border-black/5 dark:border-white/10 outline-none text-sm font-bold focus:border-purple-500/50 focus:ring-4 focus:ring-purple-500/5 transition-all w-full"
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') addTask();
-              }}
-            />
-            <input
-              type="date"
-              value={newDate}
-              onChange={(e) => setNewDate(e.target.value)}
-              className="px-4 py-4 rounded-[1.25rem] bg-white dark:bg-black/40 border border-black/5 dark:border-white/10 outline-none text-sm font-bold text-gray-500 dark:text-gray-300 focus:border-purple-500/50 transition-all cursor-pointer"
-            />
-            {statusProp ? (
-              <select
-                value={newStatus}
-                onChange={(e) => setNewStatus(e.target.value)}
-                className="px-6 py-4 rounded-[1.25rem] bg-white dark:bg-black/40 border border-black/5 dark:border-white/10 outline-none text-sm font-bold text-gray-600 dark:text-gray-200 focus:border-purple-500/50 transition-all cursor-pointer appearance-none"
-              >
-                {(statusProp.options || []).map((opt) => (
-                  <option key={opt} value={opt}>
-                    {opt}
-                  </option>
-                ))}
-              </select>
-            ) : null}
+          <div className="flex items-center gap-2">
+            <div className="relative">
+              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-black/40 dark:text-white/40" />
+              <input
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search tasks..."
+                className="pl-9 h-9 w-48 rounded-lg border border-black/10 dark:border-white/10 bg-white dark:bg-black text-sm"
+              />
+            </div>
             <button
-              onClick={addTask}
-              className="px-8 py-4 rounded-[1.25rem] bg-purple-600 text-white font-black text-sm hover:bg-purple-700 active:scale-95 transition-all shadow-lg shadow-purple-500/20"
+              onClick={openNewTask}
+              className="h-9 px-3 rounded-lg bg-black text-white dark:bg-white dark:text-black text-sm font-semibold inline-flex items-center gap-1.5"
             >
+              <Plus className="h-4 w-4" />
               Add Task
             </button>
           </div>
-        </motion.div>
+        </header>
 
-        <div className="inline-flex flex-wrap items-center gap-2 rounded-2xl border border-gray-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 p-2">
-          {views.map((v) => (
-            <button
-              key={v.id}
-              onClick={() => setView(v.id)}
-              className={`px-3 py-2 rounded-xl text-xs font-black transition-colors ${
-                db.view === v.id
-                  ? 'bg-black text-white dark:bg-white dark:text-black'
-                  : 'hover:bg-gray-50 dark:hover:bg-white/5 text-gray-500 dark:text-gray-300'
-              }`}
-            >
-              {v.label}
-            </button>
-          ))}
-        </div>
+        <div className="flex-1 overflow-y-auto px-6 py-4">
+          {showContributions ? (
+            <div className="space-y-6">
+              <div className="bg-white dark:bg-black border border-black/10 dark:border-white/10 rounded-2xl p-6">
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-xl font-black">Contribution Activity</h2>
+                  <button
+                    onClick={() => setShowContributions(false)}
+                    className="p-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/5"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                </div>
+                
+                <div className="grid grid-cols-4 gap-4 mb-6">
+                  <div className="text-center">
+                    <div className="text-2xl font-black">{overallStats.totalTasks}</div>
+                    <div className="text-xs text-black/60 dark:text-white/60">Total Tasks</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-black">{overallStats.completionRate}%</div>
+                    <div className="text-xs text-black/60 dark:text-white/60">Completion Rate</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-black">{overallStats.activeDays}</div>
+                    <div className="text-xs text-black/60 dark:text-white/60">Active Days</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-black">{overallStats.currentStreak}</div>
+                    <div className="text-xs text-black/60 dark:text-white/60">Current Streak</div>
+                  </div>
+                </div>
 
-        <button
-          onClick={addRow}
-          className="px-4 py-2 rounded-full bg-gray-100 text-black dark:bg-white/5 dark:text-white font-black text-sm hover:opacity-90 inline-flex items-center gap-2 border border-black/5 dark:border-white/10"
-        >
-          <FaPlus />
-          New
-        </button>
-      </div>
-
-      {db.view === 'table' && (
-        <motion.div 
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="overflow-x-auto rounded-[2rem] border border-black/5 dark:border-white/5 bg-white/40 dark:bg-neutral-900/40 backdrop-blur-xl shadow-xl shadow-black/5 dark:shadow-white/5"
-        >
-          <table className="min-w-full text-sm border-collapse">
-            <thead className="bg-black/5 dark:bg-white/5">
-              <tr>
-                {db.properties.map((p) => (
-                  <th key={p.id} className="text-left px-6 py-4 text-[10px] font-black uppercase tracking-[0.3em] text-gray-400 border-b border-black/5 dark:border-white/5">
-                    {p.name}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((r) => (
-                <tr key={r.id} className="group/row transition-colors hover:bg-black/5 dark:hover:bg-white/5">
-                  {db.properties.map((p) => (
-                    <td key={p.id} className="px-6 py-4 align-top border-b border-black/5 dark:border-white/5">
-                      {p.type === 'select' ? (
-                        <select
-                          value={(r.cells || {})[p.id] || ''}
-                          onChange={(e) => updateCell(r.id, p.id, e.target.value)}
-                          className="px-3 py-1.5 rounded-xl bg-white dark:bg-neutral-800 border border-black/5 dark:border-white/10 text-xs font-bold focus:ring-4 focus:ring-purple-500/10 transition-all cursor-pointer appearance-none"
-                        >
-                          {(p.options || []).map((opt) => (
-                            <option key={opt} value={opt}>
-                              {opt}
-                            </option>
-                          ))}
-                        </select>
-                      ) : (
-                        <input
-                          value={(r.cells || {})[p.id] || ''}
-                          onChange={(e) => updateCell(r.id, p.id, e.target.value)}
-                          className={`w-full bg-transparent outline-none font-medium ${p.type === 'title' ? 'font-black' : ''}`}
-                          placeholder={p.type === 'date' ? 'YYYY-MM-DD' : ''}
+                <div className="space-y-4">
+                  <div className="flex items-center gap-4 text-xs">
+                    <span className="text-black/60 dark:text-white/60">Less</span>
+                    <div className="flex gap-1">
+                      {[0, 1, 2, 3, 4].map(level => (
+                        <div
+                          key={level}
+                          className={`w-3 h-3 rounded-sm ${
+                            level === 0 ? 'bg-black/10 dark:bg-white/10' :
+                            level === 1 ? 'bg-black/20 dark:bg-white/20' :
+                            level === 2 ? 'bg-black/40 dark:bg-white/40' :
+                            level === 3 ? 'bg-black/60 dark:bg-white/60' :
+                            'bg-black dark:bg-white'
+                          }`}
                         />
-                      )}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </motion.div>
-      )}
-
-      {db.view === 'board' && (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {(statusProp?.options || ['Backlog', 'In Progress', 'Done']).map((col) => {
-            const items = rows.filter((r) => (r.cells || {})[statusProp?.id] === col);
-            return (
-              <div key={col} className="rounded-[2rem] border border-black/5 dark:border-white/5 bg-gray-50/50 dark:bg-white/5 backdrop-blur-sm overflow-hidden flex flex-col h-fit">
-                <div className="px-5 py-4 flex items-center justify-between border-b border-black/5 dark:border-white/5">
-                  <div className="flex items-center gap-3">
-                    <div className={`w-2 h-2 rounded-full ${col === 'Done' ? 'bg-green-500' : col === 'In Progress' ? 'bg-blue-500' : 'bg-gray-400'}`} />
-                    <div className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400">{col}</div>
+                      ))}
+                    </div>
+                    <span className="text-black/60 dark:text-white/60">More</span>
                   </div>
-                  <div className="text-[10px] font-black font-mono text-gray-400 bg-black/5 dark:bg-white/10 px-2 py-0.5 rounded-full">{items.length}</div>
-                </div>
-                <div className="p-4 space-y-3">
-                  {items.map((r, i) => (
-                    <motion.div 
-                      key={r.id} 
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: i * 0.05 }}
-                      className="p-5 rounded-2xl bg-white dark:bg-neutral-900 border border-black/5 dark:border-white/5 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group/card cursor-pointer"
-                    >
-                      <div className="font-bold text-sm tracking-tight leading-tight group-hover/card:text-purple-600 dark:group-hover/card:text-purple-400 transition-colors">{(r.cells || {})[titleProp?.id] || 'Untitled'}</div>
-                      <div className="flex items-center justify-between mt-4">
-                        {dateProp && (
-                          <div className="text-[10px] font-bold text-gray-400 flex items-center gap-1.5 uppercase tracking-wider">
-                            <span className="w-1 h-1 rounded-full bg-gray-300" />
-                            {(r.cells || {})[dateProp.id] || 'No Date'}
-                          </div>
-                        )}
-                        <div className="opacity-0 group-hover/card:opacity-100 transition-opacity">
-                          <button className="text-gray-300 hover:text-red-500 transition-colors">
-                            <FaTrash size={10} />
-                          </button>
+                  
+                  <div className="grid grid-cols-53 gap-1">
+                    {Array.from({ length: 53 }, (_, weekIndex) => {
+                      const weekStart = new Date(new Date().getFullYear(), 0, 1 + (weekIndex * 7));
+                      const weekDays = Array.from({ length: 7 }, (_, dayIndex) => {
+                        const date = new Date(weekStart);
+                        date.setDate(weekStart.getDate() + dayIndex);
+                        const dayData = contributionData.find(d => 
+                          d.date.getFullYear() === date.getFullYear() &&
+                          d.date.getMonth() === date.getMonth() &&
+                          d.date.getDate() === date.getDate()
+                        );
+                        
+                        return (
+                          <div
+                            key={dayIndex}
+                            className={`w-3 h-3 rounded-sm cursor-pointer transition-colors ${
+                              dayData ? (
+                                dayData.level === 0 ? 'bg-black/10 dark:bg-white/10' :
+                                dayData.level === 1 ? 'bg-black/20 dark:bg-white/20' :
+                                dayData.level === 2 ? 'bg-black/40 dark:bg-white/40' :
+                                dayData.level === 3 ? 'bg-black/60 dark:bg-white/60' :
+                                'bg-black dark:bg-white'
+                              ) : 'bg-black/5 dark:bg-white/5'
+                            }`}
+                            title={dayData ? `${dayData.date.toLocaleDateString()}: ${dayData.completed}/${dayData.total} tasks (${dayData.percentage}%)` : 'No activity'}
+                          />
+                        );
+                      });
+                      
+                      return (
+                        <div key={weekIndex} className="space-y-1">
+                          {weekDays}
                         </div>
-                      </div>
-                    </motion.div>
-                  ))}
-                  {items.length === 0 && (
-                     <div className="py-8 text-center border-2 border-dashed border-black/5 dark:border-white/5 rounded-2xl">
-                        <div className="text-[10px] font-bold uppercase tracking-widest text-gray-300">Drop here</div>
-                     </div>
-                  )}
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
-            );
-          })}
-        </div>
-      )}
-
-      {db.view === 'calendar' && (
-        <motion.div 
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="rounded-[2rem] border border-black/5 dark:border-white/5 bg-white/40 dark:bg-neutral-900/40 backdrop-blur-xl p-8"
-        >
-          <div className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400 mb-6">Monthly Roadmap</div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {rows
-              .slice()
-              .sort((a, b) => ((a.cells || {})[dateProp?.id] || '').localeCompare((b.cells || {})[dateProp?.id] || ''))
-              .map((r, i) => (
-                <motion.div 
-                  key={r.id} 
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.05 }}
-                  className="p-6 rounded-2xl border border-black/5 dark:border-white/5 bg-white dark:bg-neutral-900 shadow-sm hover:shadow-xl transition-all"
+            </div>
+          ) : filteredTasks.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-16 text-black/50 dark:text-white/50">
+              <Inbox className="h-12 w-12 mb-3 opacity-40" />
+              <p className="text-lg font-semibold">No tasks yet</p>
+              <p className="text-sm mt-1">Create your first task to get started</p>
+              <button onClick={openNewTask} className="mt-4 h-9 px-3 rounded-lg bg-black text-white dark:bg-white dark:text-black text-sm font-semibold inline-flex items-center gap-1.5">
+                <Plus className="h-4 w-4" />
+                Add Task
+              </button>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {filteredTasks.map((task) => (
+                <div
+                  key={task.id}
+                  className={`group flex items-start gap-3 p-3 rounded-xl border transition-all ${
+                    task.status === 'completed'
+                      ? 'bg-black/5 dark:bg-white/5 border-black/10 dark:border-white/10 opacity-70'
+                      : 'bg-white dark:bg-black border-black/10 dark:border-white/10 hover:shadow-sm'
+                  }`}
+                  style={task.color && task.status !== 'completed' ? { borderLeft: `4px solid ${task.color}` } : undefined}
                 >
-                  <div className="text-[10px] font-black uppercase tracking-widest text-purple-600 dark:text-purple-400 mb-2">{dateProp ? (r.cells || {})[dateProp.id] : 'No date'}</div>
-                  <div className="font-black text-sm">{(r.cells || {})[titleProp?.id] || 'Untitled'}</div>
-                </motion.div>
-              ))}
-          </div>
-        </motion.div>
-      )}
-
-      {db.view === 'timeline' && (
-        <div className="rounded-2xl border border-gray-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 p-4">
-          <div className="text-xs text-gray-400">Timeline view is driven by the Date property. (Basic view)</div>
-          <div className="mt-4 space-y-3">
-            {rows
-              .slice()
-              .sort((a, b) => ((a.cells || {})[dateProp?.id] || '').localeCompare((b.cells || {})[dateProp?.id] || ''))
-              .map((r) => (
-                <div key={r.id} className="flex items-center gap-4">
-                  <div className="w-28 text-xs font-black uppercase tracking-[0.25em] text-gray-400">
-                    {dateProp ? (r.cells || {})[dateProp.id] : ''}
+                  <input
+                    type="checkbox"
+                    checked={task.status === 'completed'}
+                    onChange={() => toggleComplete(task)}
+                    className="mt-1"
+                  />
+                  <div className="flex-1 min-w-0">
+                    <p className={`text-sm font-semibold ${task.status === 'completed' ? 'line-through text-black/40 dark:text-white/40' : ''}`}>
+                      {task.title}
+                    </p>
+                    {task.description && (
+                      <p className="mt-1 text-xs text-black/50 dark:text-white/50 line-clamp-2">{task.description}</p>
+                    )}
+                    <div className="mt-2 flex flex-wrap items-center gap-1.5">
+                      <span className="text-[10px] px-1.5 py-0.5 rounded-full border border-black/10 dark:border-white/10 inline-flex items-center gap-1">
+                        <Flag className="h-3 w-3" />
+                        {task.priority}
+                      </span>
+                      {task.dueAt && (
+                        <span className="text-[10px] px-1.5 py-0.5 rounded-full border border-black/10 dark:border-white/10 inline-flex items-center gap-1">
+                          <Calendar className="h-3 w-3" />
+                          {new Date(task.dueAt).toLocaleString()}
+                        </span>
+                      )}
+                      {task.reminderAt && (
+                        <span className="text-[10px] px-1.5 py-0.5 rounded-full border border-black/10 dark:border-white/10 inline-flex items-center gap-1">
+                          <Bell className="h-3 w-3" />
+                          {new Date(task.reminderAt).toLocaleString()}
+                        </span>
+                      )}
+                      {task.recurrence !== 'none' && (
+                        <span className="text-[10px] px-1.5 py-0.5 rounded-full border border-black/10 dark:border-white/10 inline-flex items-center gap-1">
+                          <RefreshCw className="h-3 w-3" />
+                          {task.recurrence}
+                        </span>
+                      )}
+                    </div>
                   </div>
-                  <div className="flex-1 p-4 rounded-2xl border border-gray-200 dark:border-neutral-800">
-                    <div className="font-black">{(r.cells || {})[titleProp?.id] || 'Untitled'}</div>
-                    {statusProp && <div className="text-xs text-gray-400 mt-1">{(r.cells || {})[statusProp.id] || ''}</div>}
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => openEditTask(task)}
+                      className="text-xs px-2 py-1 rounded-md border border-black/10 dark:border-white/10"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => deleteTask(task.id)}
+                      className="text-xs px-2 py-1 rounded-md bg-black text-white dark:bg-white dark:text-black"
+                    >
+                      Delete
+                    </button>
                   </div>
                 </div>
               ))}
-          </div>
+            </div>
+          )}
         </div>
-      )}
+      </main>
 
-      {db.view === 'list' && (
-        <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="space-y-3"
-        >
-          {rows.map((r, i) => (
-            <motion.div 
-              key={r.id} 
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: i * 0.03 }}
-              className="p-5 rounded-2xl border border-black/5 dark:border-white/5 bg-white/40 dark:bg-neutral-900/40 backdrop-blur-md flex items-center justify-between hover:bg-white dark:hover:bg-neutral-900 hover:shadow-lg transition-all cursor-pointer group/lst"
-            >
-              <div>
-                <div className="font-black tracking-tight group-hover/lst:text-purple-600 dark:group-hover/lst:text-purple-400 transition-colors">{(r.cells || {})[titleProp?.id] || 'Untitled'}</div>
-                <div className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mt-1 flex items-center gap-2">
-                  {statusProp && (
-                    <span className="px-1.5 py-0.5 rounded-md bg-black/5 dark:bg-white/5">{(r.cells || {})[statusProp.id]}</span>
-                  )}
-                  {statusProp && dateProp ? <span className="w-1 h-1 rounded-full bg-gray-300" /> : ''}
-                  {dateProp && (r.cells || {})[dateProp.id]}
+      {dialogOpen && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 p-4">
+          <div className="w-full max-w-lg rounded-2xl bg-white dark:bg-black border border-black/10 dark:border-white/10 p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-black">{editingId ? 'Edit Task' : 'New Task'}</h2>
+              <button onClick={() => setDialogOpen(false)} className="p-1 rounded-md hover:bg-black/5 dark:hover:bg-white/5">
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+
+            <div className="space-y-3">
+              <input
+                value={draft.title}
+                onChange={(e) => setDraft({ ...draft, title: e.target.value })}
+                placeholder="Task title"
+                className="w-full px-3 py-2 rounded-lg border border-black/10 dark:border-white/10 bg-white dark:bg-black text-sm"
+              />
+              <textarea
+                value={draft.description}
+                onChange={(e) => setDraft({ ...draft, description: e.target.value })}
+                placeholder="Description"
+                rows={3}
+                className="w-full px-3 py-2 rounded-lg border border-black/10 dark:border-white/10 bg-white dark:bg-black text-sm resize-none"
+              />
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-xs font-semibold text-black/60 dark:text-white/60">Due Date & Time</label>
+                  <input
+                    type="datetime-local"
+                    value={toInputDateTime(draft.dueAt)}
+                    onChange={(e) => setDraft({ ...draft, dueAt: fromInputDateTime(e.target.value) })}
+                    className="mt-1 w-full px-3 py-2 rounded-lg border border-black/10 dark:border-white/10 bg-white dark:bg-black text-sm"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs font-semibold text-black/60 dark:text-white/60">Reminder</label>
+                  <input
+                    type="datetime-local"
+                    value={toInputDateTime(draft.reminderAt)}
+                    onChange={(e) => setDraft({ ...draft, reminderAt: fromInputDateTime(e.target.value), reminded: false })}
+                    className="mt-1 w-full px-3 py-2 rounded-lg border border-black/10 dark:border-white/10 bg-white dark:bg-black text-sm"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs font-semibold text-black/60 dark:text-white/60">Priority</label>
+                  <select
+                    value={draft.priority}
+                    onChange={(e) => setDraft({ ...draft, priority: e.target.value })}
+                    className="mt-1 w-full px-3 py-2 rounded-lg border border-black/10 dark:border-white/10 bg-white dark:bg-black text-sm"
+                  >
+                    {TASK_PRIORITIES.map((p) => (
+                      <option key={p} value={p}>{p}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="text-xs font-semibold text-black/60 dark:text-white/60">Recurrence</label>
+                  <select
+                    value={draft.recurrence}
+                    onChange={(e) => setDraft({ ...draft, recurrence: e.target.value })}
+                    className="mt-1 w-full px-3 py-2 rounded-lg border border-black/10 dark:border-white/10 bg-white dark:bg-black text-sm"
+                  >
+                    {TASK_RECURRENCE.map((r) => (
+                      <option key={r} value={r}>{r}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="text-xs font-semibold text-black/60 dark:text-white/60">Category</label>
+                  <select
+                    value={draft.categoryId}
+                    onChange={(e) => setDraft({ ...draft, categoryId: e.target.value })}
+                    className="mt-1 w-full px-3 py-2 rounded-lg border border-black/10 dark:border-white/10 bg-white dark:bg-black text-sm"
+                  >
+                    {categories.map((c) => (
+                      <option key={c.id} value={c.id}>{c.name}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="text-xs font-semibold text-black/60 dark:text-white/60">Color</label>
+                  <input
+                    type="color"
+                    value={draft.color || '#000000'}
+                    onChange={(e) => setDraft({ ...draft, color: e.target.value })}
+                    className="mt-1 w-full h-10 rounded-lg border border-black/10 dark:border-white/10 bg-white dark:bg-black"
+                  />
                 </div>
               </div>
-            </motion.div>
-          ))}
-        </motion.div>
-      )}
 
-      {db.view === 'gallery' && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {rows.map((r, i) => (
-            <motion.div 
-              key={r.id} 
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: i * 0.05 }}
-              className="rounded-[2rem] border border-black/5 dark:border-white/5 bg-white dark:bg-neutral-900 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 overflow-hidden group/gal"
-            >
-              <div className="h-40 bg-gradient-to-br from-purple-100 to-indigo-100 dark:from-purple-900/20 dark:to-indigo-900/20 relative overflow-hidden">
-                 <div className="absolute inset-0 bg-white/10 dark:bg-black/10 backdrop-blur-[2px] opacity-0 group-hover/gal:opacity-100 transition-opacity" />
-              </div>
-              <div className="p-6">
-                <div className="font-black text-lg tracking-tight group-hover/gal:text-purple-600 dark:group-hover/gal:text-purple-400 transition-colors">{(r.cells || {})[titleProp?.id] || 'Untitled'}</div>
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {statusProp && (r.cells || {})[statusProp.id] && (
-                    <span className="text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded-lg bg-black/5 dark:bg-white/5 text-gray-500 underline decoration-purple-500/30">
-                      {(r.cells || {})[statusProp.id]}
-                    </span>
-                  )}
-                  {dateProp && (r.cells || {})[dateProp.id] && (
-                    <span className="text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded-lg bg-black/5 dark:bg-white/5 text-gray-400">
-                      {(r.cells || {})[dateProp.id]}
-                    </span>
-                  )}
+              <div className="flex items-center justify-between pt-2">
+                <button
+                  onClick={async () => {
+                    if (typeof window === 'undefined' || !('Notification' in window)) return;
+                    const perm = await Notification.requestPermission();
+                    setNotifPermission(perm);
+                  }}
+                  className="text-xs px-3 py-2 rounded-lg border border-black/10 dark:border-white/10"
+                >
+                  {notifPermission === 'granted' ? 'Notifications enabled' : 'Enable notifications'}
+                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setDialogOpen(false)}
+                    className="text-xs px-3 py-2 rounded-lg border border-black/10 dark:border-white/10"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={saveTask}
+                    className="text-xs px-3 py-2 rounded-lg bg-black text-white dark:bg-white dark:text-black"
+                  >
+                    {editingId ? 'Update' : 'Create'} Task
+                  </button>
                 </div>
               </div>
-            </motion.div>
-          ))}
+            </div>
+          </div>
         </div>
       )}
     </div>
   );
-}
-
-function BlockInput({ block, inputRef, onChange, onKeyDown, updateBlock }) {
-  const [uploading, setUploading] = useState(false);
-  const [progress, setProgress] = useState(0);
-
-  const handleUpload = async (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    setUploading(true);
-    try {
-      const result = await uploadMedia(file, 'notion', (p) => setProgress(p));
-      updateBlock(block.id, { url: result.url, text: file.name });
-    } catch (err) {
-      console.error(err);
-      alert('Upload failed');
-    } finally {
-      setUploading(false);
-    }
-  };
-
-  const common = {
-    ref: inputRef,
-    value: block.text || '',
-    onChange: (e) => onChange(e.target.value),
-    onKeyDown,
-    className:
-      'w-full bg-transparent outline-none placeholder:text-gray-300 dark:placeholder:text-neutral-700'
-  };
-
-  if (block.type === 'image' || block.type === 'video' || block.type === 'file') {
-    return (
-      <div className="w-full py-2">
-        {uploading ? (
-          <div className="w-full h-32 rounded-2xl bg-gray-50 dark:bg-white/5 flex flex-col items-center justify-center border-2 border-dashed border-gray-200 dark:border-neutral-800">
-             <div className="text-xs font-black uppercase tracking-widest text-gray-400 mb-2">Uploading {progress}%</div>
-             <div className="w-48 h-1 bg-gray-200 dark:bg-neutral-800 rounded-full overflow-hidden">
-                <motion.div 
-                  initial={{ width: 0 }}
-                  animate={{ width: `${progress}%` }}
-                  className="h-full bg-purple-500"
-                />
-             </div>
-          </div>
-        ) : block.url ? (
-          <div className="relative group/media rounded-2xl overflow-hidden border border-gray-200 dark:border-neutral-800">
-            {block.type === 'image' && (
-              <Image
-                src={block.url}
-                alt={block.text}
-                width={1600}
-                height={900}
-                sizes="(max-width: 768px) 100vw, 900px"
-                className="w-full max-h-[500px] object-contain bg-gray-50 dark:bg-neutral-900"
-              />
-            )}
-            {block.type === 'video' && (
-              <video src={block.url} controls className="w-full max-h-[500px] bg-black" />
-            )}
-            {block.type === 'file' && (
-              <a href={block.url} target="_blank" rel="noreferrer" className="flex items-center gap-3 p-4 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
-                <FaFile className="text-purple-500" />
-                <span className="text-sm font-bold">{block.text}</span>
-              </a>
-            )}
-            <button 
-              onClick={() => updateBlock(block.id, { url: null, text: '' })}
-              className="absolute top-2 right-2 p-2 rounded-full bg-black/50 text-white opacity-0 group-hover/media:opacity-100 transition-opacity hover:bg-black"
-            >
-              <FaTrash size={12} />
-            </button>
-          </div>
-        ) : (
-          <label className="flex flex-col items-center justify-center w-full h-32 rounded-2xl border-2 border-dashed border-gray-200 dark:border-neutral-800 hover:border-purple-500/50 hover:bg-purple-50/30 dark:hover:bg-purple-950/10 cursor-pointer transition-all">
-            <input type="file" className="hidden" onChange={handleUpload} accept={block.type === 'image' ? 'image/*' : block.type === 'video' ? 'video/*' : '*'} />
-            <div className="flex flex-col items-center gap-2">
-              {block.type === 'image' && <FaImage className="text-gray-400" />}
-              {block.type === 'video' && <FaVideo className="text-gray-400" />}
-              {block.type === 'file' && <FaFile className="text-gray-400" />}
-              <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">Click to upload {block.type}</span>
-            </div>
-          </label>
-        )}
-      </div>
-    );
-  }
-
-  if (block.type === 'code') {
-    return (
-      <textarea
-        {...common}
-        rows={Math.max(3, (block.text || '').split('\n').length)}
-        placeholder="Enter code here..."
-        className={`${common.className} font-mono text-[13px] leading-relaxed bg-black/5 dark:bg-white/5 rounded-2xl px-6 py-5 border border-black/5 dark:border-white/10 shadow-inner focus:border-purple-500/30 transition-all`}
-      />
-    );
-  }
-
-  if (block.type === 'quote') {
-    return (
-      <div className="border-l-[6px] border-purple-500/30 pl-6 py-2 my-4">
-        <textarea
-          {...common}
-          rows={Math.max(1, (block.text || '').split('\n').length)}
-          placeholder="Empty quote"
-          className={`${common.className} text-xl font-bold italic text-gray-600 dark:text-gray-300 h-auto resize-none`}
-        />
-      </div>
-    );
-  }
-
-  if (block.type === 'h1') {
-    return <input {...common} placeholder="Heading" className={`${common.className} text-4xl font-black tracking-tight`} />;
-  }
-  if (block.type === 'h2') {
-    return <input {...common} placeholder="Heading" className={`${common.className} text-2xl font-black tracking-tight`} />;
-  }
-  if (block.type === 'h3') {
-    return <input {...common} placeholder="Heading" className={`${common.className} text-xl font-black tracking-tight`} />;
-  }
-
-  if (block.type === 'bullet') {
-    return (
-      <div className="flex items-start gap-4 w-full group/bl">
-        <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-purple-500/50 shadow-sm shadow-purple-500/20" />
-        <input {...common} placeholder="List item" className={`${common.className} text-[15px] font-medium leading-relaxed`} />
-      </div>
-    );
-  }
-
-  if (block.type === 'todo') {
-    return (
-      <div className="flex items-center gap-4 w-full">
-        <button 
-          onClick={() => updateBlock(block.id, { checked: !block.checked })}
-          className={`w-5 h-5 rounded-lg border-2 flex items-center justify-center transition-all ${
-            block.checked 
-              ? 'bg-purple-600 border-purple-600 text-white shadow-lg shadow-purple-500/20' 
-              : 'border-black/5 dark:border-white/10 hover:border-purple-500/50'
-          }`}
-        >
-          {block.checked && <div className="w-2 h-2 rounded-full bg-white" />}
-        </button>
-        <input 
-          {...common} 
-          placeholder="To-do" 
-          className={`${common.className} text-[15px] font-medium leading-relaxed ${block.checked ? 'line-through text-gray-400' : ''}`} 
-        />
-      </div>
-    );
-  }
-
-  if (block.type === 'toggle') {
-    return <input {...common} placeholder="Toggle title" className={`${common.className} text-[15px]`} />;
-  }
-
-  return <input {...common} placeholder="Type '/' for commands" className={`${common.className} text-[15px] leading-relaxed`} />;
 }

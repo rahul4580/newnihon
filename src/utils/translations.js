@@ -82,7 +82,7 @@ export const translations = {
         },
         backend: {
             title: "Back End",
-            skills: ["Node.js, Express", "API Design", "Auth (Clerk/Auth.js)", "PostgreSQL/Vercel", "Serverless Logic"]
+            skills: ["Node.js, Express", "API Design", "Auth (Clerk/Auth.js)", "PostgreSQL", "Serverless Logic"]
         },
         data: {
             title: "Statistics",
@@ -354,7 +354,7 @@ export const translations = {
         },
         backend: {
             title: "バックエンド",
-            skills: ["Node.js, Express", "API設計", "認証 (Clerk/Auth.js)", "PostgreSQL/Vercel", "サーバーレスロジック"]
+            skills: ["Node.js, Express", "API設計", "認証 (Clerk/Auth.js)", "PostgreSQL", "サーバーレスロジック"]
         },
         data: {
             title: "統計学",
