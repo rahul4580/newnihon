@@ -4,7 +4,7 @@
 # dependencies
 /node_modules
 /.pnp
-.pnp.*git status
+.pnp.*
 
 .yarn/*
 !.yarn/patches
@@ -25,6 +25,7 @@
 # misc
 .DS_Store
 *.pem
+.sweet-project-162c3031/
 
 # debug
 npm-debug.log*
@@ -34,6 +35,7 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+.env.local
 
 # vercel
 .vercel
