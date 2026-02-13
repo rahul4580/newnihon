@@ -1,6 +1,7 @@
 export const chunk2 = [
   {
     id: 6,
+    level: "N5",
     title: "Home & Objects",
     description: "Furniture, appliances, and common household items",
     words: [
@@ -38,6 +39,7 @@ export const chunk2 = [
   },
   {
     id: 7,
+    level: "N5",
     title: "Colors & Shapes",
     description: "Colors, simple shapes, and descriptive words",
     words: [
@@ -75,6 +77,7 @@ export const chunk2 = [
   },
   {
     id: 8,
+    level: "N5",
     title: "Body & Health",
     description: "Body parts and health conditions",
     words: [
@@ -112,6 +115,7 @@ export const chunk2 = [
   },
   {
     id: 9,
+    level: "N5",
     title: "Clothing & Accessories",
     description: "Clothes, shoes, and wearing verbs",
     words: [
@@ -149,6 +153,7 @@ export const chunk2 = [
   },
   {
     id: 10,
+    level: "N5",
     title: "Places & City",
     description: "Common locations in the city and navigation",
     words: [

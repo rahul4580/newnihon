@@ -1,6 +1,7 @@
 export const chunk5 = [
   {
     id: 21,
+    level: "N5",
     title: "Shopping & Money",
     description: "Buying things, prices, and payment",
     words: [
@@ -38,6 +39,7 @@ export const chunk5 = [
   },
   {
     id: 22,
+    level: "N5",
     title: "Hobbies & Leisure",
     description: "Sports, arts, music, and free time",
     words: [
@@ -75,6 +77,7 @@ export const chunk5 = [
   },
   {
     id: 23,
+    level: "N5",
     title: "Health & Feelings",
     description: "Physical condition, illness, and emotions",
     words: [
@@ -112,6 +115,7 @@ export const chunk5 = [
   },
   {
     id: 24,
+    level: "N5",
     title: "Directions & Position",
     description: "Location words and giving directions",
     words: [
@@ -149,6 +153,7 @@ export const chunk5 = [
   },
   {
     id: 25,
+    level: "N5",
     title: "Technology & Tools",
     description: "Modern devices, internet, and utilities",
     words: [

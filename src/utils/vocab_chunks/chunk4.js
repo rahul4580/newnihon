@@ -1,6 +1,7 @@
 export const chunk4 = [
   {
     id: 16,
+    level: "N5",
     title: "Verbs: Daily Life",
     description: "Essential verbs for daily routines and activities",
     words: [
@@ -38,6 +39,7 @@ export const chunk4 = [
   },
   {
     id: 17,
+    level: "N5",
     title: "Verbs: Actions",
     description: "Verbs involving objects and states",
     words: [
@@ -75,6 +77,7 @@ export const chunk4 = [
   },
   {
     id: 18,
+    level: "N5",
     title: "Verbs: Communication",
     description: "Speaking, listening, and interacting",
     words: [
@@ -112,6 +115,7 @@ export const chunk4 = [
   },
   {
     id: 19,
+    level: "N5",
     title: "Verbs: Giving & Having",
     description: "Transactions and possession",
     words: [
@@ -149,6 +153,7 @@ export const chunk4 = [
   },
   {
     id: 20,
+    level: "N5",
     title: "Adjectives: Condition",
     description: "Describing state, difficulty, and feelings",
     words: [

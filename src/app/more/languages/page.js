@@ -104,7 +104,7 @@ export default function Languages() {
               {[
                 { label: 'Hiragana', href: '/more/languages/hiragana' },
                 { label: 'Katakana', href: '/more/languages/katakana' },
-                { label: 'N5 Kanji', href: '/more/languages/n5-kanji' },
+                { label: 'Kanji Master', href: '/more/languages/n5-kanji' },
                 { label: 'Grammar', href: '/more/languages/grammar' },
                 { label: 'Vocabulary', href: '/more/languages/vocabulary' },
                 { label: 'Nihon Bot', href: '/more/languages/listening' },

@@ -1,5 +1,4 @@
 'use client';
-
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import Navbar from '../../../../components/Navbar';
@@ -9,6 +8,29 @@ import { GRAMMAR_DATA } from '../../../../utils/grammarData';
 import { PARTICLE_DATA } from '../../../../utils/particleData';
 
 export default function GrammarPage() {
+  const [level, setLevel] = useState('N5'); // 'N5' | 'N4' | 'N3' | 'N2' | 'N1'
+  const [chapterIdx, setChapterIdx] = useState(0);
+  const [practiceOpen, setPracticeOpen] = useState(false);
+  const [userSentence, setUserSentence] = useState('');
+  const [correction, setCorrection] = useState(null);
+  const filteredChapters = useMemo(() => 
+    GRAMMAR_DATA.filter(ch => ch.level === level)
+  , [level]);
+
+  const filteredParticles = useMemo(() =>
+    PARTICLE_DATA.filter(p => p.level === level)
+  , [level]);
+
+  const simpleCorrect = useCallback((text) => {
+    if (!text) return null;
+    let t = text.trim();
+    t = t.replace(/\bi\b/g, 'I');
+    t = t.replace(/\s+/g, ' ');
+    t = t.replace(/\bdoesn\'t\b\s+\b\w+ed\b/gi, (m) => m.replace(/ed\b/i, ''));
+    t = t.replace(/\b(a|an)\s+([aeiou]\w+)/gi, 'an $2').replace(/\b(a|an)\s+([^aeiou]\w+)/gi, 'a $2');
+    return t;
+  }, []);
+
   const [view, setView] = useState('dashboard'); // 'dashboard', 'learn', 'quiz', 'results', 'particle_master', 'particle_learn', 'particle_quiz', 'particle_results'
   const [activeChapter, setActiveChapter] = useState(null);
   const [currentPatternIdx, setCurrentPatternIdx] = useState(0);
@@ -151,14 +173,14 @@ export default function GrammarPage() {
   };
 
   const startDailyTest = () => {
-    // Collect all quiz questions across chapters
-    const allQuizQuestions = GRAMMAR_DATA.flatMap((ch, idx) => ch.quiz.map(q => ({ ...q, chId: ch.chapter })));
+    // Collect all quiz questions across filtered chapters
+    const allQuizQuestions = filteredChapters.flatMap((ch, idx) => ch.quiz.map(q => ({ ...q, chId: ch.chapter })));
     const shuffled = [...allQuizQuestions].sort(() => Math.random() - 0.5).slice(0, 10);
     
     // Create a temporary "Chapter" object for the daily test
     const dailyChapter = {
       chapter: 'Daily',
-      title: 'Global N5 Challenge',
+      title: `Global ${level} Challenge`,
       quiz: shuffled
     };
     
@@ -198,20 +220,48 @@ export default function GrammarPage() {
       <Navbar />
       
       <div className="container mx-auto px-6 pt-32 pb-32 relative z-10">
+        <div className="mb-6 flex items-center justify-between">
+          <div />
+          <div className="flex items-center gap-1 bg-white dark:bg-neutral-900 p-1.5 rounded-2xl border border-black/5 dark:border-white/5 shadow-sm">
+             {['N5', 'N4', 'N3', 'N2', 'N1'].map((lv) => (
+                <button
+                  key={lv}
+                  onClick={() => { setLevel(lv); setView('dashboard'); }}
+                  className={`relative px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${
+                    level === lv ? 'text-white' : 'text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300'
+                  }`}
+                >
+                  {level === lv && (
+                    <motion.div
+                      layoutId="level-toggle"
+                      className="absolute inset-0 bg-rose-500 rounded-xl shadow-lg shadow-rose-500/30"
+                      transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
+                    />
+                  )}
+                  <span className="relative z-10">{lv}</span>
+                </button>
+             ))}
+          </div>
+        </div>
         
-        {/* Back Button */}
+        
         <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="mb-8">
            <a href="/more/languages" className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest opacity-40 hover:opacity-100 transition-opacity">
              <FaChevronLeft /> Back to Languages
            </a>
         </motion.div>
         
-        {/* VIEW: DASHBOARD */}
-        {view === 'dashboard' && (
+        
+        
+
+
+        
+        
+        
+        {view === 'dashboard' ? (
           <div className="max-w-6xl mx-auto">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-16">
                <div className="inline-block px-4 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-500 text-[10px] font-black uppercase tracking-widest mb-6 font-noto">Minna no Nihongo</div>
-               <h1 className="text-6xl md:text-8xl font-black mb-6 tracking-tighter">Grammar <span className="text-gray-300 dark:text-neutral-800">Pro</span></h1>
                
                <div className="mt-12 mb-16 max-w-2xl mx-auto p-1 bg-white dark:bg-neutral-900 rounded-[3rem] shadow-22 border border-black/5 flex items-center gap-8 pr-12">
                   <div className="w-40 h-40 rounded-[2.5rem] bg-rose-500 flex flex-col items-center justify-center text-white shadow-2xl shadow-rose-500/30">
@@ -225,15 +275,15 @@ export default function GrammarPage() {
                   </div>
                </div>
 
-               <div className="flex justify-center gap-12 mt-12 opacity-40">
-                  <div className="text-center"><p className="text-[10px] font-black uppercase tracking-widest mb-1">Total Chapters</p><p className="text-3xl font-black">25</p></div>
+                <div className="flex justify-center gap-12 mt-12 opacity-40">
+                   <div className="text-center"><p className="text-[10px] font-black uppercase tracking-widest mb-1">Total Chapters</p><p className="text-3xl font-black">{filteredChapters.length}</p></div>
                   <div className="text-center"><p className="text-[10px] font-black uppercase tracking-widest mb-1">Chapter Mastery</p><p className="text-3xl font-black text-rose-500">{masteredChapters.length}</p></div>
                   <div className="text-center"><p className="text-[10px] font-black uppercase tracking-widest mb-1">Weekly Tests</p><p className="text-3xl font-black">{stats.weekly}</p></div>
                </div>
             </motion.div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-               {/* Particle Master Entry Card */}
+               
                <motion.div 
                  whileHover={{ y: -5 }}
                  className="group p-8 rounded-[2.5rem] bg-gradient-to-br from-rose-500 to-orange-500 text-white transition-all text-left flex flex-col items-start gap-4 shadow-xl shadow-rose-500/20"
@@ -253,7 +303,7 @@ export default function GrammarPage() {
                  </div>
                </motion.div>
 
-               {GRAMMAR_DATA.map((ch) => (
+               {filteredChapters.map((ch) => (
                  <motion.div 
                    key={ch.chapter} 
                    whileHover={{ y: -5 }}
@@ -277,10 +327,9 @@ export default function GrammarPage() {
                ))}
             </div>
           </div>
-        )}
-
-        {/* VIEW: LEARN */}
-        {view === 'learn' && activeChapter && (
+        ) : null}
+        
+        {view === 'learn' && activeChapter ? (
           <div className="max-w-4xl mx-auto">
              <div className="flex justify-between items-center mb-16">
                 <button onClick={() => setView('dashboard')} className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest opacity-40 hover:opacity-100 transition-opacity"><FaChevronLeft /> Back to Lessons</button>
@@ -319,55 +368,55 @@ export default function GrammarPage() {
                       <div className="space-y-4">
                          <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2">Example Use Cases</p>
                          {activeChapter.patterns[currentPatternIdx].examples.map((ex, i) => (
-                           <div key={i} className="group p-6 rounded-2xl bg-white dark:bg-neutral-900 border border-black/5 shadow-sm hover:border-rose-500 transition-all">
-                              <div className="flex justify-between items-start gap-4 mb-2">
-                                 <p className="text-lg font-black font-noto leading-[1.4]">{ex.jp}</p>
-                                 <button onClick={() => playSound(ex.jp)} className="p-2.5 rounded-full bg-rose-500/5 text-rose-500 opacity-0 group-hover:opacity-100 transition-opacity"><FaPlay className="text-[8px]" /></button>
+                           <button 
+                             key={i} 
+                             onClick={() => playSound(ex.jp)}
+                             className="w-full group p-6 rounded-3xl bg-white dark:bg-neutral-900 border border-black/5 shadow-sm hover:border-rose-500 hover:shadow-lg transition-all text-left relative overflow-hidden"
+                           >
+                              <div className="flex items-start gap-5 relative z-10">
+                                 <div className="w-10 h-10 rounded-full bg-rose-500/5 text-rose-500 flex items-center justify-center shrink-0 group-hover:bg-rose-500 group-hover:text-white transition-colors">
+                                    <FaVolumeUp className="text-sm" />
+                                 </div>
+                                 <div>
+                                    <p className="text-xl font-black font-noto leading-relaxed mb-1">{ex.jp}</p>
+                                    <p className="text-xs font-black text-rose-500/50 uppercase tracking-widest mb-0.5">{ex.romaji}</p>
+                                    <p className="text-sm text-gray-500 font-medium group-hover:text-rose-500 transition-colors">{ex.en}</p>
+                                 </div>
                               </div>
-                              <p className="text-xs text-gray-400 font-medium">{ex.en}</p>
-                           </div>
+                           </button>
                          ))}
                       </div>
                    </div>
                 </motion.div>
              </AnimatePresence>
 
-             <div className="flex justify-center gap-4 mt-12">
+             <div className="flex justify-between items-center mt-16 pt-8 border-t border-black/5 dark:border-white/5">
                 <button 
                   disabled={currentPatternIdx === 0}
                   onClick={() => setCurrentPatternIdx(p => p - 1)}
-                  className="w-14 h-14 rounded-full bg-white dark:bg-neutral-900 flex items-center justify-center shadow-lg hover:scale-105 disabled:opacity-20 transition-all border border-black/5"
+                  className="flex items-center gap-3 px-6 py-3 rounded-xl hover:bg-black/5 dark:hover:bg-white/5 transition-colors disabled:opacity-30 text-[10px] font-black uppercase tracking-widest"
                 >
-                  <FaChevronLeft className="text-sm" />
+                  <FaChevronLeft /> Previous
                 </button>
-                {currentPatternIdx < activeChapter.patterns.length - 1 ? (
-                  <button 
-                    onClick={() => setCurrentPatternIdx(p => p + 1)}
-                    className="px-8 rounded-full bg-rose-500 text-white font-black uppercase tracking-widest text-[10px] hover:scale-105 transition-all shadow-xl shadow-rose-500/20"
-                  >
-                    Next Pattern
-                  </button>
-                ) : (
-                  <button 
-                    onClick={startQuiz}
-                    className="px-8 rounded-full bg-black dark:bg-white dark:text-black text-white font-black uppercase tracking-widest text-[10px] hover:scale-105 transition-all shadow-xl"
-                  >
-                    Start Chapter Quiz
-                  </button>
-                )}
+
+                <div className="flex gap-1.5">
+                   {activeChapter.patterns.map((_, i) => (
+                      <div key={i} className={`h-1.5 rounded-full transition-all duration-300 ${i === currentPatternIdx ? 'w-8 bg-rose-500' : 'w-1.5 bg-black/10 dark:bg-white/10'}`} />
+                   ))}
+                </div>
+
                 <button 
-                  disabled={currentPatternIdx === activeChapter.patterns.length - 1}
-                  onClick={() => setCurrentPatternIdx(p => p + 1)}
-                  className="w-14 h-14 rounded-full bg-white dark:bg-neutral-900 flex items-center justify-center shadow-lg hover:scale-105 disabled:opacity-20 transition-all border border-black/5"
+                  onClick={() => currentPatternIdx < activeChapter.patterns.length - 1 ? setCurrentPatternIdx(p => p + 1) : startQuiz()}
+                  className="flex items-center gap-3 px-8 py-3 rounded-xl bg-black dark:bg-white text-white dark:text-black hover:scale-105 transition-transform text-[10px] font-black uppercase tracking-widest shadow-xl"
                 >
-                  <FaChevronRight className="text-sm" />
+                  {currentPatternIdx < activeChapter.patterns.length - 1 ? 'Next Pattern' : 'Start Quiz'} <FaChevronRight />
                 </button>
              </div>
           </div>
-        )}
+        ) : null}
 
-        {/* VIEW: PRACTICE (Sentence Building) */}
-        {view === 'practice' && activeChapter && (
+        
+        {view === 'practice' && activeChapter ? (
           <div className="max-w-4xl mx-auto text-center">
              <div className="mb-16">
                 <div className="flex justify-between items-center mb-8">
@@ -404,13 +453,13 @@ export default function GrammarPage() {
 
              <button onClick={() => setPracticeState(p => ({ ...p, selected: [], isCorrect: null }))} className="mt-20 text-[10px] font-black uppercase tracking-[0.3em] opacity-30 hover:opacity-100 flex items-center gap-2 mx-auto transition-opacity"><FaRedo /> Reset Current Sentence</button>
           </div>
-        )}
+         ) : null}
 
-        {/* VIEW: QUIZ */}
-        {view === 'quiz' && activeChapter && (
+        
+        {view === 'quiz' && activeChapter ? (
           <div className="max-w-4xl mx-auto w-full">
              <div className="p-8 md:p-10 rounded-[2.5rem] bg-white dark:bg-neutral-950 border border-black/5 shadow-22 mb-10 relative overflow-hidden">
-                {/* Background Pattern */}
+                
                 <div className="absolute top-0 right-0 p-12 rotate-12 opacity-[0.03] select-none pointer-events-none text-rose-500">
                     <FaBook className="text-[20rem]" />
                 </div>
@@ -456,11 +505,13 @@ export default function GrammarPage() {
 
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3 w-full">
                 {activeChapter.quiz[quizIdx].options.map((opt, i) => (
-                  <button 
+                  <motion.button 
                     key={i} 
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.95 }}
                     onClick={() => handleAnswer(opt)}
                     disabled={!!quizState.feedback}
-                    className={`aspect-[1.4/1] rounded-3xl text-xl font-black transition-all border-2 flex items-center justify-center hover:scale-[1.03] active:scale-95 shadow-xl shadow-black/5 ${
+                    className={`relative overflow-hidden aspect-[1.4/1] rounded-3xl text-xl font-black transition-all border-2 flex items-center justify-center shadow-xl shadow-black/5 ${
                       quizState.feedback === 'correct' && opt === activeChapter.quiz[quizIdx].ans ? 'bg-green-500 text-white border-green-500' : 
                       quizState.feedback === 'incorrect' && opt === activeChapter.quiz[quizIdx].ans ? 'bg-green-500/20 border-green-500 text-green-500' :
                       quizState.feedback === 'incorrect' && opt !== activeChapter.quiz[quizIdx].ans ? 'opacity-20 grayscale' :
@@ -468,28 +519,33 @@ export default function GrammarPage() {
                     }`}
                   >
                     {opt}
-                  </button>
+                    {quizState.feedback === 'correct' && opt === activeChapter.quiz[quizIdx].ans && (
+                       <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="absolute inset-0 bg-green-500/10 flex items-center justify-center">
+                          <FaCheckCircle className="text-4xl text-white/50" />
+                       </motion.div>
+                    )}
+                  </motion.button>
                 ))}
              </div>
           </div>
-        )}
+        ) : null}
 
-        {/* VIEW: PARTICLE_MASTER */}
-        {view === 'particle_master' && (
+        
+        {view === 'particle_master' ? (
           <div className="max-w-6xl mx-auto">
              <div className="mb-12 flex justify-between items-end">
                 <div>
                    <button onClick={() => setView('dashboard')} className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest opacity-40 hover:opacity-100 transition-opacity mb-4"><FaChevronLeft /> Back to Dashboard</button>
                    <h2 className="text-4xl font-black tracking-tighter">Particle Master</h2>
-                   <p className="text-gray-400 text-sm mt-1 font-medium">Master the backbone of Japanese grammar (20 Essential Markers)</p>
+                   <p className="text-gray-400 text-sm mt-1 font-medium">Master the backbone of Japanese grammar ({filteredParticles.length} Essential Markers)</p>
                 </div>
                 <div className="flex gap-4">
-                   <div className="bg-rose-500/10 text-rose-500 text-[10px] font-black px-4 py-2 rounded-full uppercase tracking-widest border border-rose-500/20">Unlocked: 20/20</div>
+                   <div className="bg-rose-500/10 text-rose-500 text-[10px] font-black px-4 py-2 rounded-full uppercase tracking-widest border border-rose-500/20">Unlocked: {filteredParticles.length}/{filteredParticles.length}</div>
                 </div>
              </div>
 
              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                {PARTICLE_DATA.map((p) => (
+                {filteredParticles.map((p) => (
                   <motion.button
                     key={p.id}
                     whileHover={{ scale: 1.02, y: -2 }}
@@ -506,10 +562,10 @@ export default function GrammarPage() {
                 ))}
              </div>
           </div>
-        )}
+        ) : null}
 
-        {/* VIEW: PARTICLE_LEARN */}
-        {view === 'particle_learn' && activeParticle && (
+        
+        {view === 'particle_learn' && activeParticle ? (
           <div className="max-w-4xl mx-auto">
              <div className="mb-12">
                 <button onClick={() => setView('particle_master')} className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest opacity-40 hover:opacity-100 transition-opacity mb-8"><FaChevronLeft /> Back to Master List</button>
@@ -594,14 +650,15 @@ export default function GrammarPage() {
                 </div>
              </div>
           </div>
-        )}
+
+        ) : null}
 
 
-         {/* VIEW: PARTICLE_QUIZ */}
-         {view === 'particle_quiz' && activeParticle && (
+         
+         {view === 'particle_quiz' && activeParticle ? (
            <div className="max-w-4xl mx-auto w-full">
               <div className="p-8 md:p-10 rounded-[2.5rem] bg-white dark:bg-neutral-950 border border-black/5 shadow-22 mb-10 relative overflow-hidden">
-                 {/* Background Pattern */}
+                 
                  <div className="absolute top-0 right-0 p-12 rotate-12 opacity-[0.03] select-none pointer-events-none text-rose-500">
                      <FaStar className="text-[20rem]" />
                  </div>
@@ -663,10 +720,10 @@ export default function GrammarPage() {
                  ))}
               </div>
            </div>
-         )}
+         ) : null}
 
-          {/* VIEW: PARTICLE_RESULTS */}
-         {view === 'particle_results' && activeParticle && (
+          
+         {view === 'particle_results' && activeParticle ? (
            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="flex flex-col items-center text-center max-w-4xl mx-auto">
               <div className="w-32 h-32 rounded-full bg-rose-500/10 flex items-center justify-center mb-8 border border-rose-500/20 relative">
                  <FaTrophy className="text-6xl text-rose-500 animate-bounce" />
@@ -699,11 +756,11 @@ export default function GrammarPage() {
                  <button onClick={() => setView('particle_master')} className="px-10 py-5 rounded-3xl bg-black dark:bg-white text-white dark:text-black text-[10px] font-black uppercase tracking-[0.3em] hover:scale-105 transition-all shadow-2xl">Particle Master</button>
                  <button onClick={() => { setParticleQuizIdx(0); setQuizState({ score: 0, history: [], feedback: null }); setView('particle_quiz'); }} className="px-10 py-5 rounded-3xl bg-rose-500 text-white text-[10px] font-black uppercase tracking-[0.3em] hover:scale-105 transition-all shadow-xl shadow-rose-500/20 flex items-center gap-3"><FaRedo className="text-[8px]" /> Retake Test</button>
               </div>
-           </motion.div>
-         )}
+          </motion.div>
+         ) : null}
 
-        {/* VIEW: RESULTS */}
-        {view === 'results' && activeChapter && (
+        
+        {view === 'results' && activeChapter ? (
           <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="flex flex-col items-center text-center max-w-4xl mx-auto">
              <div className="w-32 h-32 rounded-full bg-rose-500/10 flex items-center justify-center mb-8 border border-rose-500/20 relative">
                 <FaTrophy className="text-6xl text-rose-500 animate-bounce" />
@@ -737,7 +794,8 @@ export default function GrammarPage() {
                 <button onClick={startQuiz} className="px-10 py-5 rounded-3xl bg-rose-500 text-white text-[10px] font-black uppercase tracking-[0.3em] hover:scale-105 transition-all shadow-xl shadow-rose-500/20 flex items-center gap-3"><FaRedo className="text-[8px]" /> Retake Exam</button>
              </div>
           </motion.div>
-        )}
+        ) : null}
+
 
       </div>
 

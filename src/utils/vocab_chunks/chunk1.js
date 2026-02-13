@@ -1,17 +1,18 @@
 export const chunk1 = [
   {
     id: 1,
+    level: "N5",
     title: "Greetings & Basics",
     description: "Essential daily greetings and polite expressions",
     words: [
-      { japanese: "おはよう", romaji: "ohayou", english: "Good morning", examples: [{ jp: "おはよう ございます。", en: "Good morning (polite).", romaji: "Ohayou gozaimasu." }, { jp: "おはよう、みんな。", en: "Good morning, everyone.", romaji: "Ohayou, minna." }] },
-      { japanese: "こんにちは", romaji: "konnichiwa", english: "Hello", examples: [{ jp: "こんにちは、元気？", en: "Hello, how are you?", romaji: "Konnichiwa, genki?" }, { jp: "先生、こんにちは。", en: "Hello, teacher.", romaji: "Sensei, konnichiwa." }] },
-      { japanese: "こんばんは", romaji: "konbanwa", english: "Good evening", examples: [{ jp: "こんばんは、月がきれいですね。", en: "Good evening, the moon is beautiful.", romaji: "Konbanwa, tsuki ga kirei desu ne." }, { jp: "みなさん、こんばんは。", en: "Good evening, everyone.", romaji: "Minasan, konbanwa." }] },
-      { japanese: "さようなら", romaji: "sayounara", english: "Goodbye", examples: [{ jp: "さようなら、また明日。", en: "Goodbye, see you tomorrow.", romaji: "Sayounara, mata ashita." }, { jp: "先生、さようなら。", en: "Goodbye, teacher.", romaji: "Sensei, sayounara." }] },
-      { japanese: "ありがとう", romaji: "arigatou", english: "Thank you", examples: [{ jp: "ありがとう ございます。", en: "Thank you very much.", romaji: "Arigatou gozaimasu." }, { jp: "いろいろ ありがとう。", en: "Thank you for everything.", romaji: "Iroiro arigatou." }] },
-      { japanese: "すみません", romaji: "sumimasen", english: "Excuse me/Sorry", examples: [{ jp: "すみません、トイレはどこですか。", en: "Excuse me, where is the toilet?", romaji: "Sumimasen, toire wa doko desu ka." }, { jp: "遅れて すみません。", en: "Sorry for being late.", romaji: "Okurete sumimasen." }] },
-      { japanese: "はい", romaji: "hai", english: "Yes", examples: [{ jp: "はい、そうです。", en: "Yes, that's right.", romaji: "Hai, sou desu." }, { jp: "はい、元気です。", en: "Yes, I am fine.", romaji: "Hai, genki desu." }] },
-      { japanese: "いいえ", romaji: "iie", english: "No", examples: [{ jp: "いいえ、違います。", en: "No, that's wrong.", romaji: "Iie, chigaimasu." }, { jp: "いいえ、結構です。", en: "No, thank you.", romaji: "Iie, kekkou desu." }] },
+      { japanese: "おはよう", romaji: "ohayou", hinglish: "Shubh Prabhat", english: "Good morning", examples: [{ jp: "おはよう ございます。", en: "Good morning (polite).", romaji: "Ohayou gozaimasu." }, { jp: "おはよう、みんな。", en: "Good morning, everyone.", romaji: "Ohayou, minna." }] },
+      { japanese: "こんにちは", romaji: "konnichiwa", hinglish: "Namaste / Hello", english: "Hello", examples: [{ jp: "こんにちは、元気？", en: "Hello, how are you?", romaji: "Konnichiwa, genki?" }, { jp: "先生、こんにちは。", en: "Hello, teacher.", romaji: "Sensei, konnichiwa." }] },
+      { japanese: "こんばんは", romaji: "konbanwa", hinglish: "Shubh Sandhya", english: "Good evening", examples: [{ jp: "こんばんは、月がきれいですね。", en: "Good evening, the moon is beautiful.", romaji: "Konbanwa, tsuki ga kirei desu ne." }, { jp: "みなさん、こんばんは。", en: "Good evening, everyone.", romaji: "Minasan, konbanwa." }] },
+      { japanese: "さようなら", romaji: "sayounara", hinglish: "Alvida", english: "Goodbye", examples: [{ jp: "さようなら、また明日。", en: "Goodbye, see you tomorrow.", romaji: "Sayounara, mata ashita." }, { jp: "先生、さようなら。", en: "Goodbye, teacher.", romaji: "Sensei, sayounara." }] },
+      { japanese: "ありがとう", romaji: "arigatou", hinglish: "Dhanyawaad", english: "Thank you", examples: [{ jp: "ありがとう ございます。", en: "Thank you very much.", romaji: "Arigatou gozaimasu." }, { jp: "いろいろ ありがとう。", en: "Thank you for everything.", romaji: "Iroiro arigatou." }] },
+      { japanese: "すみません", romaji: "sumimasen", hinglish: "Maaf kijiye", english: "Excuse me/Sorry", examples: [{ jp: "すみません、トイレはどこですか。", en: "Excuse me, where is the toilet?", romaji: "Sumimasen, toire wa doko desu ka." }, { jp: "遅れて すみません。", en: "Sorry for being late.", romaji: "Okurete sumimasen." }] },
+      { japanese: "はい", romaji: "hai", hinglish: "Haan", english: "Yes", examples: [{ jp: "はい、そうです。", en: "Yes, that's right.", romaji: "Hai, sou desu." }, { jp: "はい、元気です。", en: "Yes, I am fine.", romaji: "Hai, genki desu." }] },
+      { japanese: "いいえ", romaji: "iie", hinglish: "Nahi", english: "No", examples: [{ jp: "いいえ、違います。", en: "No, that's wrong.", romaji: "Iie, chigaimasu." }, { jp: "いいえ、結構です。", en: "No, thank you.", romaji: "Iie, kekkou desu." }] },
       { japanese: "お願いします", romaji: "onegaishimasu", english: "Please", examples: [{ jp: "これを お願いします。", en: "This one, please.", romaji: "Kore wo onegaishimasu." }, { jp: "よろしく お願いします。", en: "Nice to meet you.", romaji: "Yoroshiku onegaishimasu." }] },
       { japanese: "いただきます", romaji: "itadakimasu", english: "Bon appétit", examples: [{ jp: "では、いただきます。", en: "Well then, let's eat.", romaji: "Dewa, itadakimasu." }, { jp: "みんなで いただきます。", en: "Let's eat together.", romaji: "Minna de itadakimasu." }] },
       { japanese: "ごちそうさま", romaji: "gochisousama", english: "Thanks for the meal", examples: [{ jp: "ごちそうさまでした。", en: "Thank you for the meal.", romaji: "Gochisousama deshita." }, { jp: "美味しかった、ごちそうさま。", en: "It was delicious, thanks.", romaji: "Oishikatta, gochisousama." }] },
@@ -38,6 +39,7 @@ export const chunk1 = [
   },
   {
     id: 2,
+    level: "N5",
     title: "Numbers & Counting",
     description: "Numbers 1-10000 and basic counters",
     words: [
@@ -75,6 +77,7 @@ export const chunk1 = [
   },
   {
     id: 3,
+    level: "N5",
     title: "Time & Calendar",
     description: "Days, months, time expressions, and duration",
     words: [
@@ -112,6 +115,7 @@ export const chunk1 = [
   },
   {
     id: 4,
+    level: "N5",
     title: "Family & People",
     description: "Terms for family members and people",
     words: [
@@ -149,6 +153,7 @@ export const chunk1 = [
   },
   {
     id: 5,
+    level: "N5",
     title: "Food & Drinks",
     description: "Common foods, drinks, and dining terms",
     words: [

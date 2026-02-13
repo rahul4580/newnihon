@@ -1,6 +1,7 @@
 export const chunk6 = [
   {
     id: 26,
+    level: "N4",
     title: "Travel & Tourism",
     description: "Vocabulary for traveling in Japan",
     words: [
@@ -38,6 +39,7 @@ export const chunk6 = [
   },
   {
     id: 27,
+    level: "N4",
     title: "Culture & Tradition",
     description: "Japanese cultural terms and traditions",
     words: [
@@ -75,6 +77,7 @@ export const chunk6 = [
   },
   {
     id: 28,
+    level: "N4",
     title: "Adverbs & Connectors",
     description: "Words that connect ideas and modify verbs",
     words: [
@@ -112,6 +115,7 @@ export const chunk6 = [
   },
   {
     id: 29,
+    level: "N4",
     title: "Emergency & Safety",
     description: "Important words for emergencies and help",
     words: [
@@ -149,6 +153,7 @@ export const chunk6 = [
   },
   {
     id: 30,
+    level: "N4",
     title: "Common Phrases",
     description: "Useful daily expressions and set phrases",
     words: [

@@ -1,6 +1,7 @@
 export const chunk3 = [
   {
     id: 11,
+    level: "N5",
     title: "Transport & Travel",
     description: "Vehicles, travel verbs, and related terms",
     words: [
@@ -38,6 +39,7 @@ export const chunk3 = [
   },
   {
     id: 12,
+    level: "N5",
     title: "School & Education",
     description: "Classroom objects, subjects, and study terms",
     words: [
@@ -75,6 +77,7 @@ export const chunk3 = [
   },
   {
     id: 13,
+    level: "N5",
     title: "Work & Office",
     description: "Office, work tasks, and business terms",
     words: [
@@ -112,6 +115,7 @@ export const chunk3 = [
   },
   {
     id: 14,
+    level: "N5",
     title: "Nature & Seasons",
     description: "Weather, natural elements, and seasons",
     words: [
@@ -149,6 +153,7 @@ export const chunk3 = [
   },
   {
     id: 15,
+    level: "N5",
     title: "Animals",
     description: "Common animals, pets, and insects",
     words: [
