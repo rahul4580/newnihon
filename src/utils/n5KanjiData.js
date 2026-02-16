@@ -35,7 +35,14 @@ export const N5_KANJI_DATA = {
     { char: '分', meaning: 'Minute / Part', onyomi: 'fun/bun', kunyomi: 'wa' },
     { char: '何', meaning: 'What', onyomi: 'ka', kunyomi: 'nani/nan' },
     { char: '先', meaning: 'Before / Ahead', onyomi: 'sen', kunyomi: 'saki' },
-    { char: '生', meaning: 'Life / Birth', onyomi: 'sei/shou', kunyomi: 'i/u' }
+    { char: '生', meaning: 'Life / Birth', onyomi: 'sei/shou', kunyomi: 'i/u' },
+    { char: '週', meaning: 'Week', onyomi: 'shuu', kunyomi: '-' },
+    { char: '曜', meaning: 'Weekday', onyomi: 'you', kunyomi: '-' },
+    { char: '午', meaning: 'Noon', onyomi: 'go', kunyomi: '-' },
+    { char: '朝', meaning: 'Morning', onyomi: 'chou', kunyomi: 'asa' },
+    { char: '昼', meaning: 'Daytime', onyomi: 'chuu', kunyomi: 'hiru' },
+    { char: '夜', meaning: 'Night', onyomi: 'ya', kunyomi: 'yoru' },
+    { char: '夕', meaning: 'Evening', onyomi: 'seki', kunyomi: 'yuu' }
   ],
   people: [
     { char: '人', meaning: 'Person', onyomi: 'jin/nin', kunyomi: 'hito' },
@@ -43,7 +50,11 @@ export const N5_KANJI_DATA = {
     { char: '男', meaning: 'Man', onyomi: 'dan', kunyomi: 'otoko' },
     { char: '女', meaning: 'Woman', onyomi: 'jo', kunyomi: 'onna' },
     { char: '父', meaning: 'Father', onyomi: 'fu', kunyomi: 'chichi' },
-    { char: '母', meaning: 'Mother', onyomi: 'bo', kunyomi: 'haha' }
+    { char: '母', meaning: 'Mother', onyomi: 'bo', kunyomi: 'haha' },
+    { char: '兄', meaning: 'Older Brother', onyomi: 'kei/kyou', kunyomi: 'ani' },
+    { char: '姉', meaning: 'Older Sister', onyomi: 'shi', kunyomi: 'ane' },
+    { char: '弟', meaning: 'Younger Brother', onyomi: 'dai/de', kunyomi: 'otouto' },
+    { char: '妹', meaning: 'Younger Sister', onyomi: 'mai', kunyomi: 'imouto' }
   ],
   school: [
     { char: '学', meaning: 'Study / School', onyomi: 'gaku', kunyomi: 'mana' },
@@ -51,7 +62,9 @@ export const N5_KANJI_DATA = {
     { char: '書', meaning: 'Write / Book', onyomi: 'sho', kunyomi: 'ka' },
     { char: '聞', meaning: 'Hear / Listen', onyomi: 'bun/mon', kunyomi: 'ki' },
     { char: '話', meaning: 'Talk / Speak', onyomi: 'wa', kunyomi: 'hana' },
-    { char: '語', meaning: 'Language', onyomi: 'go', kunyomi: 'kata' }
+    { char: '語', meaning: 'Language', onyomi: 'go', kunyomi: 'kata' },
+    { char: '文', meaning: 'Literature / Text', onyomi: 'bun/mon', kunyomi: 'fumi' },
+    { char: '字', meaning: 'Character / Letter', onyomi: 'ji', kunyomi: 'aza' }
   ],
   place: [
     { char: '国', meaning: 'Country', onyomi: 'koku', kunyomi: 'kuni' },
@@ -66,7 +79,11 @@ export const N5_KANJI_DATA = {
     { char: '北', meaning: 'North', onyomi: 'hoku', kunyomi: 'kita' },
     { char: '南', meaning: 'South', onyomi: 'nan/na', kunyomi: 'minami' },
     { char: '東', meaning: 'East', onyomi: 'tou', kunyomi: 'higashi' },
-    { char: '西', meaning: 'West', onyomi: 'sei/sai', kunyomi: 'nishi' }
+    { char: '西', meaning: 'West', onyomi: 'sei/sai', kunyomi: 'nishi' },
+    { char: '駅', meaning: 'Station', onyomi: 'eki', kunyomi: '-' },
+    { char: '社', meaning: 'Company / Shrine', onyomi: 'sha', kunyomi: 'yashiro' },
+    { char: '会', meaning: 'Meet / Society', onyomi: 'kai', kunyomi: 'a' },
+    { char: '場', meaning: 'Place', onyomi: 'jou', kunyomi: 'ba' }
   ],
   actions: [
     { char: '入', meaning: 'Enter', onyomi: 'nyuu', kunyomi: 'hai/i' },
@@ -79,7 +96,11 @@ export const N5_KANJI_DATA = {
     { char: '読', meaning: 'Read', onyomi: 'doku/toku', kunyomi: 'yo' },
     { char: '買', meaning: 'Buy', onyomi: 'bai', kunyomi: 'ka' },
     { char: '休', meaning: 'Rest', onyomi: 'kyuu', kunyomi: 'yasu' },
-    { char: '立', meaning: 'Stand', onyomi: 'ritsu', kunyomi: 'ta' }
+    { char: '立', meaning: 'Stand', onyomi: 'ritsu', kunyomi: 'ta' },
+    { char: '言', meaning: 'Say', onyomi: 'gen/gon', kunyomi: 'i/koto' },
+    { char: '持', meaning: 'Hold', onyomi: 'ji', kunyomi: 'mo' },
+    { char: '止', meaning: 'Stop', onyomi: 'shi', kunyomi: 'to' },
+    { char: '走', meaning: 'Run', onyomi: 'sou', kunyomi: 'hashi' }
   ],
   descriptors: [
     { char: '大', meaning: 'Big', onyomi: 'dai/tai', kunyomi: 'oo' },
@@ -92,7 +113,11 @@ export const N5_KANJI_DATA = {
     { char: '古', meaning: 'Old', onyomi: 'ko', kunyomi: 'furu' },
     { char: '多', meaning: 'Many', onyomi: 'ta', kunyomi: 'oo' },
     { char: '少', meaning: 'Few / Little', onyomi: 'shou', kunyomi: 'suku/suko' },
-    { char: '半', meaning: 'Half', onyomi: 'han', kunyomi: 'naka' }
+    { char: '半', meaning: 'Half', onyomi: 'han', kunyomi: 'naka' },
+    { char: '明', meaning: 'Bright', onyomi: 'mei', kunyomi: 'aka' },
+    { char: '暗', meaning: 'Dark', onyomi: 'an', kunyomi: 'kura' },
+    { char: '広', meaning: 'Wide', onyomi: 'kou', kunyomi: 'hiro' },
+    { char: '早', meaning: 'Early', onyomi: 'sou', kunyomi: 'haya' }
   ],
   daily: [
     { char: '車', meaning: 'Car', onyomi: 'sha', kunyomi: 'kuruma' },
@@ -104,7 +129,14 @@ export const N5_KANJI_DATA = {
     { char: '本', meaning: 'Book / Origin', onyomi: 'hon', kunyomi: 'moto' },
     { char: '友', meaning: 'Friend', onyomi: 'yuu', kunyomi: 'tomo' },
     { char: '間', meaning: 'Between / Space', onyomi: 'kan/ken', kunyomi: 'ma/aida' },
-    { char: '毎', meaning: 'Every', onyomi: 'mai', kunyomi: '-' }
+    { char: '毎', meaning: 'Every', onyomi: 'mai', kunyomi: '-' },
+    { char: '円', meaning: 'Yen / Circle', onyomi: 'en', kunyomi: 'maru' },
+    { char: '肉', meaning: 'Meat', onyomi: 'niku', kunyomi: '-' },
+    { char: '茶', meaning: 'Tea', onyomi: 'cha/sa', kunyomi: '-' },
+    { char: '魚', meaning: 'Fish', onyomi: 'gyo', kunyomi: 'sakana' },
+    { char: '紙', meaning: 'Paper', onyomi: 'shi', kunyomi: 'kami' },
+    { char: '目', meaning: 'Eye', onyomi: 'moku', kunyomi: 'me' },
+    { char: '耳', meaning: 'Ear', onyomi: 'ji', kunyomi: 'mimi' }
   ]
 };
 

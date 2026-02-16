@@ -1,7 +1,6 @@
 'use client';
 import { motion } from 'motion/react';
-import Image from 'next/image';
-import Scene3D from './Scene3D';
+
 import { useLanguage } from '../context/LanguageContext';
 import { translations } from '../utils/translations';
 
@@ -14,10 +13,7 @@ const Hero = () => {
   return (
     <section className="min-h-screen flex flex-col items-center justify-center px-8 md:px-20 pt-24 pb-12 bg-white dark:bg-black text-black dark:text-white relative overflow-hidden transition-colors duration-500">
       
-      {/* Background 3D Layer */}
-      <div className="absolute inset-0 z-0">
-        <Scene3D />
-      </div>
+
 
       {/* Marquee Background Text */}
       <div className="absolute top-1/2 left-0 w-full -translate-y-1/2 pointer-events-none opacity-[0.03] dark:opacity-[0.05] whitespace-nowrap z-0 select-none">
@@ -39,13 +35,13 @@ const Hero = () => {
              transition={{ duration: 1, ease: [0.76, 0, 0.24, 1] }}
           >
              <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-black/10 dark:border-white/10 bg-white/50 dark:bg-black/50 backdrop-blur-md mb-8">
-               <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-               <span className="text-[10px] font-black uppercase tracking-widest">{t.greeting} Rahul</span>
-             </div>
+               <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+                <span className="text-[10px] font-black uppercase tracking-widest">{t.greeting}</span>
+              </div>
 
              <h1 className={`text-6xl md:text-[8rem] lg:text-[10rem] font-black leading-[0.8] tracking-tighter mb-8 ${language === 'jp' ? 'font-noto' : ''}`}>
-               DESIGN<br />
-               <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-400 to-gray-600 dark:from-neutral-500 dark:to-neutral-100">ENGINEER.</span>
+               {t.title}<br />
+               <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-400 to-gray-600 dark:from-neutral-500 dark:to-neutral-100">{t.subtitle}</span>
              </h1>
           </motion.div>
 
@@ -56,7 +52,7 @@ const Hero = () => {
               className="max-w-xl mx-auto md:mx-0"
           >
             <p className="text-xl md:text-2xl text-gray-500 dark:text-neutral-400 font-medium leading-relaxed">
-              Crafting high-end digital experiences where <span className="text-black dark:text-white font-bold">minimalism</span> meets <span className="text-black dark:text-white font-bold italic">high-performance</span> code.
+              {t.description}
             </p>
           </motion.div>
 
@@ -74,8 +70,8 @@ const Hero = () => {
                   {t.cta}
               </motion.button>
               
-              <Link href="/#contact" className="group flex items-center gap-4 px-10 py-5 font-black text-xs uppercase tracking-[0.3em]">
-                <span className="group-hover:translate-x-2 transition-transform duration-300">GET IN TOUCH</span>
+              <Link href="/more/languages" className="group flex items-center gap-4 px-10 py-5 font-black text-xs uppercase tracking-[0.3em]">
+                <span className="group-hover:translate-x-2 transition-transform duration-300">JLPT ROADMAP</span>
                 <div className="w-12 h-12 rounded-full border border-black/10 dark:border-white/10 flex items-center justify-center group-hover:bg-black group-hover:text-white dark:group-hover:bg-white dark:group-hover:text-black transition-all">
                   →
                 </div>
@@ -83,59 +79,49 @@ const Hero = () => {
           </motion.div>
         </div>
 
-        {/* Right Content - Profile Image Decoration */}
+        {/* Right Content - JLPT Levels Grid */}
         <motion.div 
            initial={{ opacity: 0, x: 50 }}
            animate={{ opacity: 1, x: 0 }}
            transition={{ delay: 0.2, duration: 1, ease: [0.76, 0, 0.24, 1] }}
            className="relative flex justify-center items-center order-1 md:order-2"
         >
-          <div className="relative w-[250px] h-[350px] md:w-[320px] md:h-[450px] overflow-hidden rounded-[3rem] group ring-1 ring-black/10 dark:ring-white/10 shadow-2xl">
-              <Image 
-                  src="/nihongo.jpg" 
-                  alt="Dinakramam Logo" 
-                  fill
-                  // Move focal point slightly right so the face isn't cropped to the left
-                  style={{ objectFit: 'cover', objectPosition: '65% 50%' }}
-                  sizes="(min-width: 768px) 320px, 250px"
-                  priority
-                  className="z-10 grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-1000 ease-out" 
-              />
-              
-              {/* Image Overlays */}
-              <div className="absolute inset-0 z-20 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-              
-              <div className="absolute bottom-8 left-8 z-30 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 translate-y-4 transition-all duration-700 delay-100">
-                <p className="text-white font-black text-xl tracking-tighter">BORN IN INDIA.</p>
-                <p className="text-white/60 text-xs font-bold tracking-widest uppercase">Currently shaping the web.</p>
+          <div className="grid grid-cols-2 gap-4 md:gap-6 max-w-[400px]">
+            {t.levels?.map((level, index) => (
+              <motion.div
+                key={level}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.8 + (index * 0.1) }}
+                whileHover={{ scale: 1.05, rotate: index % 2 === 0 ? 2 : -2 }}
+                className="aspect-square w-32 md:w-40 bg-white dark:bg-neutral-900 border border-black/10 dark:border-white/10 rounded-[2.5rem] flex flex-col items-center justify-center p-6 shadow-xl hover:shadow-2xl transition-all cursor-pointer group relative overflow-hidden"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-red-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <span className="text-[10px] font-black uppercase tracking-widest opacity-50 mb-2">JLPT</span>
+                <span className="text-4xl md:text-5xl font-black italic tracking-tighter">{level}</span>
+                <div className="mt-4 w-8 h-px bg-red-500/30 group-hover:w-16 transition-all duration-500"></div>
+              </motion.div>
+            ))}
+            
+            {/* Special Highlight Card */}
+            <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 1.4 }}
+                className="col-span-2 bg-black dark:bg-white p-8 rounded-[3rem] shadow-2xl flex items-center justify-between group cursor-pointer overflow-hidden relative"
+            >
+              <div className="relative z-10">
+                <p className="text-white/50 dark:text-black/50 text-[10px] font-black uppercase tracking-widest mb-1">Expert System</p>
+                <p className="text-white dark:text-black text-xl font-black italic tracking-tighter">N5 to N1 Journey.</p>
               </div>
-
-              <div className="absolute top-8 right-8 z-30">
-                 <div className="bg-white/90 dark:bg-black/90 backdrop-blur-md px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.2em] shadow-xl">
-                   Available 2026.
-                 </div>
+              <div className="w-12 h-12 rounded-2xl bg-white/10 dark:bg-black/10 flex items-center justify-center text-white dark:text-black text-2xl group-hover:translate-x-2 transition-transform">
+                →
               </div>
+              <div className="absolute -right-4 -bottom-4 text-white/[0.05] dark:text-black/[0.05] text-8xl font-black italic select-none">
+                NIHON
+              </div>
+            </motion.div>
           </div>
-
-          {/* Draggable/Floating Element Deco */}
-          <motion.div
-            animate={{ 
-              y: [0, -20, 0],
-              rotate: [12, 15, 12]
-            }}
-            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute -bottom-6 -left-12 z-40 bg-white dark:bg-neutral-900 border border-black/10 dark:border-white/10 p-4 rounded-3xl shadow-2xl hidden md:block"
-          >
-             <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-black dark:bg-white flex items-center justify-center text-white dark:text-black font-black text-xl italic">
-                  1%
-                </div>
-                <div>
-                  <p className="text-[10px] font-black uppercase tracking-widest opacity-50">Standard</p>
-                  <p className="text-sm font-black italic tracking-tighter">Pixel Perfection.</p>
-                </div>
-             </div>
-          </motion.div>
         </motion.div>
       </div>
 

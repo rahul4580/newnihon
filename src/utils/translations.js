@@ -11,9 +11,12 @@ export const translations = {
       contact: "Contact",
     },
     hero: {
-      greeting: "Hello, I'm",
-      role: "Creative Developer",
-      cta: "Explore Work",
+      greeting: "Journey to Nihongo Master",
+      title: "NIHONGO",
+      subtitle: "MASTER.",
+      description: "Master Japanese from N5 to N1 with our comprehensive roadmap, interactive exercises, and JLPT-focused training.",
+      cta: "Start Learning",
+      levels: ["N5", "N4", "N3", "N2", "N1"]
     },
     about: {
       title: "Who I Am",
@@ -49,15 +52,15 @@ export const translations = {
       cta: "Let's Build Something"
     },
     skills: {
-      title: "Technical Expertise",
-      subtitle: "Mastering the digital landscape through code, data, and innovative problem-solving.",
-      frontend: "Frontend",
-      backend: "Backend & DB",
-      data: "Data Analysis",
-      tools: "Tools & DevOps",
-      results: "Proven Results",
-      results_desc: "Explore how these skills translate into functional, high-performance applications.",
-      view_projects: "View Projects +"
+      title: "NIHONGO MATRIX",
+      subtitle: "Mastering the Japanese landscape through JLPT levels, career growth, and cultural immersion.",
+      frontend: "JLPT Goals",
+      backend: "Global Careers",
+      data: "Life & PR",
+      tools: "Cultural Mastery",
+      results: "IMPACT",
+      results_desc: "Opening doors to permanent residency and high-paying roles in Tokyo.",
+      view_projects: "Start Journey +"
     },
     philosophy: {
         label: "Passion",
@@ -200,7 +203,75 @@ export const translations = {
       cta_description: "Let's unlock the power of your data and turn it into competitive advantage.",
       cta_button: "View Analytics +"
     },
-    // Add more translations as needed
+    whyLearn: {
+      label: "Why Learn?",
+      title: "WHY LEARN JAPANESE?",
+      subtitle: "Beyond the language, it's a gateway to new dimensions of life, career, and culture.",
+      features: [
+        { title: "Cultural Understanding", desc: "Gain authentic experiences and deep cultural insights that travelers miss." },
+        { title: "Career Advancement", desc: "Connect with high-paying roles in Tokyo's thriving tech and global business sectors." },
+        { title: "Brain Benefits", desc: "Improve memory and cognitive flexibility by mastering three unique writing systems." },
+        { title: "Travel Freedom", desc: "Navigate Japan with absolute confidence and discover hidden gems off the beaten path." },
+        { title: "Academic Excellence", desc: "Become eligible for prestigious MEXT scholarships and top-tier research programs." },
+        { title: "Global Connections", desc: "Build meaningful relationships with over 125 million native speakers globally." }
+      ],
+      unique: {
+        title: "The Uniqueness of Nihongo",
+        desc: "A beautiful tapestry of 3 writing systems, nuanced politeness levels (Keigo), and deeply expressive idioms."
+      },
+      stats: {
+        title: "By the Numbers",
+        desc: "Japan ranks as the 3rd largest economy, offering vast trade and innovation opportunities."
+      }
+    },
+    opportunities: {
+      label: "Pathways",
+      title: "FUTURE OPPORTUNITIES",
+      subtitle: "See the doors that open when you speak the language of the rising sun.",
+      categories: {
+        careers: {
+          title: "Career Paths",
+          items: ["International Business", "Tech & Gaming", "Translation", "Entertainment", "Tourism", "Finance"]
+        },
+        study: {
+          title: "Study & Research",
+          items: ["MEXT Scholarships", "Top Universities", "Research Grants", "Cultural Exchange"]
+        },
+        living: {
+          title: "Living in Japan",
+          items: ["Work Visas", "Permanent Residency", "High Quality of Life", "Safe Communities"]
+        }
+      },
+      entrepreneurship: {
+        title: "Entrepreneurship",
+        desc: "E-commerce, content creation, and consulting in one of the world's most stable markets."
+      },
+      timeline: {
+        title: "Your Growth Timeline",
+        desc: "From 3-month survival basics to 5-year near-native fluency and JLPT N1 mastery."
+      }
+    },
+    summerInJapan: {
+      label: "Cultural Experience",
+      title: "Why Summer in Japan",
+      intro: "Japanese summer is defined by distinctive sounds and vibrant traditions that create an unforgettable cultural experience.",
+      sounds: {
+        title: "Sounds of Summer",
+        desc: "Cicadas reaching 107 decibels symbolize life's fleeting nature in Buddhist philosophy, while delicate fūrin (wind chimes) create psychological coolness during oppressive heat."
+      },
+      matsuri: {
+        title: "Summer Festivals (Matsuri)",
+        desc: "Portable shrine processions, food stalls with yakisoba and takoyaki, traditional games, and spectacular fireworks displays considered legitimate art forms. Attendees wear yukata, adding visual beauty."
+      },
+      obon: {
+        title: "Obon Festival",
+        desc: "Honor deceased ancestors through grave visits, family reunions, and Bon Odori dances. Traditional cooling practices include bamboo blinds, water features, and cold sōmen noodles."
+      },
+      essence: {
+        title: "Mono no Aware",
+        desc: "The true essence of Japanese summer lies in sharing experiences with loved ones, creating memories that embody mono no aware: appreciating beauty precisely because it is temporary."
+      }
+    },
     more: {
       title: "Explore More",
       subtitle: "Beyond the code: Interests, Hobbies, and what keeps me inspired.",
@@ -283,9 +354,12 @@ export const translations = {
       contact: "お問い合わせ",
     },
     hero: {
-      greeting: "こんにちは、私は",
-      role: "クリエイティブ・デベロッパー",
-      cta: "作品を見る",
+      greeting: "日本語マスターへの道",
+      title: "NIHONGO",
+      subtitle: "MASTER.",
+      description: "N5からN1まで、包括的なロードマップ、インタラクティブな練習、そしてJLPTに特化したトレーニングで日本語をマスターしましょう。",
+      cta: "学習を始める",
+      levels: ["N5", "N4", "N3", "N2", "N1"]
     },
     about: {
       title: "私は誰か",
@@ -321,15 +395,15 @@ export const translations = {
       cta: "一緒に何か作りましょう"
     },
     skills: {
-      title: "技術的専門知識",
-      subtitle: "コード、データ、革新的な問題解決を通じてデジタルランドスケープをマスターします。",
-      frontend: "フロントエンド",
-      backend: "バックエンド & DB",
-      data: "データ分析",
-      tools: "ツール & DevOps",
-      results: "実証された結果",
-      results_desc: "これらのスキルがどのように機能的で高性能なアプリケーションにつながるかをご覧ください。",
-      view_projects: "プロジェクトを見る +"
+      title: "日本語マトリックス",
+      subtitle: "JLPTレベル、キャリアアップ、そして文化への没入を通じて、日本のランドスケープをマスターします。",
+      frontend: "JLPT目標",
+      backend: "グローバルキャリア",
+      data: "生活と永住権",
+      tools: "文化の習得",
+      results: "インパクト",
+      results_desc: "東京での永住権取得と高収入の役割への道を切り開きます。",
+      view_projects: "旅を始める +"
     },
     philosophy: {
         label: "情熱",
@@ -541,5 +615,70 @@ export const translations = {
         { title: "3Dウェブへの旅", date: "2025年12月", snippet: "Three.jsの探索と没入型ウェブ体験の未来..." }
       ]
     },
-  },
+    whyLearn: {
+      label: "なぜ学ぶのか？",
+      title: "なぜ日本語を学ぶのか？",
+      subtitle: "言語を超えて、人生、キャリア、文化の新しい次元への入り口です。",
+      features: [
+        { title: "文化への理解", desc: "旅行者が見逃してしまうような本物の体験と深い文化的洞察を得られます。" },
+        { title: "キャリアの進化", desc: "東京の急成長するテック分野やグローバルなビジネス部門での高収入の役割につながります。" },
+        { title: "脳へのメリット", desc: "3つの独特な文字体系をマスターすることで、記憶力と認知の柔軟性が向上します。" },
+        { title: "自由な旅", desc: "絶対的な自信を持って日本をナビゲートし、穴場スポットを発見できます。" },
+        { title: "学問の卓越性", desc: "名誉ある文部科学省の奨学金制度やトップレベルの研究プログラムへの応募資格を得られます。" },
+        { title: "グローバルなつながり", desc: "世界中の1億2500万人以上のネイティブスピーカーと有意義な関係を築けます。" }
+      ],
+      unique: {
+        title: "日本語のユニークさ", desc: "3つの文字体系、繊細な敬語、そして深い表現力を持つ慣用句の美しいタペストリーです。"
+      },
+      stats: {
+        title: "数字で見る日本", desc: "日本は世界第3位の経済規模を誇り、貿易とイノベーションの広大な機会を提供しています。"
+      }
+    },
+    opportunities: {
+      label: "進路",
+      title: "未来の機会",
+      subtitle: "日の出の国の言葉を話せるようになったとき、どのような扉が開くか見てみましょう。",
+      categories: {
+        careers: {
+          title: "キャリアパス",
+          items: ["国際ビジネス", "テック＆ゲーム", "翻訳・通訳", "エンターテインメント", "観光", "金融"]
+        },
+        study: {
+          title: "留学と研究",
+          items: ["文部科学省奨学金", "トップ大学", "研究助成金", "文化交流"]
+        },
+        living: {
+          title: "日本での生活",
+          items: ["就労ビザ", "永住権", "高い生活の質", "安全なコミュニティ"]
+        }
+      },
+      entrepreneurship: {
+        title: "起業", desc: "世界で最も安定した市場の一つでの、Eコマース、コンテンツ制作、コンサルティング。"
+      },
+      timeline: {
+        title: "成長のタイムライン", desc: "3ヶ月のサバイバル基礎から、5年間のネイティブに近い流暢さとJLPT N1の完全習得まで。"
+      }
+    },
+    summerInJapan: {
+      label: "文化体験",
+      title: "なぜ日本の夏は特別なのか",
+      intro: "日本の夏は、独特な音と鮮やかな伝統によって定義され、忘れられない文化体験を生み出します。",
+      sounds: {
+        title: "夏の音",
+        desc: "107デシベルに達するセミの鳴き声は仏教哲学における命のはかなさを象徴し、繊細な風鈴は猛暑の中で心理的な涼しさを生み出します。"
+      },
+      matsuri: {
+        title: "夏祭り",
+        desc: "神輿の行列、焼きそばやたこ焼きの屋台、伝統的なゲーム、そして正当な芸術形式と見なされる壮大な花火大会。参加者は浴衣を着て、視覚的な美しさを添えます。"
+      },
+      obon: {
+        title: "お盆",
+        desc: "墓参り、家族の再会、盆踊りを通じて故人の先祖を敬います。伝統的な涼み方には、竹すだれ、水の演出、冷たいそうめんなどがあります。"
+      },
+      essence: {
+        title: "もののあわれ",
+        desc: "日本の夏の真髄は、愛する人々と経験を共有し、もののあわれを体現する思い出を作ることにあります：美しさがはかないからこそ、それを大切にすること。"
+      }
+    }
+  }
 };
