@@ -104,23 +104,25 @@ const Hero = () => {
             ))}
             
             {/* Special Highlight Card */}
-            <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 1.4 }}
-                className="col-span-2 bg-black dark:bg-white p-8 rounded-[3rem] shadow-2xl flex items-center justify-between group cursor-pointer overflow-hidden relative"
-            >
-              <div className="relative z-10">
-                <p className="text-white/50 dark:text-black/50 text-[10px] font-black uppercase tracking-widest mb-1">Expert System</p>
-                <p className="text-white dark:text-black text-xl font-black italic tracking-tighter">N5 to N1 Journey.</p>
-              </div>
-              <div className="w-12 h-12 rounded-2xl bg-white/10 dark:bg-black/10 flex items-center justify-center text-white dark:text-black text-2xl group-hover:translate-x-2 transition-transform">
-                →
-              </div>
-              <div className="absolute -right-4 -bottom-4 text-white/[0.05] dark:text-black/[0.05] text-8xl font-black italic select-none">
-                NIHON
-              </div>
-            </motion.div>
+            <Link href="/more" aria-label="N5 to N1 Journey">
+              <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 1.4 }}
+                  className="col-span-2 bg-black dark:bg-white p-8 rounded-[3rem] shadow-2xl flex items-center justify-between group cursor-pointer overflow-hidden relative"
+              >
+                <div className="relative z-10">
+                  <p className="text-white/50 dark:text-black/50 text-[10px] font-black uppercase tracking-widest mb-1">Expert System</p>
+                  <p className="text-white dark:text-black text-xl font-black italic tracking-tighter">N5 to N1 Journey.</p>
+                </div>
+                <div className="w-12 h-12 rounded-2xl bg-white/10 dark:bg-black/10 flex items-center justify-center text-white dark:text-black text-2xl group-hover:translate-x-2 transition-transform">
+                  →
+                </div>
+                <div className="absolute -right-4 -bottom-4 text-white/[0.05] dark:text-black/[0.05] text-8xl font-black italic select-none">
+                  NIHON
+                </div>
+              </motion.div>
+            </Link>
           </div>
         </motion.div>
       </div>

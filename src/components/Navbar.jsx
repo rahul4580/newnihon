@@ -6,9 +6,14 @@ import { motion, AnimatePresence } from 'motion/react';
 import { useLanguage } from '../context/LanguageContext';
 import { useTheme } from '../context/ThemeContext';
 import { translations } from '../utils/translations';
-import { FaSun, FaMoon, FaBars, FaTimes } from 'react-icons/fa';
+import {
+  Menu, X, Globe, Moon, Sun,
+  BookOpen, Sparkles, Map, Info, Mail,
+  ChevronRight, Languages, Zap, Library,
+  MessageSquare, Layout, ExternalLink,
+  Brain, FileText, Settings, Rocket
+} from 'lucide-react';
 import Image from 'next/image';
-import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 
 const Navbar = () => {
   const { language, toggleLanguage } = useLanguage();
@@ -47,7 +52,7 @@ const Navbar = () => {
   ];
 
   return (
-    <motion.nav 
+    <motion.nav
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
@@ -62,13 +67,13 @@ const Navbar = () => {
             : 'bg-white/55 dark:bg-black/55 border-black/5 dark:border-white/10 shadow-lg shadow-black/5 dark:shadow-white/5'
         }`}
       >
-        
+
         {/* Logo */}
         <Link href="/" className="group flex items-center gap-4">
           <div className="relative w-12 h-12 rounded-2xl overflow-hidden bg-white ring-1 ring-black/10 dark:ring-white/15 shadow-[0_10px_30px_rgba(0,0,0,0.22)] transition-all duration-300 group-hover:rotate-3 group-hover:scale-[1.06]">
-            <Image 
-              src="/nihongo.jpg" 
-              alt="Dinakramam Logo" 
+            <Image
+              src="/nihongo.jpg"
+              alt="Dinakramam Logo"
               width={48}
               height={48}
               className="w-full h-full object-cover"
@@ -91,8 +96,8 @@ const Navbar = () => {
               whileHover={{ scale: 1.05 }}
               className="relative group"
             >
-              <Link 
-                href={link.href} 
+              <Link
+                href={link.href}
                 className={`text-[10px] font-black uppercase tracking-[0.2em] transition-all ${
                   'text-black/60 dark:text-white/60 hover:text-black dark:hover:text-white'
                 } ${language === 'jp' ? 'font-noto' : ''}`}
@@ -103,7 +108,7 @@ const Navbar = () => {
             </motion.div>
           ))}
         </div>
-        
+
         {/* Actions */}
         <div className="flex items-center gap-3 md:gap-6">
           <div className="hidden md:flex items-center gap-4">
@@ -113,8 +118,8 @@ const Navbar = () => {
                 toggleLanguage();
               }}
               className={`text-[10px] font-black uppercase tracking-[0.3em] px-4 py-2 rounded-lg transition-all ${
-                isScrolled || theme === 'dark' 
-                  ? 'border border-black/10 text-black hover:bg-black hover:text-white dark:border-white/10 dark:text-white dark:hover:bg-white dark:hover:text-black' 
+                isScrolled || theme === 'dark'
+                  ? 'border border-black/10 text-black hover:bg-black hover:text-white dark:border-white/10 dark:text-white dark:hover:bg-white dark:hover:text-black'
                   : 'border border-white/20 text-white hover:bg-white hover:text-black dark:border-black/20 dark:text-black dark:hover:bg-black dark:hover:text-white'
               } ${isScrolled ? '' : 'mix-blend-difference'}`}
             >
@@ -123,37 +128,13 @@ const Navbar = () => {
             <button
               onClick={toggleTheme}
               className={`p-3 rounded-xl transition-all ${
-                isScrolled || theme === 'dark' 
-                  ? 'border border-black/10 text-black hover:bg-black hover:text-white dark:border-white/10 dark:text-white dark:hover:bg-white dark:hover:text-black' 
+                isScrolled || theme === 'dark'
+                  ? 'border border-black/10 text-black hover:bg-black hover:text-white dark:border-white/10 dark:text-white dark:hover:bg-white dark:hover:text-black'
                   : 'border border-white/20 text-white hover:bg-white hover:text-black dark:border-black/20 dark:text-black dark:hover:bg-black dark:hover:text-white'
               } ${isScrolled ? '' : 'mix-blend-difference'}`}
             >
-              {theme === 'dark' ? <FaSun className="w-4 h-4" /> : <FaMoon className="w-4 h-4" />}
+              {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
             </button>
-
-            {/* Auth Buttons */}
-            <SignedOut>
-              <SignInButton mode="modal">
-                <span
-                  className={`cursor-pointer text-[10px] font-black uppercase tracking-[0.3em] px-4 py-2 rounded-lg transition-all ${
-                    isScrolled || theme === 'dark' 
-                      ? 'border border-black/10 text-black hover:bg-black hover:text-white dark:border-white/10 dark:text-white dark:hover:bg-white dark:hover:text-black' 
-                      : 'border border-white/20 text-white hover:bg-white hover:text-black dark:border-black/20 dark:text-black dark:hover:bg-black dark:hover:text-white'
-                  } ${isScrolled ? '' : 'mix-blend-difference'}`}
-                >
-                  Sign In
-                </span>
-              </SignInButton>
-            </SignedOut>
-            <SignedIn>
-              <UserButton 
-                appearance={{
-                  elements: {
-                    userButtonAvatarBox: "w-8 h-8 rounded-full border border-black/10 dark:border-white/10",
-                  }
-                }}
-              />
-            </SignedIn>
           </div>
         </div>
 
@@ -167,7 +148,7 @@ const Navbar = () => {
               : 'border-black/10 dark:border-white/10 text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/5'
           }`}
         >
-          <FaBars className="text-sm" />
+          <Menu className="text-sm" />
         </button>
       </div>
 
@@ -193,12 +174,12 @@ const Navbar = () => {
               <div className="flex items-center justify-between px-6 py-6 border-b border-black/10 dark:border-white/10">
                 <Link href="/" className="flex items-center gap-3" onClick={() => setIsMobileMenuOpen(false)}>
                   <div className="relative w-10 h-10 rounded-2xl overflow-hidden bg-white ring-1 ring-black/10 dark:ring-white/15 shadow-[0_10px_30px_rgba(0,0,0,0.22)]">
-                    <Image 
-                      src="/nihongo.jpg" 
-                      alt="Logo" 
+                    <Image
+                      src="/nihongo.jpg"
+                      alt="Logo"
                       width={40}
                       height={40}
-                      className="w-full h-full object-cover" 
+                      className="w-full h-full object-cover"
                     />
                   </div>
                   <span className="text-xs font-black uppercase tracking-[0.3em] text-black dark:text-white">
@@ -211,7 +192,7 @@ const Navbar = () => {
                   aria-label="Close menu"
                   className="w-10 h-10 flex items-center justify-center rounded-full border border-black/10 dark:border-white/10 text-black dark:text-white"
                 >
-                  <FaTimes className="text-sm" />
+                  <X className="text-sm" />
                 </button>
               </div>
 
@@ -245,22 +226,20 @@ const Navbar = () => {
                       className="w-10 h-10 flex items-center justify-center rounded-full border transition-all border-black/10 dark:border-white/10 text-black dark:text-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black"
                       aria-label="Toggle Theme"
                   >
-                      {theme === 'dark' ? <FaSun className="text-sm" /> : <FaMoon className="text-sm" />}
+                      {theme === 'dark' ? <Sun className="text-sm" /> : <Moon className="text-sm" />}
                   </button>
 
-                  {/* Mobile Auth */}
-                  <SignedOut>
-                    <SignInButton mode="modal">
-                      <span
-                        className="cursor-pointer text-[10px] font-black uppercase tracking-widest h-10 px-4 flex items-center justify-center rounded-full transition-all border border-black/10 dark:border-white/10 text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/5"
-                      >
-                        Sign In
-                      </span>
-                    </SignInButton>
-                  </SignedOut>
-                  <SignedIn>
-                    <UserButton />
-                  </SignedIn>
+                    {/* CTA Button */}
+                    <Link
+                      href="/more"
+                      className="relative group px-5 py-2 overflow-hidden rounded-full transition-all duration-300 transform active:scale-95"
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-600 group-hover:from-blue-500 group-hover:to-indigo-500 transition-all duration-300"></div>
+                      <div className="relative flex items-center gap-2 text-white font-bold text-sm tracking-wide">
+                        <span>Get Started</span>
+                        <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                      </div>
+                    </Link>
                 </div>
               </div>
             </motion.div>

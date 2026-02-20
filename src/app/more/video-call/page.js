@@ -14,7 +14,6 @@ import {
   setDoc, deleteDoc, 
   query, where, serverTimestamp 
 } from 'firebase/firestore';
-import { useUser, useAuth, SignIn, ClerkLoaded, ClerkLoading } from "@clerk/nextjs";
 
 // WebRTC Configuration
 const rtcConfig = {
@@ -25,16 +24,32 @@ const rtcConfig = {
 };
 
 export default function MultiUserVideoCall() {
-  // Clerk Hooks
-  const { user, isLoaded, isSignedIn } = useUser();
-  const { signOut } = useAuth();
+  // Mock User / Guest Logic
+  const [userProfile, setUserProfile] = useState(null);
+  
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const saved = localStorage.getItem('japandev:guestProfile');
+    const profile = saved ? JSON.parse(saved) : {
+      id: `guest_${Math.random().toString(36).substr(2, 9)}`,
+      name: ''
+    };
+    setUserProfile(profile);
+  }, []);
+
+  const saveProfile = (name) => {
+    const newProfile = { ...userProfile, name };
+    setUserProfile(newProfile);
+    localStorage.setItem('japandev:guestProfile', JSON.stringify(newProfile));
+  };
+
   const router = useRouter();
 
   // State
   const [isInCall, setIsInCall] = useState(false);
   const [roomId, setRoomId] = useState('');
   
-  // Local state derived from Clerk or user input
+  // Local state derived from saved profile or user input
   const [userName, setUserName] = useState('');
   const [userId, setUserId] = useState('');
 
@@ -43,63 +58,38 @@ export default function MultiUserVideoCall() {
   const [isMuted, setIsMuted] = useState(false);
   const [isVideoOff, setIsVideoOff] = useState(false);
 
-  // Remove custom authStatus/authError since Clerk handles this mainly
-  
   // Refs
   const pcsRef = useRef({}); 
   const cleanupRefs = useRef([]);
+  const streamRef = useRef(null);
 
-  const streamRef = useRef(null); // Ref to hold stream for cleanup
-
-  // --- Effects ---
-
-  // If user ended a call previously, force a one-time reload on next visit
+  // Sync Profile -> Local Component State
   useEffect(() => {
-    if (typeof window === 'undefined') return;
-    const shouldReload = sessionStorage.getItem('videoCall:forceReload') === '1';
-    if (shouldReload) {
-      sessionStorage.removeItem('videoCall:forceReload');
-      window.location.reload();
+    if (userProfile) {
+      setUserId(userProfile.id);
+      setUserName(prev => prev || userProfile.name || '');
     }
-  }, []);
-
-  // Sync Clerk User -> Local State
-  useEffect(() => {
-    if (isLoaded && isSignedIn && user) {
-        setUserId(user.id);
-        setUserName(prev => prev || user.fullName || user.firstName || `User ${user.id.slice(0,4)}`);
-    }
-  }, [isLoaded, isSignedIn, user]);
+  }, [userProfile]);
 
   const leaveCall = useCallback(async () => {
     try {
-      // Stop all media tracks
       if (localStream) {
         localStream.getTracks().forEach(track => track.stop());
       }
-
-      // Cleanup listeners
       cleanupRefs.current.forEach(fn => fn());
       cleanupRefs.current = [];
-
-      // Close peer connections
       Object.values(pcsRef.current).forEach(pc => pc.close());
       pcsRef.current = {};
-
-      // Remove from Firestore
       if (roomId && userId) {
         await deleteDoc(doc(db, 'rooms', roomId, 'participants', userId));
       }
     } catch (e) {
       console.error("Error cleaning up:", e);
     } finally {
-      // Reset state
       setIsInCall(false);
       setRoomId('');
       setPeers({});
       setLocalStream(null);
-
-      // Mark to reload this page on next visit, then go back to /more
       if (typeof window !== 'undefined') {
         sessionStorage.setItem('videoCall:forceReload', '1');
       }
@@ -107,7 +97,6 @@ export default function MultiUserVideoCall() {
     }
   }, [roomId, userId, localStream, router]);
 
-  // Initialize Local Stream & CLEANUP
   useEffect(() => {
     const startCamera = async () => {
       try {
@@ -116,30 +105,23 @@ export default function MultiUserVideoCall() {
             audio: true 
         });
         setLocalStream(stream);
-        streamRef.current = stream; // Store in ref for cleanup
+        streamRef.current = stream;
       } catch (err) {
         console.error("Error accessing media:", err);
       }
     };
     startCamera();
-
-    // CLEANUP FUNCTION: Stops camera when component unmounts (navigating away)
     return () => {
       if (streamRef.current) {
         streamRef.current.getTracks().forEach(track => track.stop());
-        console.log("Camera tracks stopped.");
       }
     };
   }, []);
 
-
-
-  // --- Handlers ---
-
   const createRoom = async () => {
-    if (!isSignedIn) return alert('Authentication Error: Not connected');
     if (!userName) return alert("Please enter your name");
     if (!localStream) return alert("Camera not ready");
+    saveProfile(userName);
 
     try {
         const roomRef = doc(collection(db, 'rooms'));
@@ -152,10 +134,10 @@ export default function MultiUserVideoCall() {
   };
 
   const joinRoom = async () => {
-    if (!isSignedIn) return alert('Authentication Error: Not connected');
     if (!roomId) return alert("Enter Room ID");
     if (!userName) return alert("Enter Name");
     if (!localStream) return alert("Camera not ready");
+    saveProfile(userName);
     
     joinRoomLogic(roomId, localStream);
   };
@@ -335,58 +317,7 @@ export default function MultiUserVideoCall() {
     alert("Room ID copied!");
   };
 
-  // --- CLERK LOGIN SCREEN ---
-  if (!isLoaded) {
-     return (
-        <div className="min-h-screen bg-neutral-950 flex items-center justify-center text-white">
-           <div className="animate-pulse flex flex-col items-center gap-4">
-              <div className="w-12 h-12 rounded-full border-2 border-white/20 border-t-white animate-spin"></div>
-              <span>Connecting to Secure Auth...</span>
-           </div>
-        </div>
-     );
-  }
-
-  if (!isSignedIn && !isInCall) {
-      return (
-         <div className="min-h-screen bg-neutral-950 flex flex-col items-center justify-center p-4 relative overflow-hidden">
-             
-             {/* Background Effects */}
-             <div className="absolute top-0 left-0 w-full h-full bg-[url('/grid.svg')] opacity-20 pointer-events-none"></div>
-             <div className="absolute w-96 h-96 bg-purple-600/20 rounded-full blur-[100px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
-             
-             <div className="relative z-10 flex flex-col items-center gap-8">
-                 <div className="text-center space-y-2">
-                     <div className="w-16 h-16 bg-white/10 rounded-2xl mx-auto flex items-center justify-center mb-4 backdrop-blur-md border border-white/10">
-                         <User className="w-8 h-8 text-white" />
-                     </div>
-                     <h1 className="text-4xl font-black text-white tracking-tight">Welcome Back</h1>
-                     <p className="text-neutral-400">Secure Application Access</p>
-                 </div>
-
-                 <div className="bg-neutral-900/50 backdrop-blur-xl border border-white/10 p-2 rounded-[2rem] shadow-2xl">
-                    <SignIn 
-                      appearance={{
-                        elements: {
-                          rootBox: "w-full",
-                          card: "bg-transparent shadow-none w-full",
-                          headerTitle: "hidden",
-                          headerSubtitle: "hidden",
-                          socialButtonsBlockButton: "bg-white text-black hover:bg-neutral-200 border-none font-bold",
-                          formButtonPrimary: "bg-blue-600 hover:bg-blue-700 text-white font-bold",
-                          footerActionLink: "text-blue-400 hover:text-blue-300",
-                          formFieldLabel: "text-neutral-400",
-                          formFieldInput: "bg-black/40 border-white/10 text-white focus:border-blue-500",
-                          dividerLine: "bg-white/10",
-                          dividerText: "text-neutral-500",
-                        }
-                      }}
-                    />
-                 </div>
-             </div>
-         </div>
-      );
-  }
+  // REMOVED CLERK LOADING/LOGIN STATE
 
   return (
     <div className="bg-neutral-950 min-h-screen text-white overflow-hidden selection:bg-purple-500/30">
@@ -452,15 +383,10 @@ export default function MultiUserVideoCall() {
                animate={{ opacity: 1, x: 0 }}
                className="w-full max-w-md bg-neutral-900/50 backdrop-blur-3xl p-8 rounded-[2.5rem] border border-white/5 shadow-2xl"
              >
-                <div className="mb-8 flex justify-between items-start">
-                   <div>
-                       <h1 className="text-4xl font-black mb-2 bg-gradient-to-r from-white to-neutral-500 bg-clip-text text-transparent">Join Meeting</h1>
-                       <p className="text-neutral-400">Enter your details to start connecting.</p>
-                   </div>
-                   <button onClick={() => signOut()} className="p-2 hover:bg-white/10 rounded-full text-neutral-400" title="Logout">
-                       <LogOut className="w-5 h-5" />
-                   </button>
-                </div>
+                    <div>
+                        <h1 className="text-4xl font-black mb-2 bg-gradient-to-r from-white to-neutral-500 bg-clip-text text-transparent">Join Meeting</h1>
+                        <p className="text-neutral-400">Enter your details to start connecting.</p>
+                    </div>
 
                 <div className="space-y-5">
                    <div>
@@ -474,16 +400,16 @@ export default function MultiUserVideoCall() {
                    </div>
 
                    <div className="grid grid-cols-2 gap-4">
-                      <button 
-                        onClick={createRoom}
-                        disabled={!localStream || !isSignedIn}
-                        className="p-6 rounded-2xl bg-white text-black font-black hover:scale-[1.02] active:scale-95 transition-all flex flex-col items-center gap-3 disabled:opacity-50 disabled:grayscale"
-                      >
-                         <div className="w-10 h-10 rounded-full bg-neutral-100 flex items-center justify-center">
-                            <MonitorUp className="w-5 h-5" />
-                         </div>
-                         <span>New Room</span>
-                      </button>
+                       <button 
+                         onClick={createRoom}
+                         disabled={!localStream}
+                         className="p-6 rounded-2xl bg-white text-black font-black hover:scale-[1.02] active:scale-95 transition-all flex flex-col items-center gap-3 disabled:opacity-50 disabled:grayscale"
+                       >
+                          <div className="w-10 h-10 rounded-full bg-neutral-100 flex items-center justify-center">
+                             <MonitorUp className="w-5 h-5" />
+                          </div>
+                          <span>New Room</span>
+                       </button>
                       
                       <div className="flex flex-col gap-3">
                         <input 
@@ -492,13 +418,13 @@ export default function MultiUserVideoCall() {
                            className="w-full flex-1 bg-black/20 border border-white/10 rounded-2xl px-4 outline-none focus:border-blue-500 transition-all text-sm text-center font-mono placeholder:text-neutral-700"
                            placeholder="Room ID"
                         />
-                        <button 
-                           onClick={joinRoom}
-                           disabled={!roomId || !localStream || !isSignedIn}
-                           className="w-full p-4 rounded-2xl bg-blue-600 text-white font-bold text-sm hover:bg-blue-500 disabled:opacity-50 transition-all"
-                        >
-                           Join
-                        </button>
+                         <button 
+                            onClick={joinRoom}
+                            disabled={!roomId || !localStream}
+                            className="w-full p-4 rounded-2xl bg-blue-600 text-white font-bold text-sm hover:bg-blue-500 disabled:opacity-50 transition-all"
+                         >
+                            Join
+                         </button>
                       </div>
                    </div>
                 </div>

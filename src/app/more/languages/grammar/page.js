@@ -21,6 +21,20 @@ export default function GrammarPage() {
     PARTICLE_DATA.filter(p => p.level === level)
   , [level]);
 
+  const categorizedChapters = useMemo(() => {
+    const groups = {};
+    filteredChapters.forEach(ch => {
+      let cat = ch.category;
+      if (!cat) {
+        if (ch.level === 'N5' && ch.chapter <= 50) cat = "Minna no Nihongo";
+        else cat = `${ch.level} Comprehensive`;
+      }
+      if (!groups[cat]) groups[cat] = [];
+      groups[cat].push(ch);
+    });
+    return groups;
+  }, [filteredChapters]);
+
   const simpleCorrect = useCallback((text) => {
     if (!text) return null;
     let t = text.trim();
@@ -142,7 +156,12 @@ export default function GrammarPage() {
       ...prev,
       feedback: isCorrect ? 'correct' : 'incorrect',
       score: isCorrect ? prev.score + 1 : prev.score,
-      history: [...prev.history, { q: activeChapter.quiz[quizIdx].q, wasCorrect: isCorrect }]
+      history: [...prev.history, { 
+        q: activeChapter.quiz[quizIdx].q, 
+        ans: correctAns,
+        userAns: option,
+        wasCorrect: isCorrect 
+      }]
     }));
 
     if (isCorrect) playSound(option);
@@ -200,7 +219,12 @@ export default function GrammarPage() {
       ...prev,
       feedback: isCorrect ? 'correct' : 'incorrect',
       score: isCorrect ? prev.score + 1 : prev.score,
-      history: [...prev.history, { q: activeParticle.quiz[particleQuizIdx].q, wasCorrect: isCorrect }]
+      history: [...prev.history, { 
+        q: activeParticle.quiz[particleQuizIdx].q, 
+        ans: correctAns,
+        userAns: option,
+        wasCorrect: isCorrect 
+      }]
     }));
 
     if (isCorrect) playSound(option);
@@ -270,7 +294,7 @@ export default function GrammarPage() {
                   </div>
                   <div className="text-left flex-1 py-4">
                      <h2 className="text-2xl font-black tracking-tighter mb-1 select-none">Daily Mastery Challenge</h2>
-                     <p className="text-[11px] text-gray-400 font-medium mb-6">Test your skills with 10 random questions from all 25 chapters.</p>
+                     <p className="text-[11px] text-gray-400 font-medium mb-6">Test your skills with 10 random questions from all {filteredChapters.length} chapters.</p>
                      <button onClick={startDailyTest} className="px-8 py-3 rounded-2xl bg-black dark:bg-white text-white dark:text-black text-[10px] font-black uppercase tracking-widest hover:scale-105 transition-all shadow-xl">Complete Today&apos;s Test</button>
                   </div>
                </div>
@@ -298,32 +322,44 @@ export default function GrammarPage() {
                     <h4 className="text-xl font-black tracking-tighter mb-1">Particle Master</h4>
                     <p className="text-[11px] text-white/70 font-medium line-clamp-1">20 Key Particles (wa, ga, ni, de...)</p>
                  </button>
-                 <div className="mt-4 w-full h-1 bg-white/20 rounded-full overflow-hidden">
-                    <div className="h-full bg-white w-1/4"></div>
-                 </div>
+                  <div className="mt-4 w-full h-1 bg-white/20 rounded-full overflow-hidden">
+                     <div className="h-full bg-white transition-all" style={{ width: `${(masteredChapters.filter(id => filteredParticles.some(p => p.id === id)).length / 20) * 100}%` }}></div>
+                  </div>
                </motion.div>
 
-               {filteredChapters.map((ch) => (
-                 <motion.div 
-                   key={ch.chapter} 
-                   whileHover={{ y: -5 }}
-                   className="group p-8 rounded-[2.5rem] bg-white dark:bg-neutral-900 border border-black/5 hover:border-rose-500/50 transition-all text-left flex flex-col items-start gap-4 shadow-xl shadow-black/5"
-                 >
-                    <div className="flex justify-between w-full items-start">
-                       <div className={`w-12 h-12 rounded-xl flex items-center justify-center shadow-lg transition-colors ${masteredChapters.includes(ch.chapter) ? 'bg-green-500 text-white' : 'bg-rose-500 text-white'}`}>
-                          {masteredChapters.includes(ch.chapter) ? <FaCheckCircle className="text-xl" /> : <FaBook className="text-xl" />}
-                       </div>
-                       <button onClick={() => startPractice(ch)} className="text-[10px] font-black uppercase tracking-widest text-rose-500 opacity-0 group-hover:opacity-100 transition-opacity hover:underline">Practice Mode</button>
+               {Object.entries(categorizedChapters).map(([category, chapters]) => (
+                  <React.Fragment key={category}>
+                    <div className="col-span-1 md:col-span-2 lg:col-span-4 mt-8 first:mt-0">
+                      <h3 className="text-xs font-black uppercase tracking-[0.3em] text-gray-400 mb-6 flex items-center gap-4">
+                        {category}
+                        <div className="flex-1 h-px bg-black/5 dark:bg-white/5" />
+                        <span className="text-[10px] lowercase italic font-medium opacity-60">({chapters.length} lessons)</span>
+                      </h3>
                     </div>
-                    <button onClick={() => handleChapterSelect(ch)} className="text-left">
-                       <h3 className="text-[10px] font-black text-rose-500 uppercase tracking-widest mb-1">Lesson {ch.chapter}</h3>
-                       <h4 className="text-xl font-black tracking-tighter mb-1">{ch.title}</h4>
-                       <p className="text-[11px] text-gray-400 font-medium line-clamp-1">{ch.desc}</p>
-                    </button>
-                    <div className="mt-4 w-full h-1 bg-gray-100 dark:bg-neutral-800 rounded-full overflow-hidden">
-                       <div className={`h-full transition-all duration-1000 ${masteredChapters.includes(ch.chapter) ? 'w-full bg-green-500' : 'w-0'}`}></div>
-                    </div>
-                 </motion.div>
+                    {chapters.map((ch) => (
+                      <motion.div 
+                        key={ch.chapter} 
+                        whileHover={{ y: -5 }}
+                        className="group p-8 rounded-[2.5rem] bg-white dark:bg-neutral-900 border border-black/5 hover:border-rose-500/50 transition-all text-left flex flex-col items-start gap-4 shadow-xl shadow-black/5"
+                      >
+                         <div className="flex justify-between w-full items-start">
+                            <div className={`w-12 h-12 rounded-xl flex items-center justify-center shadow-lg transition-colors ${masteredChapters.includes(ch.chapter) ? 'bg-green-500 text-white' : 'bg-rose-500 text-white'}`}>
+                               {masteredChapters.includes(ch.chapter) ? <FaCheckCircle className="text-xl" /> : <FaBook className="text-xl" />}
+                            </div>
+                         </div>
+                         <button onClick={() => handleChapterSelect(ch)} className="text-left">
+                            <h3 className="text-[10px] font-black text-rose-500 uppercase tracking-widest mb-1">
+                              {category.includes('Master') ? 'Study Point' : 'Lesson'} {ch.chapter}
+                            </h3>
+                            <h4 className="text-xl font-black tracking-tighter mb-1">{ch.title}</h4>
+                            <p className="text-[11px] text-gray-400 font-medium line-clamp-1">{ch.desc}</p>
+                         </button>
+                         <div className="mt-4 w-full h-1 bg-gray-100 dark:bg-neutral-800 rounded-full overflow-hidden">
+                            <div className={`h-full transition-all duration-1000 ${masteredChapters.includes(ch.chapter) ? 'w-full bg-green-500' : 'w-0'}`}></div>
+                         </div>
+                      </motion.div>
+                    ))}
+                  </React.Fragment>
                ))}
             </div>
           </div>
@@ -772,7 +808,7 @@ export default function GrammarPage() {
              </h2>
              <p className="text-sm text-gray-400 font-medium mb-12">Lesson {activeChapter.chapter === 'Daily' ? 'Daily Challenge' : activeChapter.chapter} proficiency session results.</p>
 
-             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full mb-16">
+             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full mb-10">
                 <div className="p-8 rounded-[2rem] bg-white dark:bg-neutral-900 border border-black/5 shadow-xl flex items-center gap-6">
                    <div className="w-14 h-14 rounded-2xl bg-orange-100 text-orange-500 flex items-center justify-center flex-shrink-0"><FaStar className="text-2xl" /></div>
                    <div className="text-left">
@@ -786,6 +822,34 @@ export default function GrammarPage() {
                       <p className="text-[10px] font-black uppercase opacity-30 mb-0.5">Status Update</p>
                       <p className="text-3xl font-black text-rose-500">{quizState.score === 10 ? 'CHAPTER CLEAR' : 'TRY AGAIN'}</p>
                    </div>
+                </div>
+             </div>
+
+             <div className="w-full mb-16 text-left">
+                <h3 className="text-[10px] font-black uppercase tracking-[0.3em] opacity-30 mb-6 px-4">Session Review</h3>
+                <div className="space-y-3 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+                   {quizState.history.map((item, i) => (
+                      <div key={i} className="p-6 rounded-[2rem] bg-white dark:bg-neutral-900 border border-black/5 shadow-sm flex items-start gap-6 transition-all hover:border-black/10">
+                         <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${item.wasCorrect ? 'bg-green-500/10 text-green-500' : 'bg-red-500/10 text-red-500'}`}>
+                            {item.wasCorrect ? <FaCheckCircle /> : <FaRedo className="rotate-45" />}
+                         </div>
+                         <div className="flex-1 min-w-0">
+                            <p className="text-lg font-medium font-noto mb-2 leading-relaxed">{item.q.replace('___', item.ans)}</p>
+                            <div className="flex gap-4 items-center">
+                               <div className="flex items-center gap-2">
+                                  <span className="text-[9px] font-black uppercase opacity-30">Your Answer:</span>
+                                  <span className={`text-[11px] font-bold ${item.wasCorrect ? 'text-green-500' : 'text-red-500'}`}>{item.userAns}</span>
+                               </div>
+                               {!item.wasCorrect && (
+                                  <div className="flex items-center gap-2">
+                                     <span className="text-[9px] font-black uppercase opacity-30">Correct:</span>
+                                     <span className="text-[11px] font-bold text-green-500">{item.ans}</span>
+                                  </div>
+                               )}
+                            </div>
+                         </div>
+                      </div>
+                   ))}
                 </div>
              </div>
 
@@ -807,6 +871,10 @@ export default function GrammarPage() {
         }
         .animate-shake { animation: shake 0.3s ease-in-out infinite; }
         .shadow-22 { box-shadow: 0 40px 100px -20px rgba(0,0,0,0.1); }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.05); border-radius: 10px; }
+        .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.05); }
       `}</style>
       
       <Footer />

@@ -6,10 +6,12 @@ import { useLanguage } from '../../context/LanguageContext';
 import { translations } from '../../utils/translations';
 import Navbar from '../../components/Navbar';
 import Link from 'next/link';
+import Image from 'next/image';
 import { 
   Globe, 
   Video, 
   FileText, 
+  BookOpen,
   ArrowUpRight, 
   Sparkles,
   Zap,
@@ -155,7 +157,7 @@ export default function More() {
             </div>
           </BentoCard>
 
-          {/* Card 2: Video Call (New) */}
+          {/* Card 2: Video Call */}
           <BentoCard 
             href="/more/video-call" 
             delay={0.4} 
@@ -181,15 +183,89 @@ export default function More() {
              </div>
           </BentoCard>
 
-           {/* Card 3: Notion */}
+          {/* Card 3: Culture (NEW) */}
+          <BentoCard 
+            href="/more/culture" 
+            delay={0.5} 
+            className="min-h-[400px]"
+            gradient="from-rose-500/10 to-orange-500/10 dark:from-rose-900/20 dark:to-orange-900/20"
+          >
+             <div className="w-12 h-12 rounded-xl bg-rose-500/10 dark:bg-rose-500/20 flex items-center justify-center mb-6 text-rose-600 dark:text-rose-400">
+                <Sparkles className="w-6 h-6" />
+             </div>
+             
+             <h3 className={`text-3xl font-bold mb-2 tracking-tight ${language === 'jp' ? 'font-noto' : ''}`}>
+               {t.culture?.title}
+             </h3>
+             <p className={`text-base text-neutral-500 dark:text-neutral-400 mb-8 ${language === 'jp' ? 'font-noto' : ''}`}>
+               {t.culture?.desc}
+             </p>
+
+             <div className="mt-auto relative rounded-xl overflow-hidden aspect-square h-32 bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center">
+                <Image src="https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=300&q=80" alt="Cultural Festival" fill className="object-cover opacity-50 group-hover:opacity-100 transition-opacity" />
+             </div>
+          </BentoCard>
+
+          {/* Card 4: Articles (NEW) */}
+          <BentoCard 
+            href="/more/articles" 
+            delay={0.6} 
+            className="min-h-[400px]"
+            gradient="from-blue-500/10 to-cyan-500/10 dark:from-blue-900/20 dark:to-cyan-900/20"
+          >
+             <div className="w-12 h-12 rounded-xl bg-blue-500/10 dark:bg-blue-500/20 flex items-center justify-center mb-6 text-blue-600 dark:text-blue-400">
+                <FileText className="w-6 h-6" />
+             </div>
+             
+             <h3 className={`text-3xl font-bold mb-2 tracking-tight ${language === 'jp' ? 'font-noto' : ''}`}>
+               {t.articles?.title}
+             </h3>
+             <p className={`text-base text-neutral-500 dark:text-neutral-400 mb-8 ${language === 'jp' ? 'font-noto' : ''}`}>
+               {t.articles?.desc}
+             </p>
+
+             <div className="mt-auto flex flex-col gap-2">
+                {[1,2].map(i => (
+                  <div key={i} className="h-4 w-full bg-neutral-100 dark:bg-neutral-800 rounded-full overflow-hidden">
+                     <div className="h-full bg-blue-500/20 w-[60%] animate-pulse" style={{ animationDelay: `${i*0.5}s` }} />
+                  </div>
+                ))}
+             </div>
+          </BentoCard>
+
+          {/* Card 5: Books (NEW) */}
+          <BentoCard 
+            href="/more/books" 
+            delay={0.7} 
+            className="min-h-[400px]"
+            gradient="from-amber-500/10 to-yellow-500/10 dark:from-amber-900/20 dark:to-yellow-900/20"
+          >
+             <div className="w-12 h-12 rounded-xl bg-amber-500/10 dark:bg-amber-500/20 flex items-center justify-center mb-6 text-amber-600 dark:text-amber-400">
+                <BookOpen className="w-6 h-6" />
+             </div>
+             
+             <h3 className={`text-3xl font-bold mb-2 tracking-tight ${language === 'jp' ? 'font-noto' : ''}`}>
+               {t.books?.title}
+             </h3>
+             <p className={`text-base text-neutral-500 dark:text-neutral-400 mb-8 ${language === 'jp' ? 'font-noto' : ''}`}>
+               {t.books?.desc}
+             </p>
+
+             <div className="mt-auto flex gap-2">
+                <div className="h-20 w-14 bg-amber-500/10 rounded-lg border border-amber-500/20 flex items-center justify-center text-[8px] font-black text-amber-600/50 uppercase tracking-tighter text-center px-1">Atomic Habits</div>
+                <div className="h-20 w-14 bg-amber-500/10 rounded-lg border border-amber-500/20 flex items-center justify-center text-[8px] font-black text-amber-600/50 uppercase tracking-tighter text-center px-1 self-end">Clean Code</div>
+             </div>
+          </BentoCard>
+
+           {/* Card 6: Notion */}
            <BentoCard 
             href="/more/notion" 
-            delay={0.5} 
+            delay={0.8} 
             className="md:col-span-3 min-h-[300px] flex flex-row items-center"
             gradient="from-neutral-500/10 to-neutral-500/10 dark:from-neutral-800/20 dark:to-neutral-800/20"
           >
             <div className="flex flex-col md:flex-row w-full gap-8 md:items-center">
-              <div className="flex-1">
+              <div className="flex-1 text-left">
                  <div className="w-12 h-12 rounded-xl bg-neutral-500/10 dark:bg-neutral-500/20 flex items-center justify-center mb-6 text-neutral-600 dark:text-neutral-400">
                     <LayoutGrid className="w-6 h-6" />
                  </div>

@@ -57,7 +57,7 @@ export const N3_KANJI_DATA = {
     { char: '停', meaning: 'Halt/Stop', onyomi: 'tei', kunyomi: '-' },
     { char: '伝', meaning: 'Transmit', onyomi: 'den', kunyomi: 'tsuta' },
     { char: '努', meaning: 'Effort', onyomi: 'do', kunyomi: 'tsuto' },
-    { char: '働く', meaning: 'Work', onyomi: 'dou', kunyomi: 'hatara' },
+    { char: '働', meaning: 'Work', onyomi: 'dou', kunyomi: 'hatara(ku)' },
     { char: '飛', meaning: 'Fly', onyomi: 'hi', kunyomi: 'to' },
     { char: '敗', meaning: 'Fail/Defeat', onyomi: 'bai', kunyomi: 'yabu' },
     { char: '望', meaning: 'Hope', onyomi: 'bou/mou', kunyomi: 'nozo' },

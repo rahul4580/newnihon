@@ -37,19 +37,14 @@ export const metadata = {
   }
 };
 
-function RootLayout({ children }) {
+export default function RootLayout({ children }) {
   return (
-    <ClerkProvider>
-      <html lang="en">
-        <body className={`${geistSans.variable} ${geistMono.variable} ${notoSansJP.variable} antialiased selection:bg-blue-500 selection:text-white`}>
-          <ClientWrapper>
-
-            {children}
-          </ClientWrapper>
-        </body>
-      </html>
-    </ClerkProvider>
+    <html lang="en">
+      <body className={`${geistSans.variable} ${geistMono.variable} ${notoSansJP.variable} antialiased selection:bg-blue-500 selection:text-white`}>
+        <ClientWrapper>
+          {children}
+        </ClientWrapper>
+      </body>
+    </html>
   );
 }
-
-export default RootLayout;

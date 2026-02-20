@@ -28,13 +28,13 @@ export const GRAMMAR_DATA = [
   {
     chapter: 2,
     level: "N5",
-    title: "Things",
+    title: "Nouns & Identification",
     desc: "Kore / Sore / Are / Kono / Sono",
     patterns: [
       { id: "2.1", label: "これ / それ / あれ", meaning: "This / That / That Over There", explanation: "Demonstrative pronouns used alone.", examples: [{ jp: "これは辞書です。", romaji: "Kore wa jisho desu.", en: "This is a dictionary." }, { jp: "それは何ですか。", romaji: "Sore wa nan desu ka.", en: "What is that?" }] },
       { id: "2.2", label: "この / その / あの + N", meaning: "This / That / That (with Noun)", explanation: "Demonstrative adjectives that MUST be followed by a noun.", examples: [{ jp: "この本はわたしのです。", romaji: "Kono hon wa watashi no desu.", en: "This book is mine." }] },
-      { id: "2.3", label: "ここ / そこ / あそこ", meaning: "Here / There / Over There", explanation: "Demonstrative pronouns for locations.", examples: [{ jp: "ここは教室です。", romaji: "Koko wa kyoushitsu desu.", en: "Here is the classroom." }] },
-      { id: "2.4", label: "どこ", meaning: "Where", explanation: "Question word for location.", examples: [{ jp: "トイレはどこですか。", romaji: "Toire wa doko desu ka.", en: "Where is the restroom?" }] }
+      { id: "2.3", label: "～です / ～じゃありません", meaning: "Identification", explanation: "Positive and negative identification of things.", examples: [{ jp: "これは本です。", en: "This is a book.", romaji: "Kore wa hon desu." }, { jp: "それは辞書じゃありません。", en: "That is not a dictionary.", romaji: "Sore wa jisho ja arimasen." }] },
+      { id: "2.4", label: "そうですか", meaning: "I see / Is that so?", explanation: "Used to acknowledge new information.", examples: [{ jp: "A: これはミラーさんのです。 B: そうですか。", romaji: "A: Kore wa Miraa-san no desu. B: Sou desu ka.", en: "A: This is Mr. Miller's. B: I see." }] }
     ],
     quiz: [
       { q: "___ は わたしの じしょです。", ans: "これ", options: ["これ", "この", "ここ", "こちら"] },
@@ -52,695 +52,749 @@ export const GRAMMAR_DATA = [
   {
     chapter: 3,
     level: "N5",
-    title: "Existence",
-    desc: "Imasu / Arimasu / Ni",
+    title: "Places",
+    desc: "Koko / Soko / Asoko / Kochira",
     patterns: [
-      { id: "3.1", label: "～にいます / あります", meaning: "Existence (Animate / Inanimate)", explanation: "'Imasu' for living things, 'Arimasu' for non-living things.", examples: [{ jp: "猫が机の上にいます。", romaji: "Neko ga tsukue no ue ni imasu.", en: "The cat is on the desk." }, { jp: "あそこにコンビニがあります。", romaji: "Asoko ni konbini ga arimasu.", en: "There is a convenience store over there." }] },
-      { id: "3.2", label: "～に", meaning: "Location of Existence", explanation: "Particle 'ni' marks the location.", examples: [{ jp: "教室に学生がいます。", romaji: "Kyoushitsu ni gakusei ga imasu.", en: "There are students in the classroom." }] },
-      { id: "3.3", label: "～から～まで", meaning: "From... to...", explanation: "Indicates a range of time or space.", examples: [{ jp: "９時から５時まで働きます。", romaji: "Kuji kara goji made hatarakimasu.", en: "I work from 9 to 5." }] }
+      { id: "3.1", label: "ここ / そこ / あそこ", meaning: "Here / There / Over There", explanation: "Demonstrative pronouns for locations.", examples: [{ jp: "ここは教室です。", romaji: "Koko wa kyoushitsu desu.", en: "Here is the classroom." }] },
+      { id: "3.2", label: "こちら / そちら / あちら", meaning: "This way / That way / That way (polite)", explanation: "Polite or directional versions of koko/soko/asoko.", examples: [{ jp: "受付はこちらです。", romaji: "Uketsuke wa kochira desu.", en: "The reception is this way." }] },
+      { id: "3.3", label: "～は～です (Place)", meaning: "[Topic] is [Place]", explanation: "Describing where something is located.", examples: [{ jp: "トイレはあそこです。", romaji: "Toire wa asoko desu.", en: "The restroom is over there." }] },
+      { id: "3.4", label: "N の N (Belonging)", meaning: "N1 of N2", explanation: "Origin or category of a place or product.", examples: [{ jp: "これは日本の車です。", romaji: "Kore wa Nihon no kuruma desu.", en: "This is a Japanese car." }] }
     ],
     quiz: [
-      { q: "あそこに 学生 ___ います。", ans: "が", options: ["が", "に", "を", "は"] },
-      { q: "机の ___ に 電話が あります。", ans: "うえ", options: ["うえ", "なか", "まえ", "うしろ"] },
-      { q: "あそこ ___ じむしょ です。", ans: "は", options: ["に", "は", "を", "へ"] },
-      { q: "公園に だれ ___ いますか。", ans: "が", options: ["が", "を", "に", "は"] },
-      { q: "冷蔵庫 ___ なかに ビールが あります。", ans: "の", options: ["の", "に", "で", "を"] },
-      { q: "猫は どこ ___ いますか。", ans: "に", options: ["に", "で", "を", "へ"] },
-      { q: "犬 ___ 猫が います。", ans: "と", options: ["と", "も", "は", "に"] },
-      { q: "箱の なか ___ 何も ありません。", ans: "には", options: ["に", "には", "を", "で"] },
-      { q: "木 ___ 下に 子供が います。", ans: "の", options: ["の", "に", "は", "を"] },
-      { q: "そこに 王さん ___ います。", ans: "も", options: ["は", "も", "を", "に"] }
+      { q: "あそら ___ じむしょ です。", ans: "は", options: ["に", "は", "を", "へ"] },
+      { q: "エレベーターは ___ ですか。", ans: "どこ", options: ["どこ", "どなた", "だれ", "どれ"] },
+      { q: "お国は ___ ですか。", ans: "どちら", options: ["どちら", "どこ", "だれ", "なに"] },
+      { q: "ここは ___ です。", ans: "きょうしつ", options: ["きょうしつ", "がっこう", "にわ", "へや"] },
+      { q: "それは ___ の コンピューター ですか。日本のです。", ans: "どこ", options: ["どこ", "なに", "だれ", "いつ"] },
+      { q: "電話は ___ です。", ans: "あそこ", options: ["あそこ", "あちら", "それ", "ここ"] },
+      { q: "ミラーさんは ___ ですか。事務所です。", ans: "どこ", options: ["どこ", "どちら", "だれ", "なに"] },
+      { q: "これは ___ ですか。１万ウォンです。", ans: "いくら", options: ["いくら", "なん", "どこ", "どちら"] },
+      { q: "時計 ___ 売り場は どこですか。", ans: "の", options: ["の", "に", "を", "は"] },
+      { q: "すみませんが、出口を ___ けてください。", ans: "あ", options: ["あ", "い", "う", "え"] }
     ]
   },
   {
     chapter: 4,
     level: "N5",
-    title: "Verbs (Polite)",
-    desc: "Masu / Masen / Mashita",
+    title: "Time & Verbs",
+    desc: "Time counters / Kara Made / Masu",
     patterns: [
-      { id: "4.1", label: "～ます / ～ません", meaning: "Polite Verb Form", explanation: "Standard polite form for present/future tense.", examples: [{ jp: "毎日学校へ行きます。", romaji: "Mainichi gakkou e ikimasu.", en: "I go to school every day." }, { jp: "肉を食べません。", romaji: "Niku o tabemasen.", en: "I don't eat meat." }] },
-      { id: "4.2", label: "～ました / ～ませんでした", meaning: "Past Tense Polite", explanation: "Standard polite form for past tense.", examples: [{ jp: "きのう映画を見ました。", romaji: "Kinou eiga o mimashita.", en: "I watched a movie yesterday." }] },
-      { id: "4.3", label: "何時 / 何曜日", meaning: "What time / What day", explanation: "Asking questions about time.", examples: [{ jp: "今何時ですか。", romaji: "Ima nanji desu ka.", en: "What time is it now?" }] }
+      { id: "4.1", label: "今～時～分", meaning: "Telling Time", explanation: "Naming hours and minutes.", examples: [{ jp: "今、９時１５分です。", romaji: "Ima, kuji juugofun desu.", en: "It is 9:15 now." }] },
+      { id: "4.2", label: "～から～まで", meaning: "From... to...", explanation: "Range of time or place.", examples: [{ jp: "９時から５時まで働きます。", romaji: "Kuji kara goji made hatarakimasu.", en: "I work from 9 to 5." }] },
+      { id: "4.3", label: "～に (Time)", meaning: "At (Time)", explanation: "Particle indicating the time an action occurs.", examples: [{ jp: "６時に起きます。", romaji: "Rokuji ni okimasu.", en: "I wake up at 6." }] },
+      { id: "4.4", label: "～ます / ～ません", meaning: "Present Polite Verbs", explanation: "Standard polite form for actions.", examples: [{ jp: "毎日、働きます。", romaji: "Mainichi, hatarakimasu.", en: "I work every day." }, { jp: "明日は、休みません。", romaji: "Ashita wa, yasumimasen.", en: "I will not rest tomorrow." }] }
     ],
     quiz: [
-      { q: "きのうは 暑 ___ です。", ans: "かった", options: ["い", "かった", "だ", "かったい"] },
-      { q: "京都は 静か ___ です。", ans: "でした", options: ["た", "だ", "でした", "かった"] },
-      { q: "昨日 べんきょう ___。", ans: "しました", options: ["しました", "します", "する", "して"] },
-      { q: "今朝 朝ごはん を ___ か。", ans: "食べました", options: ["食べました", "食べます", "食べて", "食べ"] },
-      { q: "会議は 何時 ___ ですか。", ans: "から", options: ["から", "まで", "に", "へ"] },
-      { q: "毎朝 何時 ___ 起きますか。", ans: "に", options: ["に", "を", "で", "は"] },
-      { q: "きのうの パーティーは ___ ですか。", ans: "どう", options: ["どう", "どんな", "どれ", "なに"] },
-      { q: "テストは あまり ___ ありませんでした。", ans: "むずかしく", options: ["むずかしい", "むずかしく", "むずかな", "むずか"] },
-      { q: "いいえ、行き ___。", ans: "ませんでした", options: ["ません", "ませんでした", "ます", "でした"] },
-      { q: "きのうは ___ ですか。", ans: "ひま", options: ["ひま", "ひまい", "ひまな", "ひまに"] }
+      { q: "今、何時 ___ ですか。", ans: "なん", options: ["なん", "どこ", "いつ", "なに"] },
+      { q: "銀行は ９時 ___ ３時 ___ です。", ans: "から / まで", options: ["から / まで", "に / に", "を / を", "へ / へ"] },
+      { q: "毎朝 ７時 ___ 起きます。", ans: "に", options: ["に", "を", "で", "は"] },
+      { q: "昨日 勉強 ___。", ans: "しました", options: ["しました", "します", "する", "して"] },
+      { q: "土曜日は 働き ___。", ans: "ません", options: ["ません", "ます", "ましょう", "しました"] },
+      { q: "試験は 何曜日 ___ ですか。", ans: "なん", options: ["なん", "なに", "どこ", "どの"] },
+      { q: "会議は 終わりました ___。", ans: "か", options: ["か", "ね", "よ", "は"] },
+      { q: "昨日 １０時 ___ 寝ました。", ans: "に", options: ["に", "を", "で", "は"] },
+      { q: "休日は 働き ___。", ans: "ません", options: ["ません", "ます", "ましょう", "しました"] },
+      { q: "今 ３時 ___ です。", ans: "はん", options: ["はん", "ぷん", "じ", "じゅう"] }
     ]
   },
   {
     chapter: 5,
     level: "N5",
-    title: "Movement",
-    desc: "E ikimasu / De / To",
+    title: "Movement & Transport",
+    desc: "Go Come Return / Particle E / To / De",
     patterns: [
-      { id: "5.1", label: "～へ行きます / 来ます / 帰ります", meaning: "Go / Come / Return", explanation: "Verbs of movement use particle 'e' (written as 'he').", examples: [{ jp: "日本へ行きます。", romaji: "Nihon e ikimasu.", en: "I will go to Japan." }, { jp: "うちへ帰ります。", romaji: "Uchi e kaerimasu.", en: "I will go home." }] },
-      { id: "5.2", label: "～で", meaning: "By means of", explanation: "Indicates the method of transport or tool.", examples: [{ jp: "電車で会社へ行きます。", romaji: "Densha de kaisha e ikimasu.", en: "I go to work by train." }] },
-      { id: "5.3", label: "一緒に", meaning: "Together", explanation: "Adverb meaning 'together'.", examples: [{ jp: "一緒に京都へ行きませんか。", romaji: "Issho ni Kyouto e ikimasen ka.", en: "Won't you go to Kyoto together?" }] }
+      { id: "5.1", label: "行きます / 来ます / 帰ります", meaning: "Go / Come / Return", explanation: "Primary verbs of movement.", examples: [{ jp: "会社へ行きます。", romaji: "Kaisha e ikimasu.", en: "I will go to the office." }] },
+      { id: "5.2", label: "～へ / ～に (Destination)", meaning: "To (Direction/Destination)", explanation: "Particle 'e' (written as 'he') or 'ni' for the goal of movement.", examples: [{ jp: "デパートへ行きます。", romaji: "Depaato e ikimasu.", en: "I go to the department store." }] },
+      { id: "5.3", label: "～で (Transport)", meaning: "By (Transport)", explanation: "Indicates the mode of transportation used.", examples: [{ jp: "電車で来ました。", romaji: "Densha de kimashita.", en: "I came by train." }] },
+      { id: "5.4", label: "～と (With)", meaning: "With (Person)", explanation: "The person someone does an action with.", examples: [{ jp: "友達と京都へ行きます。", romaji: "Tomodachi to Kyouto e ikimasu.", en: "I will go to Kyoto with my friend." }] }
     ],
     quiz: [
       { q: "どこ ___ 買いましたか。デパートです。", ans: "で", options: ["で", "に", "を", "へ"] },
-      { q: "いっしょに 行き ___。", ans: "ませんか", options: ["ますか", "ませんか", "ました", "する"] },
       { q: "電車 ___ 会社へ行きます。", ans: "で", options: ["に", "を", "は", "で"] },
       { q: "あした どこ ___ 行きますか。", ans: "へ", options: ["に", "を", "で", "へ"] },
-      { q: "ロビー ___ 待ちましょう。", ans: "で", options: ["で", "に", "へ", "を"] },
-      { q: "バス ___乗ります。", ans: "に", options: ["を", "は", "に", "で"] },
       { q: "歩いて 帰り ___。", ans: "ます", options: ["ます", "ましょう", "ました", "して"] },
       { q: "だれ ___ 行きますか。 友達と行きます。", ans: "と", options: ["と", "に", "を", "は"] },
-      { q: "学校 ___ 来ます。", ans: "へ", options: ["を", "に", "へ", "が"] }
+      { q: "学校 ___ 来ます。", ans: "へ", options: ["を", "に", "へ", "が"] },
+      { q: "タクシー ___ 来ました。", ans: "で", options: ["で", "に", "へ", "を"] },
+      { q: "昨日 １人で ___ 行きましたか。", ans: "どこへも", options: ["どこへも", "どこへ", "どこに", "どこを"] },
+      { q: "誕生日は ___ ですか。６月１日です。", ans: "いつ", options: ["いつ", "なん", "どこ", "だれ"] },
+      { q: "「おめでとうございます。」 「ありがとう ___。」", ans: "ございます", options: ["ございます", "あります", "います", "いたします"] }
     ]
   },
   {
     chapter: 6,
     level: "N5",
-    title: "Actions (Object)",
-    desc: "Wo / Masu form",
+    title: "Transitive Actions",
+    desc: "Wo object / Kudasai",
     patterns: [
-      { id: "6.1", label: "～を", meaning: "Object Marker", explanation: "Denotes the direct object of a verb.", examples: [{ jp: "コーヒーを飲みます。", romaji: "Kouhii o nomimasu.", en: "I drink coffee." }, { jp: "本を読みます。", romaji: "Hon o yomimasu.", en: "I read a book." }] },
-      { id: "6.2", label: "Masu Form", meaning: "Polite Verb Ending", explanation: "Standard form for verbs in polite speech.", examples: [{ jp: "明日、テニスをします。", romaji: "Ashita, tenisu o shimasu.", en: "I will play tennis tomorrow." }] }
+      { id: "6.1", label: "～を (Object)", meaning: "Object Marker", explanation: "Denotes the direct object of a verb.", examples: [{ jp: "お茶を飲みます。", romaji: "Ocha o nomimasu.", en: "I drink tea." }] },
+      { id: "6.2", label: "～ます (Present)", meaning: "Do...", explanation: "Describing current or future habitual actions.", examples: [{ jp: "毎日、新聞を読みます。", romaji: "Mainichi, shinbun o yomimasu.", en: "I read the newspaper every day." }] },
+      { id: "6.3", label: "～をください", meaning: "Please give me...", explanation: "Requesting an object.", examples: [{ jp: "これをください。", romaji: "Kore o kudasai.", en: "Please give me this." }] }
     ],
     quiz: [
       { q: "おさけ ___ 飲みますか。", ans: "を", options: ["を", "は", "に", "が"] },
-      { q: "パン ___ 食べます。", ans: "を", options: ["を", "は", "に", "で"] },
+      { q: "毎日 なに ___ 食べますか。", ans: "を", options: ["を", "に", "は", "で"] },
       { q: "テニス ___ しましょう。", ans: "を", options: ["に", "を", "は", "で"] },
-      { q: "あした なに ___ しますか。", ans: "を", options: ["に", "を", "で", "が"] },
-      { q: "手紙 ___ 書きます。", ans: "を", options: ["を", "に", "へ", "で"] },
       { q: "写真を ___。", ans: "とります", options: ["とります", "かきます", "します", "ききます"] },
       { q: "たばこ ___ すいますか。", ans: "を", options: ["を", "に", "は", "が"] },
-      { q: "音楽 ___ 聞きます。", ans: "を", options: ["を", "に", "は", "が"] },
-      { q: "宿題 ___ します。", ans: "を", options: ["を", "に", "は", "が"] },
-      { q: "水 ___ 飲みます。", ans: "を", options: ["を", "に", "は", "が"] }
+      { q: "ジュース ___ ください。", ans: "を", options: ["を", "に", "は", "も"] },
+      { q: "宿題を ___。", ans: "しました", options: ["しました", "します", "する", "して"] },
+      { q: "昼休み ___ 勉強しました。", ans: "は", options: ["は", "に", "を", "で"] },
+      { q: "公園 ___ 写真を とりました。", ans: "で", options: ["で", "に", "へ", "を"] },
+      { q: "あした 三越 ___ 会いましょう。", ans: "で", options: ["で", "に", "を", "へ"] }
     ]
   },
   {
     chapter: 7,
     level: "N5",
-    title: "Requests & Permission",
-    desc: "Te-form / Kudasai / Te mo ii",
+    title: "Means & Relations",
+    desc: "De / Wo / Kara Made / To",
     patterns: [
-      { id: "7.1", label: "～て form", meaning: "Te-form", explanation: "Used for connecting sentences, making requests, etc.", examples: [{ jp: "食べて", romaji: "Tabete", en: "Eat (and...)" }] },
-      { id: "7.2", label: "～てください", meaning: "Please do...", explanation: "Polite request.", examples: [{ jp: "ドアを開けてください。", romaji: "Doa o akete kudasai.", en: "Please open the door." }] },
-      { id: "7.3", label: "～てもいいです", meaning: "Permission", explanation: "Asking for or granting permission.", examples: [{ jp: "ここで写真を撮ってもいいですか。", romaji: "Koko de shashin o tottemo ii desu ka.", en: "May I take a photo here?" }] }
+      { id: "7.1", label: "～で (Place of Action)", meaning: "At (Place)", explanation: "Particle indicating where an action occurs.", examples: [{ jp: "食堂で昼ごはんを食べます。", romaji: "Shokudou de hirugohan o tabemasu.", en: "I eat lunch in the cafeteria." }] },
+      { id: "7.2", label: "～を (Action focus)", meaning: "Focus on action", explanation: "Direct action using 'wo'.", examples: [{ jp: "ニュースを見ました。", romaji: "Nyuusu o mimashita.", en: "I watched the news." }] },
+      { id: "7.3", label: "～から (Source)", meaning: "From (Source)", explanation: "Particle for origin or giver.", examples: [{ jp: "母からプレゼントをもらいました。", romaji: "Haha kara purezento o moraimashita.", en: "I received a present from my mother." }] },
+      { id: "7.4", label: "～と (And)", meaning: "And", explanation: "Connecting two nouns.", examples: [{ jp: "パンと卵を食べます。", romaji: "Pan to tamago o tabemasu.", en: "I eat bread and eggs." }] }
     ],
     quiz: [
-      { q: "ここ ___ 名前を 書いてください。", ans: "に", options: ["に", "を", "で", "へ"] },
-      { q: "タクシーを ___ ください。", ans: "よんで", options: ["よんで", "よび", "よぶ", "よまし"] },
-      { q: "しおを ___ ください。", ans: "とって", options: ["とって", "とり", "とる", "とら"] },
-      { q: "ゆっくり ___ ください。", ans: "はなして", options: ["はなして", "はなし", "はなす", "はなせ"] },
-      { q: "ここで タバコを ___ もいいですか。", ans: "すって", options: ["すって", "すい", "すう", "すわ"] },
-      { q: "ドアを ___ ください。", ans: "あけて", options: ["あけて", "あけ", "あける", "あけな"] },
-      { q: "荷物を ___ ましょうか。", ans: "もち", options: ["もち", "もって", "もつ", "もた"] },
-      { q: "コピーを ___ ください。", ans: "して", options: ["して", "し", "する", "しな"] },
-      { q: "ボールペン ___ 書いてください。", ans: "で", options: ["で", "を", "に", "へ"] },
-      { q: "ちょっと ___ ください。", ans: "まって", options: ["まって", "まち", "まつ", "また"] }
+      { q: "何 ___ 食べますか。 はしで食べます。", ans: "で", options: ["で", "を", "に", "は"] },
+      { q: "日本語 ___ 何ですか。スマホです。", ans: "で", options: ["で", "を", "に", "は"] },
+      { q: "田中さんは 山田さん ___ 花を あげました。", ans: "に", options: ["に", "を", "で", "は"] },
+      { q: "母 ___ プレゼントを もらいました。", ans: "から", options: ["から", "に", "で", "を"] },
+      { q: "もう 荷物を ___ か。", ans: "送りました", options: ["送りました", "送ります", "送って", "送れ"] },
+      { q: "だれ ___ 習いましたか。王さんに習いました。", ans: "に", options: ["に", "で", "を", "は"] },
+      { q: "レポート ___ 書きましたか。", ans: "を", options: ["を", "に", "で", "へ"] },
+      { q: "テニス ___ 友達を 会います。", ans: "と", options: ["と", "に", "を", "は"] },
+      { q: "英語 ___ 手紙を 書きます。", ans: "で", options: ["で", "に", "を", "は"] },
+      { q: "もう ご飯を ___ か。", ans: "食べました", options: ["食べました", "食べます", "食べて", "食べ"] }
     ]
   },
   {
     chapter: 8,
     level: "N5",
-    title: "Progressive & Sequence",
-    desc: "Te-iru / Te-kara",
+    title: "Adjectives (Properties)",
+    desc: "I & Na Adjectives / Connecting",
     patterns: [
-      { id: "8.1", label: "～ている", meaning: "Progressive / State", explanation: "Ongoing action or resulting state.", examples: [{ jp: "今、本を読んでいます。", romaji: "Ima, hon o yonde imasu.", en: "I am reading a book now." }] },
-      { id: "8.2", label: "～てから", meaning: "After doing...", explanation: "Sequence of actions.", examples: [{ jp: "ご飯を食べてから勉強します。", romaji: "Gohan o tabete kara benkyou shimasu.", en: "I will study after eating." }] }
+      { id: "8.1", label: "Adjectives (い / な)", meaning: "Properties", explanation: "Describing nouns with properties.", examples: [{ jp: "富士山は高いです。", romaji: "Fujisan wa takai desu.", en: "Mt. Fuji is high." }, { jp: "奈良は静かです。", romaji: "Nara wa shizuka desu.", en: "Nara is quiet." }] },
+      { id: "8.2", label: "～くないです / ～じゃありません", meaning: "Negative Adjectives", explanation: "Forming negative descriptions.", examples: [{ jp: "この本は高くないです。", romaji: "Kono hon wa takakunai desu.", en: "This book is not expensive." }, { jp: "あの町はおもしろじゃありません。", romaji: "Ano machi wa omoshiro ja arimasen.", en: "That town is not interesting." }] },
+      { id: "8.3", label: "～くて / ～で (Connecting)", meaning: "And (Properties)", explanation: "Connecting two or more adjectives.", examples: [{ jp: "広くて、きれいです。", romaji: "Hirokute, kirei desu.", en: "It is spacious and beautiful." }] }
     ],
     quiz: [
-      { q: "ジョギングを ___ から シャワーをあびます。", ans: "して", options: ["して", "し", "する", "した"] },
-      { q: "今、雨が ___ います。", ans: "ふって", options: ["ふって", "ふり", "ふる", "ふら"] },
-      { q: "ミラーさんは 今 電話を ___ います。", ans: "かけて", options: ["かけて", "かけ", "かける", "かかり"] },
-      { q: "大学へ ___ から べんきょうを はじめます。", ans: "行って", options: ["行って", "行き", "行く", "行か"] },
-      { q: "結婚 ___ いますか。", ans: "して", options: ["し", "して", "する", "しな"] },
-      { q: "使い方を ___ くださいませんか。", ans: "教え", options: ["教え", "教えて", "教える", "教えな"] },
-      { q: "仕事が ___ から、飲みに行きましょう。", ans: "終わって", options: ["終わり", "終わって", "終わる", "終わった"] },
-      { q: "歯を ___ から、寝ます。", ans: "みがいて", options: ["みがいて", "みがき", "みがく", "みがいた"] },
-      { q: "どこに ___ いますか。", ans: "すんで", options: ["すんで", "すむ", "すみ", "すんだ"] },
-      { q: "名前を ___ から 入ってください。", ans: "書いて", options: ["書き", "書いて", "書く", "書か"] }
+      { q: "京都は ___ です。", ans: "きれいで", options: ["きれいで", "きれいくて", "きれいに", "きれいな"] },
+      { q: "昨日は 土曜日 ___。", ans: "でした", options: ["でした", "です", "だ", "かった"] },
+      { q: "この お茶は ___ ないです。", ans: "熱く", options: ["熱く", "熱い", "熱いな", "熱か"] },
+      { q: "山は ___ でした。", ans: "高かった", options: ["高かった", "高い", "高くて", "高いだ"] },
+      { q: "いいえ、あまり ___ ありませんでした。", ans: "寒く", options: ["寒く", "寒い", "寒いな", "寒か"] },
+      { q: "元気 ___ ですか。", ans: "です", options: ["です", "だ", "かった", "でした"] },
+      { q: "仕事は ___ ですか。忙しいです。", ans: "どう", options: ["どう", "どの", "どちら", "どこ"] },
+      { q: "昨日は ___ では ありませんでした。", ans: "暇", options: ["暇", "暇い", "暇な", "暇く"] },
+      { q: "この カバンは ___ て、安いです。", ans: "軽く", options: ["軽く", "軽い", "軽", "軽な"] },
+      { q: "とても ___ です。", ans: "楽しい", options: ["楽しい", "楽し", "楽しく", "楽しな"] }
     ]
   },
   {
     chapter: 9,
     level: "N5",
-    title: "Desire & Simultaneous",
-    desc: "Tai / Nagara",
+    title: "Preferences & Skills",
+    desc: "Suki Kirai / Jouzu Heta / Ga",
     patterns: [
-      { id: "9.1", label: "～たいです", meaning: "Want to...", explanation: "Expressing desire to do an action.", examples: [{ jp: "日本へ行きたいです。", romaji: "Nihon e ikitai desu.", en: "I want to go to Japan." }] },
-      { id: "9.2", label: "～ながら", meaning: "While doing...", explanation: "Simultaneous actions.", examples: [{ jp: "音楽を聞きながら勉強します。", romaji: "Ongaku o kikinagara benkyou shimasu.", en: "I study while listening to music." }] }
+      { id: "9.1", label: "好き / 嫌い (Suki / Kirai)", meaning: "Like / Dislike", explanation: "Expressing preferences.", examples: [{ jp: "スポーツが好きです。", romaji: "Supootsu ga suki desu.", en: "I like sports." }] },
+      { id: "9.2", label: "上手 / 下手", meaning: "Good at / Bad at", explanation: "Expressing skills.", examples: [{ jp: "田中さんは歌が上手です。", romaji: "Tanaka-san wa uta ga jouzu desu.", en: "Mr. Tanaka is good at singing." }] },
+      { id: "9.3", label: "～が好きです", meaning: "I like [Noun]", explanation: "Basic preference sentence.", examples: [{ jp: "魚が好きです。", romaji: "Sakana ga suki desu.", en: "I like fish." }] },
+      { id: "9.4", label: "～は～が～", meaning: "Subject-Object relation", explanation: "The structure for having traits or likes.", examples: [{ jp: "わたしは イタリア料理が 好きです。", romaji: "Watashi wa Itaria ryouri ga suki desu.", en: "I like Italian food." }] }
     ],
     quiz: [
-      { q: "わたしは 新しい 車 ___ ほしいです。", ans: "が", options: ["を", "が", "は", "に"] },
-      { q: "のどが かわきました. 水 ___ 飲みたいです。", ans: "が", options: ["を", "が", "は", "に"] },
-      { q: "音楽を ___ ながら 食事します。", ans: "聞き", options: ["聞き", "聞く", "聞いて", "聞か"] },
-      { q: "テレビを ___ ながら 本を読みます。", ans: "見", options: ["見", "見る", "見て", "見ない"] },
-      { q: "おなかが すきました. なに ___ 食べたいです。", ans: "か", options: ["か", "も", "を", "に"] },
-      { q: "今日は どこへ ___ 行きたくないです。", ans: "も", options: ["に", "を", "も", "は"] },
-      { q: "日本へ 料理を ___ 行きます。", ans: "食べに", options: ["食べる", "食べに", "食べて", "食べ"] },
-      { q: "歩き ___ 話しましょう。", ans: "ながら", options: ["ながら", "たい", "て", "ない"] },
-      { q: "何も ___ ないです。", ans: "したく", options: ["したく", "したい", "して", "する"] },
-      { q: "フランスへ 料理を ___ に行きます。", ans: "習い", options: ["習い", "習う", "習って", "習わ"] }
+      { q: "わたしは お酒 ___ 嫌いです。", ans: "が", options: ["が", "を", "は", "に"] },
+      { q: "ミラーさんは 日本語が ___ ですか。", ans: "上手", options: ["上手", "上手な", "下手の", "下手い"] },
+      { q: "なに ___ 一番 好きですか。", ans: "が", options: ["が", "を", "は", "に"] },
+      { q: "よく わかり ___。", ans: "ます", options: ["ます", "ました", "する", "して"] },
+      { q: "だいたい わかり ___。", ans: "ます", options: ["ます", "ました", "する", "して"] },
+      { q: "少し わかり ___。", ans: "ます", options: ["ます", "ました", "する", "して"] },
+      { q: "あまり わかり ___。", ans: "ません", options: ["ません", "ました", "ます", "ましょう"] },
+      { q: "全然 わかり ___。", ans: "ません", options: ["ません", "ました", "ます", "ましょう"] },
+      { q: "時間が ___ から、帰りましょう。", ans: "あります", options: ["あります", "ありますな", "ありますで", "ありますを"] },
+      { q: "用事が ___、行けません。", ans: "ありますから", options: ["ありますから", "ありますで", "ありますを", "ありますに"] }
     ]
   },
   {
     chapter: 10,
     level: "N5",
-    title: "Time & Nominalization",
-    desc: "Mae ni / No ga",
+    title: "Existence & Counters",
+    desc: "Arimasu Imasu / Ni / Counters",
     patterns: [
-      { id: "10.1", label: "～前に", meaning: "Before doing...", explanation: "Action happening before another.", examples: [{ jp: "寝る前に歯を磨きます。", romaji: "Neru mae ni ha o migakimasu.", en: "I brush my teeth before sleeping." }] },
-      { id: "10.2", label: "～のが", meaning: "Nominalizer", explanation: "Turning a verb phrase into a noun usage (likes/skills).", examples: [{ jp: "日本語を話すのが好きです。", romaji: "Nihongo o hanasu no ga suki desu.", en: "I like speaking Japanese." }] }
+      { id: "10.1", label: "あります / います", meaning: "Existence", explanation: "'Arimasu' for objects/plants, 'Imasu' for people/animals.", examples: [{ jp: "本が机の上にあります。", romaji: "Hon ga tsukue no ue ni arimasu.", en: "The book is on the desk." }, { jp: "あそこに佐藤さんがいます。", romaji: "Asoko ni Satou-san ga imasu.", en: "Mr. Sato is over there." }] },
+      { id: "10.2", label: "～に～があります", meaning: "There is... in [Place]", explanation: "Describing existence in a specific location.", examples: [{ jp: "公園に木があります。", romaji: "Kouen ni ki ga arimasu.", en: "There is a tree in the park." }] },
+      { id: "10.3", label: "Number + counters", meaning: "Counting People/Things", explanation: "Japanese counting system for people and items.", examples: [{ jp: "学生が３人います。", romaji: "Gakusei ga sannin imasu.", en: "There are 3 students." }] }
     ],
     quiz: [
-      { q: "寝る ___ 歯をみがきます。", ans: "まえに", options: ["まえに", "あとで", "ときに", "から"] },
-      { q: "日本へ ___ まえに、日本語を勉強しました。", ans: "来る", options: ["来る", "来", "来て", "来た"] },
-      { q: "テニスを ___ のが好きです。", ans: "する", options: ["する", "し", "して", "した"] },
-      { q: "絵を ___ のが上手です。", ans: "かく", options: ["かく", "かき", "かいて", "かいた"] },
-      { q: "食事の ___ 手を洗います。", ans: "まえに", options: ["まえに", "あとで", "とき", "から"] },
-      { q: "漢字を ___ のは難しいです。", ans: "読む", options: ["読む", "読み", "読んで", "読んだ"] },
-      { q: "泳ぐ ___ ができますか。", ans: "こと", options: ["こと", "もの", "の", "が"] },
-      { q: "旅行の ___ 荷物を準備します。", ans: "まえに", options: ["まえに", "あとで", "ときに", "から"] },
-      { q: "歌を ___ のが好きです。", ans: "歌う", options: ["歌う", "歌i", "歌って", "歌った"] },
-      { q: "走る ___ は速いです。", ans: "の", options: ["の", "こと", "もの", "が"] }
+      { q: "あそこに 猫 ___ います。", ans: "が", options: ["が", "を", "に", "は"] },
+      { q: "机の 上 ___ 消しゴムが あります。", ans: "に", options: ["に", "を", "で", "へ"] },
+      { q: "家族は ５人 ___。", ans: "います", options: ["います", "あります", "して", "だけ"] },
+      { q: "冷蔵庫 ___ 何も ありません。", ans: "には", options: ["には", "に", "を", "で"] },
+      { q: "木 ___ 下に 子供が います。", ans: "の", options: ["の", "に", "は", "を"] },
+      { q: "りんごを ４つ ___。", ans: "買いました", options: ["買いました", "買います", "買って", "買え"] },
+      { q: "男の 子 ___ 女の 子が います。", ans: "と", options: ["と", "も", "は", "に"] },
+      { q: "公園に だれ ___ いません。", ans: "も", options: ["も", "が", "を", "に"] },
+      { q: "車が ___ ありますか。２台あります。", ans: "何台", options: ["何台", "何人", "何枚", "何個"] },
+      { q: "切手を ___ 枚 買いましたか。", ans: "何", options: ["何", "いくつ", "どこ", "どれ"] }
     ]
   },
   {
     chapter: 11,
     level: "N5",
-    title: "Listing Actions",
-    desc: "Tari Tari",
+    title: "Durations & Counters",
+    desc: "Counters / Gurai / Dake / Ka",
     patterns: [
-      { id: "11.1", label: "～たり～たりします", meaning: "Do such things as...", explanation: "Listing representative actions.", examples: [{ jp: "休みの日は本を読んだり、映画を見たりします。", romaji: "Yasumi no hi wa hon o yondari, eiga o mitari shimasu.", en: "On holidays, I read books, watch movies, etc." }] },
-      { id: "11.2", label: "～たり～たりして", meaning: "Doing A, B, etc.", explanation: "Listing actions in a connecting form.", examples: [{ jp: "歌ったり踊ったりして楽しかったです。", romaji: "Utattari odottari shite tanoshikatta desu.", en: "Singing and dancing was fun." }] }
+      { id: "11.1", label: "数え方 (counters)", meaning: "Counting quantities", explanation: "Specific counters for time, people, and objects.", examples: [{ jp: "３時間勉強しました。", romaji: "Sanjikan benkyou shimashita.", en: "I studied for 3 hours." }] },
+      { id: "11.2", label: "～だけ (only)", meaning: "Only / Just", explanation: "Indicating a limit.", examples: [{ jp: "りんごを１つだけ食べました。", romaji: "Ringo o hitotsu dake tabemashita.", en: "I ate only one apple." }] },
+      { id: "11.3", label: "～ぐらい (about)", meaning: "About / Approximately", explanation: "Approximate quantity or duration.", examples: [{ jp: "３０分ぐらい待ちました。", romaji: "Sanjuupun gurai machimashita.", en: "I waited for about 30 minutes." }] },
+      { id: "11.4", label: "～か (or)", meaning: "Or", explanation: "Connecting nouns with an 'or' choice.", examples: [{ jp: "パンか卵を食べます。", romaji: "Pan ka tamago o tabemasu.", en: "I will eat bread or eggs." }] }
     ],
     quiz: [
-      { q: "日曜日は テニスを ___ 映画を ___ します。", ans: "したり / 見たり", options: ["したり / 見たり", "して / 見て", "する / 見る", "した / 見た"] },
-      { q: "本を ___ 音楽を ___ します。", ans: "読んだり / 聞いたり", options: ["読んだり / 聞いたり", "読んで / 聞いて", "読む / 聞く", "読んだ / 聞いた"] },
-      { q: "泣いたり ___ しています。", ans: "笑ったり", options: ["笑ったり", "笑って", "笑う", "笑い"] },
-      { q: "掃除を ___ 洗濯を ___ します。", ans: "したり / したり", options: ["したり / したり", "して / して", "する / する", "した / した"] },
-      { q: "食べたり ___ してはいけません。", ans: "飲んだり", options: ["飲んだり", "飲んで", "飲む", "飲み"] },
-      { q: "行ったり ___ しています。", ans: "来たり", options: ["来たり", "来て", "来る", "来ない"] },
-      { q: "夏休みは 泳いだり ___ したいです。", ans: "遊んだり", options: ["遊んだり", "遊んで", "遊ぶ", "遊び"] },
-      { q: "雨が 降ったり ___ しています。", ans: "止んだり", options: ["止んだり", "止んで", "止む", "止め"] },
-      { q: "見たり ___ しました。", ans: "聞いたり", options: ["聞いたり", "聞いて", "聞く", "聞き"] },
-      { q: "勉強したり ___ します。", ans: "休んだり", options: ["休んだり", "休んで", "休む", "休み"] }
+      { q: "毎日 ８時間 ___ 寝ます。", ans: "ぐらい", options: ["ぐらい", "ごろ", "まで", "から"] },
+      { q: "休みは 日曜日 ___ です。", ans: "だけ", options: ["だけ", "も", "は", "が"] },
+      { q: "ジュース ___ コーラを 飲みます。", ans: "か", options: ["か", "も", "は", "に"] },
+      { q: "この かばんに 本が ___ ありますか。５冊あります。", ans: "何冊", options: ["何冊", "何枚", "何人", "何個"] },
+      { q: "テニスを ___ しましたか。２時間しました。", ans: "どのくらい", options: ["どのくらい", "いつ", "だれと", "どこで"] },
+      { q: "切手を ５ ___ 買いました。", ans: "枚", options: ["枚", "人", "個", "本"] },
+      { q: "学生が ２０ ___ います。", ans: "人", options: ["人", "枚", "匹", "台"] },
+      { q: "バナナを ___ 買いましたか。３本買いました。", ans: "何本", options: ["何本", "何枚", "何人", "何個"] },
+      { q: "みかんを ___ 食べましたか。３つ食べました。", ans: "いくつ", options: ["いくつ", "なん", "どこ", "どちら"] },
+      { q: "京都まで ２時間 ___ かかります。", ans: "ぐらい", options: ["ぐらい", "だけ", "は", "も"] }
     ]
   },
   {
     chapter: 12,
     level: "N5",
-    title: "I-Adjectives",
-    desc: "Conjugation",
+    title: "Tense of Nouns & Adjectives",
+    desc: "Past Tense: Mashita / Deshita",
     patterns: [
-      { id: "12.1", label: "I-Adjectives", meaning: "Basic Usage", explanation: "Adjectives ending in 'i'.", examples: [{ jp: "この部屋は広いです / 広くありません。", romaji: "Kono heya wa hiroi desu / hiroku arimasen.", en: "This room is spacious / not spacious." }] },
-      { id: "12.2", label: "Adjective + Noun", meaning: "Modification", explanation: "Placing adjective before noun.", examples: [{ jp: "おいしい料理", romaji: "Oishii ryouri", en: "Delicious food" }] }
+      { id: "12.1", label: "～ました / ～ませんでした", meaning: "Past Polite Verbs", explanation: "Standard polite form for past tense actions.", examples: [{ jp: "昨日、映画を見ました。", romaji: "Kinou, eiga o mimashita.", en: "I watched a movie yesterday." }] },
+      { id: "12.2", label: "～は～でした", meaning: "Topic was [Noun/Na-Adj]", explanation: "Past polite form for nouns and na-adjectives.", examples: [{ jp: "昨日は雨でした。", romaji: "Kinou wa ame deshita.", en: "Yesterday it was rainy." }] },
+      { id: "12.3", label: "～かったです / ～じゃありませんでした", meaning: "Past I-Adjectives", explanation: "Past polite forms for i-adjectives.", examples: [{ jp: "昨日は暑かったです。", romaji: "Kinou wa atsukatta desu.", en: "Yesterday it was hot." }] }
     ],
     quiz: [
-      { q: "この 映画は ___ です。", ans: "おもしろい", options: ["おもしろい", "おもしろ", "おもしろな", "おもしろく"] },
-      { q: "今日は ___ ありません。", ans: "あつく", options: ["あつく", "あつい", "あつ", "あつな"] },
-      { q: "昨日は ___ です。", ans: "さむかった", options: ["さむかった", "さむい", "さむくて", "さむ"] },
-      { q: "試験は ___ よ。", ans: "むずかしい", options: ["むずかしい", "むずかしく", "むずかし", "むずかしな"] },
-      { q: "この カバンは ___ ないです。", ans: "重く", options: ["重く", "重い", "重", "重な"] },
-      { q: "___ りんごですね。", ans: "赤い", options: ["赤い", "赤", "赤く", "赤の"] },
-      { q: "日本料理は ___ ですか。", ans: "おいしい", options: ["おいしい", "おいし", "おいしく", "おいしな"] },
-      { q: "昨日は ___ ありませんでした。", ans: "よく", options: ["よく", "いい", "よい", "よ"] },
-      { q: "海が ___ です。", ans: "青い", options: ["青い", "青", "青く", "青の"] },
-      { q: "とても ___ です。", ans: "楽しい", options: ["楽しい", "楽しく", "楽し", "楽しな"] }
+      { q: "昨日の パーティーは ___ ですか。", ans: "どう", options: ["どう", "どの", "どちら", "どこ"] },
+      { q: "試験は ___ でした。", ans: "難しかった", options: ["難しかった", "難しい", "難しくて", "難しいだ"] },
+      { q: "昨日は 天気が ___ ありませんでした。", ans: "よく", options: ["よく", "いい", "よい", "よ"] },
+      { q: "去年の 夏は ___ です。", ans: "暑かったです", options: ["暑かったです", "暑い", "暑いな", "暑か"] },
+      { q: "日曜日は ___ でした。", ans: "暇", options: ["暇", "暇い", "暇な", "暇く"] },
+      { q: "刺身は ___ ですか。", ans: "おいしい", options: ["おいしい", "おいし", "おいしく", "おいしな"] },
+      { q: "京都は ___ です。", ans: "静かでした", options: ["静かでした", "静か", "静かな", "静かい"] },
+      { q: "テストは あまり ___ ありませんでした。", ans: "難しく", options: ["難しく", "難しい", "難しいな", "難しな"] },
+      { q: "旅行は ___ 楽しかったです。", ans: "とても", options: ["とても", "あまり", "全然", "ちょうど"] },
+      { q: "お祭りは ___ でしたか。", ans: "どう", options: ["どう", "なに", "いつ", "だれ"] }
     ]
   },
   {
     chapter: 13,
     level: "N5",
-    title: "Na-Adjectives & Comparison",
-    desc: "Na-adj / Hou ga yori",
+    title: "Desires & Comparison",
+    desc: "Hou ga ii / Yori / Comparison",
     patterns: [
-      { id: "13.1", label: "Na-Adjectives", meaning: "Descriptive verbs", explanation: "Adjectives that require 'na' before nouns.", examples: [{ jp: "静かな部屋です。", romaji: "Shizuka na heya desu.", en: "It is a quiet room." }] },
-      { id: "13.2", label: "～ほうが～より", meaning: "Comparison", explanation: "Comparing two things.", examples: [{ jp: "東京のほうが大阪より大きいです。", romaji: "Toukyou no hou ga Oosaka yori ookii desu.", en: "Tokyo is bigger than Osaka." }] }
+      { id: "13.1", label: "～ほうがいいです (Advice)", meaning: "You should...", explanation: "Giving advice or recommendation.", examples: [{ jp: "早く寝たほうがいいです。", romaji: "Hayaku neta hou ga ii desu.", en: "You should sleep early." }] },
+      { id: "13.2", label: "～より～のほうが", meaning: "A is more ... than B", explanation: "Primary comparison structure.", examples: [{ jp: "サッカーより野球のほうが好きです。", romaji: "Sakkaa yori yakyuu no hou ga suki desu.", en: "I like baseball more than soccer." }] },
+      { id: "13.3", label: "～ほど～ません", meaning: "Not as ... as", explanation: "Comparison showing less degree.", examples: [{ jp: "大阪は東京ほど大きくありません。", romaji: "Oosaka wa Toukyou hodo ookiku arimasen.", en: "Osaka is not as big as Tokyo." }] },
+      { id: "13.4", label: "Comparison (Superlative)", meaning: "The most...", explanation: "Describing the best/most in a group.", examples: [{ jp: "スポーツで何が一番好きですか。", romaji: "Supootsu de nani ga ichiban suki desu ka.", en: "What do you like most among sports?" }] }
     ],
     quiz: [
-      { q: "ワット先生は ___ 先生です。", ans: "親切な", options: ["親切な", "親切", "親切い", "親切だ"] },
-      { q: "この 町は ___ です。", ans: "にぎやか", options: ["にぎやか", "にぎやかな", "にぎやかい", "にぎやくだ"] },
+      { q: "新しい 車 ___ ほしいです。", ans: "が", options: ["が", "を", "は", "に"] },
       { q: "北海道の ほうが 大阪 ___ 涼しいです。", ans: "より", options: ["より", "も", "と", "が"] },
       { q: "コーヒーと 紅茶と ___ が好きですか。", ans: "どちら", options: ["どちら", "だれ", "どの", "なに"] },
       { q: "わたしは 魚 ___ 肉のほうが 好きです。", ans: "より", options: ["より", "も", "は", "が"] },
-      { q: "図書館は ___ ですか。", ans: "静か", options: ["静か", "静かな", "静かい", "静かだ"] },
-      { q: "その 店は ___ 有名じゃありません。", ans: "あまり", options: ["あまり", "とても", "少し", "よく"] },
-      { q: "漢字は ひらがなより ___ です。", ans: "難しい", options: ["難しい", "難しく", "難し", "難しな"] },
+      { q: "ロシアは 日本 ___ はるかに 大きいです。", ans: "より", options: ["より", "も", "と", "が"] },
       { q: "スポーツで 何 ___ 一番 好きですか。", ans: "が", options: ["が", "を", "に", "は"] },
-      { q: "あの人は ___ です。", ans: "元気", options: ["元気", "元気な", "元気い", "元気だ"] }
+      { q: "１年で いつ ___ 一番 暑いですか。", ans: "が", options: ["が", "に", "を", "は"] },
+      { q: "日本料理 ___ 何が 一番 好きですか。", ans: "で", options: ["で", "に", "を", "は"] },
+      { q: "テニスと サッカーと どちら ___ おもしろいですか。", ans: "が", options: ["が", "を", "に", "は"] },
+      { q: "家族で だれ ___ 一番 背が高いですか。", ans: "が", options: ["が", "に", "を", "は"] }
     ]
   },
   {
     chapter: 14,
     level: "N5",
-    title: "Change of State",
-    desc: "Naru",
+    title: "Requests & Instructions",
+    desc: "Te-form Introduction / Kudasai / Temo ii / Te wa ikemasen",
     patterns: [
-      { id: "14.1", label: "～くなる / ～になる", meaning: "Become...", explanation: "Change of state for adjectives and nouns.", examples: [{ jp: "天気がよくなりました。", romaji: "Tenki ga yoku narimashita.", en: "The weather became good." }] },
-      { id: "14.2", label: "一番～", meaning: "The most...", explanation: "Superlative.", examples: [{ jp: "一番高いです。", romaji: "Ichiban takai desu.", en: "It is the most expensive." }] }
+      { id: "14.1", label: "～て-form (introduction)", meaning: "Connecting form", explanation: "The base form for many grammatical structures.", examples: [{ jp: "食べて / 飲んで", romaji: "Tabete / Nonde", en: "Eat / Drink (and...)" }] },
+      { id: "14.2", label: "～てください (request)", meaning: "Please do...", explanation: "Polite request for an action.", examples: [{ jp: "座ってください。", romaji: "Suwatte kudasai.", en: "Please sit down." }] },
+      { id: "14.3", label: "～てもいいです (permission)", meaning: "May I... / You may...", explanation: "Granting or asking for permission.", examples: [{ jp: "写真を撮ってもいいです。", romaji: "Shashin o tottemo ii desu.", en: "You may take a photo." }] },
+      { id: "14.4", label: "～てはいけません (prohibition)", meaning: "Must not...", explanation: "Prohibiting an action.", examples: [{ jp: "煙草を吸ってはいけません。", romaji: "Tabako o sutte wa ikemasen.", en: "You must not smoke." }] }
     ],
     quiz: [
-      { q: "天気が ___ なりました。", ans: "よく", options: ["よく", "いい", "よい", "いく"] },
-      { q: "だんだん ___ なります。", ans: "暖かく", options: ["暖かく", "暖かい", "暖かくて", "暖か"] },
-      { q: "部屋が ___ なりました。", ans: "きれいに", options: ["きれいに", "きれい", "きれいな", "きれいく"] },
-      { q: "息子は 医者に ___ ました。", ans: "なり", options: ["なり", "なる", "なって", "なれ"] },
-      { q: "来年 二十歳に ___ ます。", ans: "なり", options: ["なり", "なる", "なって", "なれ"] },
-      { q: "日本語が ___ なりました。", ans: "上手に", options: ["上手に", "上手", "上手な", "上手く"] },
-      { q: "髪が ___ なりました。", ans: "短く", options: ["短く", "短い", "短くて", "短か"] },
-      { q: "クラスで 誰が ___ 背が高いですか。", ans: "一番", options: ["一番", "もっと", "とても", "よく"] },
-      { q: "富士山は 日本で ___ 高い山です。", ans: "一番", options: ["一番", "とても", "もっと", "すごく"] },
-      { q: "空が ___ なりました。", ans: "暗く", options: ["暗く", "暗い", "暗くて", "暗か"] }
+      { q: "ここ ___ 名前を 書いてください。", ans: "に", options: ["に", "を", "で", "へ"] },
+      { q: "名前を ___ ください。", ans: "書いて", options: ["書いて", "書く", "書き", "書か"] },
+      { q: "辞書を ___ いいですか。", ans: "借りても", options: ["借りても", "借りて", "借り", "借りな"] },
+      { q: "ここで 写真を ___ いけません。", ans: "とっては", options: ["とっては", "とって", "とる", "とり"] },
+      { q: "タクシーを ___ ください。", ans: "よんで", options: ["よんで", "よび", "よぶ", "よませ"] },
+      { q: "しおを ___ ください。", ans: "とって", options: ["とって", "とり", "とる", "とら"] },
+      { q: "ゆっくり ___ ください。", ans: "はなして", options: ["はなして", "はなし", "はなす", "はなせ"] },
+      { q: "ドアを ___ ください。", ans: "あけて", options: ["あけて", "あけ", "あける", "あけな"] },
+      { q: "ちょっと ___ ください。", ans: "まって", options: ["まって", "まち", "まつ", "また"] },
+      { q: "コピーを ___ ください。", ans: "して", options: ["して", "し", "する", "しな"] }
     ]
   },
   {
     chapter: 15,
     level: "N5",
-    title: "Excess & Ease",
-    desc: "Sugiru / Yasui / Nikui",
+    title: "Permissions & States",
+    desc: "Te mo ii desu ka / Te wa ikemasen ka / Te-iru",
     patterns: [
-      { id: "15.1", label: "～すぎる", meaning: "Too much...", explanation: "Excessive degree.", examples: [{ jp: "このケーキは甘すぎます。", romaji: "Kono keeki wa ama sugimasu.", en: "This cake is too sweet." }] },
-      { id: "15.2", label: "～やすい / ～にくい", meaning: "Easy / Hard to...", explanation: "Ease or difficulty of doing an action.", examples: [{ jp: "この本は読みやすいです。", romaji: "Kono hon wa yomi yasui desu.", en: "This book is easy to read." }] }
+      { id: "15.1", label: "～てもいいですか", meaning: "May I...?", explanation: "Politely asking for permission.", examples: [{ jp: "ここに入ってもいいですか。", romaji: "Koko ni haitte mo ii desu ka.", en: "May I come in here?" }] },
+      { id: "15.2", label: "～てはいけませんか", meaning: "Is it not allowed to...?", explanation: "Confirming prohibitions.", examples: [{ jp: "ここで遊んではいけませんか。", romaji: "Koko de asonde wa ikemasen ka.", en: "Is playing here not allowed?" }] },
+      { id: "15.3", label: "～ています (ongoing state)", meaning: "Is doing / Ongoing state", explanation: "Describes an action in progress or a lasting state.", examples: [{ jp: "佐藤さんを知っていますか。", romaji: "Satou-san o shitte imasu ka.", en: "Do you know Mr. Sato?" }, { jp: "結婚しています。", romaji: "Kekkon shite imasu.", en: "I am married." }] }
     ],
     quiz: [
-      { q: "この 料理は ___ すぎます。", ans: "から", options: ["から", "からい", "からく", "からな"] },
-      { q: "昨日は お酒を ___ すぎました。", ans: "飲み", options: ["飲み", "飲む", "飲んで", "飲んだ"] },
-      { q: "この 靴は ___ やすいです。", ans: "歩き", options: ["歩き", "歩く", "歩いて", "歩か"] },
-      { q: "あの 漢字は ___ にくいです。", ans: "覚え", options: ["覚え", "覚える", "覚えて", "覚えり"] },
-      { q: "この ペンは ___ やすいです。", ans: "書き", options: ["書き", "書く", "書いて", "書か"] },
-      { q: "食べ ___ て、お腹が痛いです。", ans: "すぎ", options: ["すぎ", "すぎる", "すぎて", "すぎた"] },
-      { q: "この 辞書は ___ やすいです。", ans: "使い", options: ["使い", "使う", "使って", "使わ"] },
-      { q: "先生の話は ___ やすいです。", ans: "わかり", options: ["わかり", "わかる", "わかって", "わかった"] },
-      { q: "この 薬は ___ にくいです。", ans: "飲み", options: ["飲み", "飲む", "飲んで", "飲んだ"] },
-      { q: "歌い ___ ました。", ans: "すぎ", options: ["すぎ", "すぎる", "すぎて", "すぎた"] }
+      { q: "ミラーさんは どこに ___ いますか。", ans: "住んで", options: ["住んで", "住み", "住む", "住んだ"] },
+      { q: "佐藤さんを ___ いますか。", ans: "知って", options: ["知って", "知り", "知る", "知れ"] },
+      { q: "ここで タバコを ___ いけません。", ans: "すっては", options: ["すっては", "すって", "すう", "いけ"] },
+      { q: "カタログを ___ も いいですか。", ans: "もらって", options: ["もらって", "もらい", "もらう", "もらな"] },
+      { q: "IMCの 電話番号を ___ いますか。", ans: "知って", options: ["知って", "知り", "知る", "きき"] },
+      { q: "独身ですか。いいえ、___ います。", ans: "結婚して", options: ["結婚して", "結婚し", "結婚する", "結婚した"] },
+      { q: "この カタログを ___ もいいですか。", ans: "見ても", options: ["見ても", "見て", "見", "見な"] },
+      { q: "仕事は コンピューターを ___ います。", ans: "作って", options: ["作って", "作り", "作る", "作ら"] },
+      { q: "今 どこに ___ いますか。", ans: "住んで", options: ["住んで", "住み", "住む", "住んだ"] },
+      { q: "ここで 写真を ___ は いけません。", ans: "とって", options: ["とって", "とり", "とる", "とら"] }
     ]
   },
   {
     chapter: 16,
     level: "N5",
-    title: "Hearsay & Appearance",
-    desc: "Sou desu (Hearsay) / Sou desu (Looks)",
+    title: "Sequence & Rules",
+    desc: "Te kara / Nakutemo ii / Nakereba narimasen",
     patterns: [
-      { id: "16.1", label: "～そうです (Hearsay)", meaning: "I heard that...", explanation: "Reporting info learned from another source.", examples: [{ jp: "彼は来ないそうです。", romaji: "Kare wa konai sou desu.", en: "I heard he isn't coming." }] },
-      { id: "16.2", label: "～そうです (Appearance)", meaning: "Available / Looks like...", explanation: "Describing appearance based on observation.", examples: [{ jp: "おいしそうです。", romaji: "Oishi sou desu.", en: "It looks delicious." }] }
+      { id: "16.1", label: "～てから (after doing)", meaning: "After doing A, then B", explanation: "Sequence of two actions.", examples: [{ jp: "手を洗ってから食べます。", romaji: "Te o aratte kara tabemasu.", en: "After washing hands, I eat." }] },
+      { id: "16.2", label: "～なくてもいいです", meaning: "Don't have to...", explanation: "Lack of obligation.", examples: [{ jp: "急がなくてもいいです。", romaji: "Isoganakutemo ii desu.", en: "You don't have to hurry." }] },
+      { id: "16.3", label: "～なければなりません (must)", meaning: "Must / Have to...", explanation: "Strong obligation.", examples: [{ jp: "薬を飲まなければなりません。", romaji: "Kusuri o nomanakereba narimasen.", en: "I must take medicine." }] }
     ],
     quiz: [
-      { q: "天気予報によると、明日は 雨が ___ そうです。", ans: "降る", options: ["降る", "降り", "降って", "降ら"] },
-      { q: "この ケーキは ___ そうです。", ans: "おいし", options: ["おいし", "おいしい", "おいしく", "おいしかった"] },
-      { q: "雨が ___ そうです。", ans: "降り", options: ["降り", "降る", "降って", "降ら"] },
-      { q: "荷物が ___ そうですね。", ans: "落ち", options: ["落ち", "落ちる", "落ちて", "落ちた"] },
-      { q: "ボタンが ___ そうです。", ans: "とれ", options: ["とれ", "とれる", "とれて", "とれた"] },
-      { q: "田中さんは 元気 ___ そうです。", ans: "だ", options: ["だ", "な", "の", "に"] },
-      { q: "この 本は ___ そうです。", ans: "おもしろ", options: ["おもしろ", "おもしろい", "おもしろく", "おもしろかった"] },
-      { q: "忙し ___ ですね。", ans: "そう", options: ["そう", "だ", "い", "な"] },
-      { q: "新聞によると、事故が ___ そうです。", ans: "あった", options: ["あった", "ある", "あり", "あって"] },
-      { q: "その 映画は ___ そうですよ。", ans: "いい", options: ["いい", "よく", "よかった", "いく"] }
+      { q: "手を ___ から 食べます。", ans: "洗って", options: ["洗って", "洗い", "洗う", "洗った"] },
+      { q: "今日は 忙しいですから 病院へ ___ なければなりません。", ans: "行かな", options: ["行かな", "行き", "行く", "行って"] },
+      { q: "無理を ___ なくても いいです。", ans: "し", options: ["し", "して", "する", "した"] },
+      { q: "暗く ___ から 帰りましょう。", ans: "なって", options: ["なって", "なり", "なる", "なった"] },
+      { q: "お金を ___ なければ なりませんか。", ans: "払わ", options: ["払わ", "払い", "払う", "払った"] },
+      { q: "日曜日は ___ なくても いいです。", ans: "働か", options: ["働か", "働き", "働く", "働いた"] },
+      { q: "レポートを ___ なければ なりません。", ans: "出さ", options: ["出さ", "出し", "出す", "出した"] },
+      { q: "靴を ___ から 入ってください。", ans: "脱いで", options: ["脱いで", "脱ぎ", "脱ぐ", "脱いだ"] },
+      { q: "名前を ___ なくても いいですか。", ans: "書か", options: ["書か", "書き", "書く", "書いた"] },
+      { q: "明日 ___ なければ なりませんか。", ans: "来", options: ["来", "来い", "来る", "来た"] }
     ]
   },
   {
     chapter: 17,
     level: "N5",
-    title: "Trial & Prep",
-    desc: "Te-miru / Te-oku",
+    title: "Negatives & Prohibition",
+    desc: "Nai form / Nai de kudasai / Nai hou ga ii",
     patterns: [
-      { id: "17.1", label: "～てみる", meaning: "Try doing...", explanation: "Trying something to see the result.", examples: [{ jp: "この服を着てみます。", romaji: "Kono fuku o kite mimasu.", en: "I'll try wearing these clothes." }] },
-      { id: "17.2", label: "～ておく", meaning: "Do in advance", explanation: "Doing something in preparation for the future.", examples: [{ jp: "チケットを買っておきます。", romaji: "Chiketto o katte okimasu.", en: "I'll buy tickets in advance." }] }
+      { id: "17.1", label: "～ない form", meaning: "Negative form", explanation: "The plain negative form of verbs.", examples: [{ jp: "食べない / 飲まない", romaji: "Tabenai / Nomanai", en: "Not eat / Not drink" }] },
+      { id: "17.2", label: "～ないでください", meaning: "Please don't...", explanation: "Requesting someone NOT to do something.", examples: [{ jp: "忘れないでください。", romaji: "Wasurenaide kudasai.", en: "Please don't forget." }] },
+      { id: "17.3", label: "～ないほうがいいです", meaning: "Had better not...", explanation: "Advice against doing something.", examples: [{ jp: "タバコを吸わないほうがいいです。", romaji: "Tabako o suwanai hou ga ii desu.", en: "You had better not smoke." }] }
     ],
     quiz: [
-      { q: "この靴を ___ みても いいですか。", ans: "はいて", options: ["はいて", "はき", "はく", "はいた"] },
-      { q: "もう一度 ___ みてください。", ans: "やって", options: ["やって", "やり", "やる", "やった"] },
-      { q: "旅行の まえに ホテルを ___ おきます。", ans: "予約して", options: ["予約して", "予約し", "予約する", "予約した"] },
-      { q: "使ったら 元の 所に ___ おいてください。", ans: "戻して", options: ["戻して", "戻し", "戻す", "戻した"] },
-      { q: "日本料理を ___ みました。", ans: "食べて", options: ["食べて", "食べ", "食べる", "食べた"] },
-      { q: "お皿を ___ おきます。", ans: "洗って", options: ["洗って", "洗い", "洗う", "洗った"] },
-      { q: "サイズが 合うか、___ みます。", ans: "着て", options: ["着て", "着", "着る", "着た"] },
-      { q: "飲み物を ___ おきましょう。", ans: "買って", options: ["買って", "買い", "買う", "買わ"] },
-      { q: "ちょっと ___ みます。", ans: "考えて", options: ["考えて", "考え", "考える", "考えた"] },
-      { q: "窓を ___ おきます。", ans: "開けて", options: ["開けて", "開け", "開ける", "開けた"] }
+      { q: "ここで 写真を ___ ください。", ans: "撮らないで", options: ["撮らないで", "撮らなくて", "撮らな", "撮り"] },
+      { q: "外へ ___ ほうが いいですよ。", ans: "出ない", options: ["出ない", "出なくて", "出な", "出て"] },
+      { q: "無理を ___ ください。", ans: "しないで", options: ["しないで", "しなくて", "しな", "して"] },
+      { q: "危ないですから 入ら ___ ください。", ans: "ないで", options: ["ないで", "なくて", "ない", "な"] },
+      { q: "心配し ___ ください。", ans: "ないで", options: ["ないで", "なくて", "ない", "な"] },
+      { q: "昨日は お酒を ___ ほうが よかったです。", ans: "飲まない", options: ["飲まない", "飲まなくて", "飲まないで", "飲み"] },
+      { q: "明日までに レポートを ___ なければ いけませんか。", ans: "出さ", options: ["出さ", "出し", "出す", "出した"] },
+      { q: "この カタログを ___ ほうが いいですか。", ans: "捨てない", options: ["捨てない", "捨てなくて", "捨てないで", "捨てた"] },
+      { q: "名前を ___ ください。", ans: "書かないで", options: ["書かないで", "書かなくて", "書かない", "書か"] },
+      { q: "大きな声で ___ ください。", ans: "話さないで", options: ["話さないで", "話さなくて", "話さない", "話し"] }
     ]
   },
   {
     chapter: 18,
     level: "N5",
-    title: "Conditional (Ba)",
-    desc: "-Ba form / Nakereba narimasen",
+    title: "Ability & Nominalization",
+    desc: "Dictionary form / Koto ga dekimasu / Koto desu",
     patterns: [
-      { id: "18.1", label: "～ば", meaning: "If...", explanation: "Hypothetical condition.", examples: [{ jp: "雨が降れば行きません。", romaji: "Ame ga fureba ikimasen.", en: "If it rains, I won't go." }] },
-      { id: "18.2", label: "～なければなりません", meaning: "Must", explanation: "Obligation.", examples: [{ jp: "宿題をしなければなりません。", romaji: "Shukudai o shinakereba narimasen.", en: "I must do my homework." }] }
+      { id: "18.1", label: "Dictionary form (る / う verbs)", meaning: "Plain form", explanation: "The base form found in dictionaries.", examples: [{ jp: "行く / 食べる / 来る", romaji: "Iku / Taberu / Kuru", en: "Go / Eat / Come" }] },
+      { id: "18.2", label: "～ことができます (can)", meaning: "Can / Be able to...", explanation: "Expressing capability.", examples: [{ jp: "日本語を話すことができます。", romaji: "Nihongo o hanasu koto ga dekimasu.", en: "I can speak Japanese." }] },
+      { id: "18.3", label: "～ことです (nominalizer)", meaning: "Is [Action]", explanation: "Turning a verb into a noun to describe hobbies/tasks.", examples: [{ jp: "趣味は映画を見ることです。", romaji: "Shumi wa eiga o miru koto desu.", en: "My hobby is watching movies." }] }
     ],
     quiz: [
-      { q: "明日 雨が ___ 行きません。", ans: "ふれば", options: ["ふれば", "ふり", "ふる", "ふって"] },
-      { q: "安 ___ 買います。", ans: "ければ", options: ["ければ", "い", "く", "くて"] },
-      { q: "暇 ___ 手伝ってください。", ans: "なら", options: ["なら", "だ", "の", "に"] },
-      { q: "薬を ___ ければなりません。", ans: "飲まな", options: ["飲まな", "飲み", "飲む", "飲んで"] },
-      { q: "早く ___ ければなりません。", ans: "行かな", options: ["行かな", "行き", "行く", "行って"] },
-      { q: "天気が ___ 出かけましょう。", ans: "よければ", options: ["よければ", "いい", "よく", "よくて"] },
-      { q: "お金が ___ 旅行できません。", ans: "なければ", options: ["なければ", "ない", "なく", "なくて"] },
-      { q: "パスポートを ___ ければなりません。", ans: "見せな", options: ["見せな", "見せ", "見せる", "見せた"] },
-      { q: "説明書を ___ わかります。", ans: "読めば", options: ["読めば", "読み", "読む", "読んで"] },
-      { q: "勉強 ___ ければなりません。", ans: "しな", options: ["しな", "し", "する", "して"] }
+      { q: "漢字を 読む ___ ができますか。", ans: "こと", options: ["こと", "もの", "の", "が"] },
+      { q: "趣味は 音楽を ___ ことです。", ans: "聞く", options: ["聞く", "きき", "きいて", "きいた"] },
+      { q: "一人で 病院へ ___ ことが できますか。", ans: "行く", options: ["行く", "行き", "行って", "行か"] },
+      { q: "カードで ___ ことが できます。", ans: "払う", options: ["払う", "払い", "払って", "払った"] },
+      { q: "泳ぐ ことが ___。", ans: "できます", options: ["できます", "できますな", "できまして", "できました"] },
+      { q: "寝る ___ 歯を 磨きます。", ans: "前に", options: ["前に", "あとで", "ときに", "から"] },
+      { q: "ここで お金を ___ ことが できますか。", ans: "替える", options: ["替える", "替え", "替えた", "替えり"] },
+      { q: "日記を ___ ことが 習慣です。", ans: "書く", options: ["書く", "書き", "書いて", "書か"] },
+      { q: "靴を ___ ことが できます。", ans: "修理する", options: ["修理する", "修理し", "修理して", "修理した"] },
+      { q: "日本語が ___ ことが できます。", ans: "話せる", options: ["話せる", "話す", "話し", "話して"] }
     ]
   },
   {
     chapter: 19,
     level: "N5",
-    title: "Purpose",
-    desc: "You ni",
+    title: "Experience & Representative List",
+    desc: "Ta form / Koto ga arimasu / Tari Tari",
     patterns: [
-      { id: "19.1", label: "～ように (In order to)", meaning: "So that...", explanation: "Purpose or aim.", examples: [{ jp: "日本語が上手になるように勉強します。", romaji: "Nihongo ga jouzu ni naru you ni benkyou shimasu.", en: "I study so that I will become good at Japanese." }] },
-      { id: "19.2", label: "～ように (Like/As)", meaning: "Like...", explanation: "Similarity.", examples: [{ jp: "雪のように白い。", romaji: "Yuki no you ni shiroi.", en: "White like snow." }] }
+      { id: "19.1", label: "～た form", meaning: "Past plain form", explanation: "Primary form for past tense and experience.", examples: [{ jp: "食べた / 飲んだ", romaji: "Tabeta / Nonda", en: "Ate / Drank" }] },
+      { id: "19.2", label: "～たことがあります (experience)", meaning: "Have ever done...", explanation: "Expressing past experience.", examples: [{ jp: "日本へ行ったことがあります。", romaji: "Nihon e itta koto ga arimasu.", en: "I have been to Japan." }] },
+      { id: "19.3", label: "～たり～たりします", meaning: "Doing things like A and B", explanation: "Listing representative actions in a non-exhaustive way.", examples: [{ jp: "日曜日は買い物をしたり、テレビを見たりします。", romaji: "Nichiyoubi wa kaimono o shitari, terebi o mitari shimasu.", en: "On Sundays, I do things like shopping and watching TV." }] }
     ],
     quiz: [
-      { q: "忘れない ___ メモします。", ans: "ように", options: ["ように", "ため", "こと", "の"] },
-      { q: "聞こえる ___ 大きい声で話してください。", ans: "ように", options: ["ように", "ため", "こと", "の"] },
-      { q: "早く ___ ように 薬を飲みます。", ans: "治る", options: ["治る", "治り", "治って", "治った"] },
-      { q: "氷の ___ 冷たいです。", ans: "ように", options: ["ように", "な", "だ", "の"] },
-      { q: "先生が 言う ___ 書いてください。", ans: "ように", options: ["ように", "ため", "こと", "の"] },
-      { q: "遅れない ___ してください。", ans: "ように", options: ["ように", "ため", "こと", "の"] },
-      { q: "風邪を 引かない ___ 気をつけています。", ans: "ように", options: ["ように", "ため", "こと", "の"] },
-      { q: "日本語が 話せる ___ なりたいです。", ans: "ように", options: ["ように", "ため", "こと", "の"] },
-      { q: "祈る ___ 手を合わせました。", ans: "ように", options: ["ように", "ため", "こと", "の"] },
-      { q: "鳥の ___ 空を飛びたいです。", ans: "ように", options: ["ように", "な", "だ", "の"] }
+      { q: "日本料理を ___ ことがありますか。", ans: "食べた", options: ["食べた", "食べて", "食べる", "食べ"] },
+      { q: "日曜日は テニスを ___ 映画を ___ します。", ans: "したり / 見たり", options: ["したり / 見たり", "して / 見て", "する / 見る", "した / 見た"] },
+      { q: "馬に ___ ことがありますか。", ans: "乗った", options: ["乗った", "乗り", "乗る", "乗って"] },
+      { q: "昨日は 本を ___ 音楽を ___ しました。", ans: "読んだり / 聞いたり", options: ["読んだり / 聞いたり", "読んで / 聞いて", "読む / 聞く", "読んだ / 聞いた"] },
+      { q: "北海道へ ___ ことがありますか。", ans: "行った", options: ["行った", "行き", "行く", "行って"] },
+      { q: "掃除を ___ 洗濯を ___ します。", ans: "したり / したり", options: ["したり / したり", "して / して", "する / する", "した / した"] },
+      { q: "相撲を ___ ことがありますか。", ans: "見た", options: ["見た", "見", "見る", "見て"] },
+      { q: "夏休みは 旅行 ___ 泳い ___ したいです。", ans: "したり / だり", options: ["したり / だり", "して / で", "する / ぐ", "した / だ"] },
+      { q: "全然 料理を ___ ことが ありません。", ans: "作った", options: ["作った", "作り", "作る", "作って"] },
+      { q: "山に ___ ことは ありますか。", ans: "登った", options: ["登った", "登り", "登る", "登って"] }
     ]
   },
   {
     chapter: 20,
     level: "N5",
-    title: "Current State",
-    desc: "Tokoro / Ta-bakari",
+    title: "Casual Speech & Quotation",
+    desc: "Plain form / To omoimasu / To iimashita",
     patterns: [
-      { id: "20.1", label: "～ところ", meaning: "Point in time", explanation: "Just about to, in the middle of, or just did.", examples: [{ jp: "今、帰るところです。", romaji: "Ima, kaeru tokoro desu.", en: "I am about to go home / Just going home." }] },
-      { id: "20.2", label: "～たばかり", meaning: "Just finished", explanation: "Completed very recently.", examples: [{ jp: "食べたばかりです。", romaji: "Tabeta bakari desu.", en: "I just ate." }] }
+      { id: "20.1", label: "Plain form (casual)", meaning: "Casual speaking style", explanation: "Used with friends and family.", examples: [{ jp: "明日、ひま？ / うん、ひまだよ。", romaji: "Ashita, hima? / Un, hima da yo.", en: "Are you free tomorrow? / Yeah, I'm free." }] },
+      { id: "20.2", label: "～と思います (I think)", meaning: "I think that...", explanation: "Expressing thoughts or opinions.", examples: [{ jp: "明日は雨が降ると思います。", romaji: "Ashita wa ame ga furu to omoimasu.", en: "I think it will rain tomorrow." }] },
+      { id: "20.3", label: "～と言いました (said)", meaning: "Said that...", explanation: "Quoting what someone said.", examples: [{ jp: "田中さんは「明日休みます」と言いました。", romaji: "Tanaka-san wa 'Ashita yasumimasu' to iimashita.", en: "Mr. Tanaka said, 'I will rest tomorrow'." }] }
     ],
     quiz: [
-      { q: "今から 食べる ___ です。", ans: "ところ", options: ["ところ", "ばかり", "こと", "もの"] },
-      { q: "今 食べている ___ です。", ans: "ところ", options: ["ところ", "ばかり", "こと", "もの"] },
-      { q: "たった今 食べた ___ です。", ans: "ところ", options: ["ところ", "ばかり", "こと", "もの"] },
-      { q: "日本へ 来た ___ です。", ans: "ばかり", options: ["ばかり", "ところ", "こと", "もの"] },
-      { q: "この 時計は 買った ___ です。", ans: "ばかり", options: ["ばかり", "ところ", "こと", "もの"] },
-      { q: "これから 始まる ___ です。", ans: "ところ", options: ["ところ", "ばかり", "こと", "もの"] },
-      { q: "今 調べている ___ です。", ans: "ところ", options: ["ところ", "ばかり", "こと", "もの"] },
-      { q: "さっき 起きた ___ です。", ans: "ばかり", options: ["ばかり", "ところ", "こと", "もの"] },
-      { q: "バスは 今 出た ___ です。", ans: "ところ", options: ["ところ", "ばかり", "こと", "もの"] },
-      { q: "大学を 出た ___ です。", ans: "ばかり", options: ["ばかり", "ところ", "こと", "もの"] }
+      { q: "明日は 雨が ___ と 思います。", ans: "降る", options: ["降る", "降り", "降って", "降った"] },
+      { q: "彼は 来ない ___ 言いました。", ans: "と", options: ["と", "を", "に", "は"] },
+      { q: "日本は 綺麗 ___ と 思います。", ans: "だ", options: ["だ", "な", "の", "に"] },
+      { q: "先生は 明日 休み ___ と 言いました。", ans: "だ", options: ["だ", "な", "の", "に"] },
+      { q: "この 映画は おもしろい ___ 思います。", ans: "と", options: ["と", "を", "に", "は"] },
+      { q: "もう 帰らなければ ___。", ans: "ならない", options: ["ならない", "なりません", "なって", "なれ"] },
+      { q: "タバコを 吸って ___。", ans: "いい？", options: ["いい？", "いいですか？", "いけない？", "いけませんか？"] },
+      { q: "何時 ___ 終わる？", ans: "に", options: ["に", "を", "で", "は"] },
+      { q: "ちょっと 待って ___。", ans: "ね", options: ["ね", "よ", "は", "か"] },
+      { q: "ごはん、___？", ans: "食べた", options: ["食べた", "食べます", "食べて", "食べたい"] }
     ]
   },
   {
     chapter: 21,
     level: "N5",
-    title: "Polite & Regret",
-    desc: "Sou desu / Masen deshita",
+    title: "Noun Modifiers",
+    desc: "V plain + Noun",
     patterns: [
-      { id: "21.1", label: "～そうです", meaning: "Looks like / Hearsay", explanation: "Review of Sou desu.", examples: [{ jp: "雨が降りそうです。", romaji: "Ame ga furi sou desu.", en: "It looks like it will rain." }] },
-      { id: "21.2", label: "～ませんでした", meaning: "Didn't", explanation: "Polite negative past.", examples: [{ jp: "行きませんでした。", romaji: "Ikimasen deshita.", en: "I didn't go." }] },
-      { id: "21.3", label: "～ながら", meaning: "Simultaneous", explanation: "Advanced review.", examples: [{ jp: "歩きながら考えます。", romaji: "Aruki nagara kangaemasu.", en: "I think while walking." }] }
+      { id: "21.1", label: "～ [Plain Verb] + N", meaning: "Relative clauses", explanation: "Using a whole sentence to describe a noun.", examples: [{ jp: "これはミラーさんが作ったケーキです。", romaji: "Kore wa Miraa-san ga tsukutta keeki desu.", en: "This is the cake that Mr. Miller made." }] },
+      { id: "21.2", label: "～ [Noun Modifier] + 時間 / 約束", meaning: "Time/Appointment to do...", explanation: "Describing nouns like 'time' or 'promise' with verbs.", examples: [{ jp: "私は朝ごはんを食べる時間がありません。", romaji: "Watashi wa asagohan o taberu jikan ga arimasen.", en: "I don't have time to eat breakfast." }] }
     ],
     quiz: [
-      { q: "ボタンが ___ そうです。", ans: "とれ", options: ["とれ", "とれる", "とれて", "とれた"] },
-      { q: "荷物が ___ そうです。", ans: "落ち", options: ["落ち", "落ちる", "落ちて", "落ちた"] },
-      { q: "おいし ___ ケーキですね。", ans: "そうな", options: ["そうな", "そう", "そうに", "そうだ"] },
-      { q: "昨日 映画を ___ でした。", ans: "見ません", options: ["見ません", "見ない", "見なく", "見ず"] },
-      { q: "朝ごはんを ___ ませんでした。", ans: "食べ", options: ["食べ", "食べる", "食ベて", "食べた"] },
-      { q: "運転し ___ 話してはいけません。", ans: "ながら", options: ["ながら", "つつ", "て", "ないで"] },
-      { q: "勉強し ___ 音楽を聞きます。", ans: "ながら", options: ["ながら", "つつ", "て", "ないで"] },
-      { q: "良さ ___ 本ですね。", ans: "そうな", options: ["そうな", "そう", "そうに", "そうだ"] },
-      { q: "元気 ___ 人ですね。", ans: "そうな", options: ["そうな", "そう", "そうに", "そうだ"] },
-      { q: "雨が ___ そうです。", ans: "やみ", options: ["やみ", "やむ", "やんで", "やんだ"] }
+      { q: "これは ミラーさんが ___ ケーキです。", ans: "作った", options: ["作った", "作り", "作る", "作って"] },
+      { q: "朝ごはんを ___ 時間が ありません。", ans: "食べる", options: ["食べる", "食べ", "食べて", "食べた"] },
+      { q: "あそこに ___ 人は 誰ですか。", ans: "いる", options: ["いる", "います", "いて", "いた"] },
+      { q: "昨日 ___ 映画は おもしろかったです。", ans: "見た", options: ["見た", "見", "見る", "見て"] },
+      { q: "私が ___ 部屋は ここです。", ans: "寝る", options: ["寝る", "寝", "寝て", "寝た"] },
+      { q: "病院へ ___ 時間が ありません。", ans: "行く", options: ["行く", "行き", "行って", "行った"] },
+      { q: "友達と 会う ___ があります。", ans: "約束", options: ["約束", "時間", "用事", "こと"] },
+      { q: "市役所へ 行く ___ があります。", ans: "用事", options: ["用事", "時間", "約束", "こと"] },
+      { q: "母が ___ 料理は おいしいです。", ans: "作った", options: ["作った", "作り", "作る", "作って"] },
+      { q: "彼が ___ 言い方は 難しいです。", ans: "言う", options: ["言う", "言い", "言った", "言って"] }
     ]
   },
   {
     chapter: 22,
     level: "N5",
-    title: "Appearance & Probability",
-    desc: "Sou desu / Kamoshiremasen",
+    title: "Time & Conditionals",
+    desc: "Toki / To",
     patterns: [
-      { id: "22.1", label: "～そうです", meaning: "It seems...", explanation: "Based on appearance.", examples: [{ jp: "元気そうです。", romaji: "Genki sou desu.", en: "He seems healthy." }] },
-      { id: "22.2", label: "～かもしれません", meaning: "Might", explanation: "Possibility.", examples: [{ jp: "遅れるかもしれません。", romaji: "Okureru kamo shiremasen.", en: "I might be late." }] }
+      { id: "22.1", label: "～とき (When)", meaning: "When ...", explanation: "Indicating the time when something happens.", examples: [{ jp: "図書館で本を借りる時、カードがいります。", romaji: "Toshokan de hon o kariru toki, kaado ga irimasu.", en: "When you borrow a book from the library, you need a card." }] },
+      { id: "22.2", label: "～と (Conditional)", meaning: "If / Whenever", explanation: "Natural consequence or inevitable result.", examples: [{ jp: "このボタンを押すと、お釣りが出ます。", romaji: "Kono botan o osu to, otsuri ga demasu.", en: "If you press this button, change will come out." }] }
     ],
     quiz: [
-      { q: "明日は 雨が ___ かもしれません。", ans: "降る", options: ["降る", "降り", "降って", "降ら"] },
-      { q: "約束に ___ かもしれません。", ans: "まにあわない", options: ["まにあわない", "まにあう", "まにあって", "まにあい"] },
-      { q: "彼は 病気 ___ かもしれません。", ans: "だ", options: ["だ", "な", "の", "に"] },
-      { q: "来週は ___ かもしれません。", ans: "忙しい", options: ["忙しい", "忙しく", "忙な", "忙に"] },
-      { q: "この 料理は ___ かもしれません。", ans: "からい", options: ["からい", "からく", "からな", "から"] },
-      { q: "元気 ___ ですね。", ans: "そう", options: ["そう", "だ", "な", "に"] },
-      { q: "丈夫 ___ かばんですね。", ans: "そうな", options: ["そうな", "そう", "そうに", "そうだ"] },
-      { q: "雨は もうすぐ ___ そうです。", ans: "やみ", options: ["やみ", "やむ", "やんで", "やんだ"] },
-      { q: "この 店は ___ かもしれません。", ans: "休み", options: ["休み", "休む", "休んで", "休んだ"] },
-      { q: "道が ___ かもしれません。", ans: "混んでいる", options: ["混んでいる", "混む", "混み", "混んで"] }
+      { q: "暇な ___、遊びに 来てください。", ans: "とき", options: ["とき", "に", "を", "は"] },
+      { q: "ここを ___ と、お釣りが出ます。", ans: "押す", options: ["押す", "押し", "押して", "押した"] },
+      { q: "わからない ___、先生に 聞いてください。", ans: "とき", options: ["とき", "に", "を", "は"] },
+      { q: "日本へ ___ とき、カバンを 買いました。", ans: "来る", options: ["来る", "来", "来て", "来た"] },
+      { q: "これを ___ と、音が 大きくなります。", ans: "回す", options: ["回す", "回し", "回して", "回した"] },
+      { q: "寂しい ___、家族に 電話します。", ans: "とき", options: ["とき", "に", "を", "は"] },
+      { q: "まっすぐ ___ と、右に 銀行が あります。", ans: "行く", options: ["行く", "行き", "行って", "行か"] },
+      { q: "夜 寝る ___、「おやすみなさい」と言います。", ans: "とき", options: ["とき", "に", "を", "は"] },
+      { q: "雨が 降る ___、タクシーで 帰ります。", ans: "とき", options: ["とき", "に", "を", "は"] },
+      { q: "お腹が 空いた ___、これを 食べてください。", ans: "とき", options: ["とき", "に", "を", "は"] }
     ]
   },
   {
     chapter: 23,
     level: "N5",
-    title: "Advice & Obligation",
-    desc: "Hou ga ii / Nakute wa ikemasen",
+    title: "Giving & Receiving (Polite)",
+    desc: "Agemasu / Moraimasu / Kuremasu",
     patterns: [
-      { id: "23.1", label: "～ばいいです", meaning: "Should / Had better", explanation: "Recommendation.", examples: [{ jp: "早く寝たほうがいいです。", romaji: "Hayaku neta hou ga ii desu.", en: "You should sleep early." }] },
-      { id: "23.2", label: "～なくてはいけません", meaning: "Must", explanation: "Strong obligation.", examples: [{ jp: "今日行かなくてはいけません。", romaji: "Kyou ikanakute wa ikemasen.", en: "I must go today." }] }
+      { id: "23.1", label: "あげる / もらう / くれる", meaning: "Give / Receive", explanation: "Standard verbs for exchange of items.", examples: [{ jp: "私は佐藤さんに花をあげました。", romaji: "Watashi wa Satou-san ni hana o agemashita.", en: "I gave flowers to Ms. Sato." }, { jp: "佐藤さんは私にお菓子をくれました。", romaji: "Satou-san wa watashi ni okashi o kuremashita.", en: "Ms. Sato gave me sweets." }] },
+      { id: "23.2", label: "～てあげる / てもらう / てくれる", meaning: "Doing favors", explanation: "Exchange of actions/favors.", examples: [{ jp: "私は木村さんに本を貸してあげました。", romaji: "Watashi wa Kimura-san ni hon o kashite agemashita.", en: "I lent a book to Ms. Kimura." }] }
     ],
     quiz: [
-      { q: "熱が あるんです。病院へ ___ ほうが いいですよ。", ans: "行った", options: ["行った", "行く", "行き", "行って"] },
-      { q: "無理を ___ ほうが いいですよ。", ans: "しない", options: ["しない", "した", "して", "する"] },
-      { q: "お風呂に ___ ほうが いいですか。", ans: "入らない", options: ["入らない", "入った", "入って", "入る"] },
-      { q: "薬を ___ てはいけません。", ans: "飲まなく", options: ["飲まなく", "飲まない", "飲んで", "飲む"] },
-      { q: "残業 ___ くてはいけません。", ans: "しな", options: ["しな", "し", "する", "して"] },
-      { q: "パスポートを ___ くてはいけません。", ans: "見せな", options: ["見せな", "見せ", "見せる", "見せた"] },
-      { q: "早く ___ ほうが いいですよ。", ans: "帰った", options: ["帰った", "帰る", "帰り", "帰って"] },
-      { q: "もっと 野菜を ___ ほうが いいです。", ans: "食べた", options: ["食べた", "食べる", "食べ", "食べて"] },
-      { q: "勉強 ___ くてはいけません。", ans: "しな", options: ["しな", "し", "する", "して"] },
-      { q: "お金を ___ くてはいけません。", ans: "払わな", options: ["払わな", "払う", "払い", "払って"] }
+      { q: "私は 友達 ___ プレゼントを あげました。", ans: "に", options: ["に", "を", "で", "は"] },
+      { q: "佐藤さんは 私 ___ 花を くれました。", ans: "に", options: ["に", "を", "で", "は"] },
+      { q: "私は 山田さん ___ 漢字を 教えてもらいました。", ans: "に", options: ["に", "を", "で", "は"] },
+      { q: "母は 私 ___ セーターを 送ってくれました。", ans: "に", options: ["に", "を", "で", "は"] },
+      { q: "私は 友達の 引っ越しを ___ あげました。", ans: "手伝って", options: ["手伝って", "手伝い", "手伝う", "手伝いた"] },
+      { q: "誰に これを ___ か。", ans: "もらいました", options: ["もらいました", "あげました", "くれました", "しました"] },
+      { q: "先生は 私に 辞書を ___。", ans: "貸してくれました", options: ["貸してくれました", "貸してあげました", "貸してもらいました", "貸しました"] },
+      { q: "私は 犬に 散歩 ___ 行きました。", ans: "に", options: ["に", "を", "で", "は"] },
+      { q: "友達に お金を ___ もらいました。", ans: "貸して", options: ["貸して", "貸し", "貸す", "貸した"] },
+      { q: "お誕生日に 何を ___ か。時計をもらいました。", ans: "もらいました", options: ["もらいました", "あげました", "くれました", "しました"] }
     ]
   },
   {
     chapter: 24,
     level: "N5",
-    title: "Hearsay & Completion",
-    desc: "Sou desu / Te shimau",
+    title: "Conditionals & Results",
+    desc: "Tara / To",
     patterns: [
-      { id: "24.1", label: "～そうです (Hearsay)", meaning: "I heard...", explanation: "Relaying information.", examples: [{ jp: "彼は結婚するそうです。", romaji: "Kare wa kekkon suru sou desu.", en: "I heard he is getting married." }] },
-      { id: "24.2", label: "～てしまう", meaning: "Completely / Regret", explanation: "Action completed or done accidentally.", examples: [{ jp: "忘れてしまいました。", romaji: "Wasurete shimaimashita.", en: "I completely forgot / I regret forgetting." }] }
+      { id: "24.1", label: "～たら (If / When)", meaning: "If... then...", explanation: "Conditional for one-time events or steps.", examples: [{ jp: "雨が降ったら、行きません。", romaji: "Ame ga futtara, ikimasen.", en: "If it rains, I won't go." }] },
+      { id: "24.2", label: "～と (Natural result)", meaning: "Whenever / If", explanation: "Review of natural conditionals.", examples: [{ jp: "春になると、花が咲きます。", romaji: "Haru ni naru to, hana ga sakimasu.", en: "When spring comes, flowers bloom." }] }
     ],
     quiz: [
-      { q: "宿題を ___ しまいました。", ans: "忘れて", options: ["忘れて", "忘れ", "忘れる", "忘れた"] },
-      { q: "全部 ___ しまいました。", ans: "食べて", options: ["食べて", "食べ", "食べる", "食べた"] },
-      { q: "電車に 傘を ___ しまいました。", ans: "忘れて", options: ["忘れて", "忘れ", "忘れる", "忘れた"] },
-      { q: "財布を ___ しまいました。", ans: "落として", options: ["落として", "落とし", "落とす", "落とした"] },
-      { q: "パスポートを ___ しまいました。", ans: "なくして", options: ["なくして", "なくし", "なくす", "なくした"] },
-      { q: "社長は もう ___ しまいました。", ans: "帰って", options: ["帰って", "帰り", "帰る", "帰った"] },
-      { q: "その 本は もう ___ しまいました。", ans: "読んで", options: ["読んで", "読み", "読む", "読んだ"] },
-      { q: "風邪を ___ しまいました。", ans: "引いて", options: ["引いて", "引き", "引く", "引いた"] },
-      { q: "指を ___ しまいました。", ans: "切って", options: ["切って", "切り", "切る", "切った"] },
-      { q: "ニュースによると、犯人は ___ そうです。", ans: "捕まった", options: ["捕まった", "捕まる", "捕まり", "捕まって"] }
+      { q: "お金が ___、旅行に 行きます。", ans: "あったら", options: ["あったら", "あると", "あれば", "あった"] },
+      { q: "雨が ___、行きません。", ans: "降ったら", options: ["降ったら", "降ると", "降れば", "降って"] },
+      { q: "安く ___、買いません。", ans: "なかったら", options: ["なかったら", "ないで", "なければ", "ない"] },
+      { q: "暇 ___、遊びに 来てください。", ans: "だったら", options: ["だったら", "だ", "な", "に"] },
+      { q: "熱が ___、お風呂に 入らないでください。", ans: "あったら", options: ["あったら", "ある", "あり", "あって"] },
+      { q: "冬に ___ と、雪が 降ります。", ans: "なる", options: ["なる", "なり", "なって", "なれ"] },
+      { q: "これを ___ と、電気が つきます。", ans: "回す", options: ["回す", "回し", "回して", "回した"] },
+      { q: "仕事が ___、飲みに行きましょう。", ans: "終わったら", options: ["終わったら", "終わり", "終わる", "終わって"] },
+      { q: "もし ___、連絡します。", ans: "遅れたら", options: ["遅れたら", "遅れる", "遅れ", "遅れて"] },
+      { q: "駅へ ___ と、右に 交番が あります。", ans: "行く", options: ["行く", "行き", "行って", "行か"] }
     ]
   },
   {
     chapter: 25,
     level: "N5",
-    title: "Conditionals",
-    desc: "Tara / Temo",
+    title: "Concession & Review",
+    desc: "Temo / Review",
     patterns: [
-      { id: "25.1", label: "～たら", meaning: "If / When", explanation: "Hypothetical condition or sequence.", examples: [{ jp: "お金があったら、旅行します。", romaji: "Okane ga attara, ryokou shimasu.", en: "If I have money, I will travel." }, { jp: "ご飯を食べたら、出かけます。", romaji: "Gohan o tabetara, dekakemasu.", en: "When I've eaten, I'll go out." }] },
-      { id: "25.2", label: "～ても", meaning: "Even if", explanation: "Concession.", examples: [{ jp: "雨が降っても行きます。", romaji: "Ame ga futtemo ikimasu.", en: "Even if it rains, I will go." }] }
+      { id: "25.1", label: "～ても (Even if)", meaning: "Even if...", explanation: "Showing concession.", examples: [{ jp: "高くても、買います。", romaji: "Takakutemo, kaimasu.", en: "Even if it's expensive, I will buy it." }] },
+      { id: "25.2", label: "いくら～ても", meaning: "No matter how...", explanation: "Emphasizing concession.", examples: [{ jp: "いくら考えても、わかりません。", romaji: "Ikura kangaetemo, wakarimasen.", en: "No matter how much I think, I don't understand." }] }
     ],
     quiz: [
-      { q: "お金が ___、旅行に 行きます。", ans: "あったら", options: ["あったら", "あると", "あれば", "あった"] },
       { q: "雨が ___、行きます。", ans: "降っても", options: ["降っても", "降り", "降る", "降って"] },
-      { q: "安く ___、買いません。", ans: "なくても", options: ["なくても", "ないで", "なけ", "なかっ"] },
-      { q: "暇 ___、手伝ってください。", ans: "だったら", options: ["だったら", "だ", "な", "に"] },
-      { q: "熱が ___、お風呂に入らないでください。", ans: "あったら", options: ["あったら", "ある", "あり", "あって"] },
+      { q: "安く ___、買いません。", ans: "なくても", options: ["なくても", "ないで", "なければ", "ない"] },
       { q: "いくら ___、わかりません。", ans: "考えても", options: ["考えても", "考え", "考える", "考えた"] },
       { q: "薬を ___、よくなりません。", ans: "飲んでも", options: ["飲んでも", "飲み", "飲む", "飲んだ"] },
       { q: "調べても ___。", ans: "わかりませんでした", options: ["わかりませんでした", "わかりました", "わかる", "わかり"] },
-      { q: "もし ___、連絡します。", ans: "遅れたら", options: ["遅れたら", "遅れる", "遅れ", "遅れて"] }
+      { q: "高く ___、買いますか。", ans: "ても", options: ["ても", "でも", "なら", "たら"] },
+      { q: "嫌い ___、食べなければなりません。", ans: "でも", options: ["でも", "ても", "なら", "たら"] },
+      { q: "便利 ___、使いません。", ans: "でも", options: ["でも", "ても", "なら", "たら"] },
+      { q: "日曜日 ___、働きます。", ans: "でも", options: ["でも", "ても", "なら", "たら"] },
+      { q: "何回 ___、覚えられません。", ans: "読んでも", options: ["読んでも", "読み", "読む", "読んで"] }
     ]
   },
   // --- JLPT N4 CONTENT ---
   {
     chapter: 26,
     level: "N4",
-    title: "Potential Form",
-    desc: "V-rareru / Dekiru",
+    title: "Explanation Pattern",
+    desc: "～んです / ～なのです",
     patterns: [
-      { id: "26.1", label: "～られる", meaning: "Can do", explanation: "The potential form indicates ability or possibility.", examples: [{ jp: "日本語が話せます。", romaji: "Nihongo ga hanasemasu.", en: "I can speak Japanese." }, { jp: "漢字が書けますか。", romaji: "Kanji ga kakemasu ka.", en: "Can you write Kanji?" }] },
-      { id: "26.2", label: "～ことができる", meaning: "Be able to", explanation: "A more formal way to express potential.", examples: [{ jp: "泳ぐことができます。", romaji: "Oyogu koto ga dekimasu.", en: "I can swim." }] }
+      { id: "26.1", label: "～んです", meaning: "It is that... (Explanation)", explanation: "Used to explain a reason, state a cause, or emphasize a situation.", examples: [{ jp: "どうしたんですか。", romaji: "Dou shita n desu ka.", en: "What's the matter? (Looking for explanation)" }, { jp: "頭が痛いんです。", romaji: "Atama ga itai n desu.", en: "It is that my head hurts." }] },
+      { id: "26.2", label: "～んですが…", meaning: "It's just that... (Softening)", explanation: "Used to introduce a topic or reason before making a request.", examples: [{ jp: "デパートへ行きたいんですが…。", romaji: "Depaato e ikitai n desu ga...", en: "I want to go to the department store (could you show me the way?)" }] },
+      { id: "26.3", label: "～ていただけませんか", meaning: "Could you please...?", explanation: "A very polite way to request someone to do something.", examples: [{ jp: "書き方を教えていただけませんか。", romaji: "Kakikata o oshiete itadakemasen ka.", en: "Could you please teach me how to write it?" }] }
     ],
     quiz: [
-      { q: "わたしは 日本料理を ___。", ans: "作れます", options: ["作れます", "作ります", "作って", "作れ"] },
-      { q: "一人で 病院へ ___ か。", ans: "行けます", options: ["行けます", "行きます", "行って", "行け"] },
-      { q: "お酒が ___ ません。", ans: "飲め", options: ["飲め", "飲み", "飲める", "飲ん"] },
-      { q: "漢字を 読む ___ できます。", ans: "ことが", options: ["ことが", "のを", "は", "に"] },
-      { q: "この 部屋から 海が ___。", ans: "見えます", options: ["見えます", "見られます", "見る", "見"] },
-      { q: "ピアノを ___ ことが できますか。", ans: "弾く", options: ["弾く", "弾いた", "弾け", "弾き"] },
-      { q: "ここから 富士山が ___。", ans: "見えます", options: ["見えます", "見られます", "見る", "見"] },
-      { q: "声が ___ ません。", ans: "聞こえ", options: ["聞こえ", "聞こえる", "聞き", "聞け"] },
-      { q: "日本語の 新聞が ___ ますか。", ans: "読め", options: ["読め", "読み", "読める", "読ん"] },
-      { q: "銀行で お金を ___ ことが できます。", ans: "替える", options: ["替える", "替え", "替えた", "替えり"] }
+      { q: "どうした ___ か。", ans: "んです", options: ["んです", "のです", "のか", "のだ"] },
+      { q: "バスが 来ない ___。", ans: "んです", options: ["んです", "ます", "です", "だ"] },
+      { q: "地図を 書いて ___ ませんか。", ans: "いただけ", options: ["いただけ", "ください", "もらえ", "あげ"] },
+      { q: "気分が 悪い ___。", ans: "んです", options: ["んです", "ます", "です", "だ"] },
+      { q: "日本語を 勉強したい ___ ですが、いい本を 教えてください。", ans: "ん", options: ["ん", "の", "だ", "に"] },
+      { q: "コピー機が 動かない ___ ですが、見ていただけませんか。", ans: "ん", options: ["ん", "の", "だ", "に"] },
+      { q: "「お茶、飲みませんか。」 「すみません、今 忙しい ___。」", ans: "んです", options: ["んです", "ます", "です", "ませ"] },
+      { q: "「いい カメラですね。」 「ええ、日本で 買った ___。」", ans: "んです", options: ["んです", "ます", "です", "のだ"] },
+      { q: "これを 修理して ___ ませんか。", ans: "いただけ", options: ["いただけ", "ください", "もらえ", "あげ"] },
+      { q: "落とし物ですよ。 ___ ですか。", ans: "あなたのです", options: ["あなたのです", "あなたのんです", "あなたの", "あなただ"] }
     ]
   },
   {
     chapter: 27,
     level: "N4",
-    title: "Intentions & Plans",
-    desc: "Tsumori / Yo uto omou",
+    title: "Ability & Limits",
+    desc: "Potential form / Shika / Sae",
     patterns: [
-      { id: "27.1", label: "～つもりです", meaning: "Intend to", explanation: "Expresses a firm intention to do something.", examples: [{ jp: "来年日本へ行くつもりです。", romaji: "Rainen Nihon e iku tsumori desu.", en: "I intend to go to Japan next year." }] },
-      { id: "27.2", label: "～ようと思う", meaning: "Thinking of doing", explanation: "Expresses a volitional intent, slightly less firm than 'tsumori'.", examples: [{ jp: "会社を辞めようと思っています。", romaji: "Kaisha o yameyou to omotte imasu.", en: "I'm thinking of quitting my job." }] }
+      { id: "27.1", label: "Potential Form (可能形)", meaning: "Can do...", explanation: "Used to express ability or possibility. Group 1: u -> e + masu. Group 2: ru -> rareru. Group 3: kuru -> korareru, suru -> dekiru.", examples: [{ jp: "日本語が話せます。", romaji: "Nihongo ga hanasemasu.", en: "I can speak Japanese." }, { jp: "１人で病院へ行けます。", romaji: "Hitori de byouin e ikemasu.", en: "I can go to the hospital alone." }] },
+      { id: "27.2", label: "～しか～ません", meaning: "Only / Nothing but", explanation: "Used with a negative verb to emphasize that it's the only thing/amount.", examples: [{ jp: "ひらがなしか書けません。", romaji: "Hiragana shika kakemasen.", en: "I can write only Hiragana." }] },
+      { id: "27.3", label: "～さえ～ば", meaning: "If only...", explanation: "Used to emphasize that one condition is sufficient.", examples: [{ jp: "薬を飲みさえすれば、よくなります。", romaji: "Kusuri o nomi sae sureba, yoku narimasu.", en: "If you just take medicine, you will get better." }] }
     ],
     quiz: [
-      { q: "週末は 海へ ___ つもりです。", ans: "行く", options: ["行く", "行こう", "行って", "行き"] },
-      { q: "明日、部長に ___ と 思っています。", ans: "会おう", options: ["会おう", "会う", "会って", "会い"] },
-      { q: "タバコを ___ つもりです。", ans: "やめる", options: ["やめる", "やめた", "やめよう", "やめて"] },
-      { q: "夏休みは どこへも ___ つもりです。", ans: "行かない", options: ["行かない", "行かないで", "行こう", "行かないと"] },
-      { q: "今日から 日記を ___ と 思います。", ans: "書こう", options: ["書こう", "書く", "書いて", "書き"] },
-      { q: "将来 自分の 店を ___ つもりです。", ans: "持つ", options: ["持つ", "持とう", "持って", "持ち"] },
-      { q: "疲れたから、早く ___ と 思います。", ans: "寝よう", options: ["寝よう", "寝る", "寝て", "寝"] },
-      { q: "レポートは 明日 ___ つもりです。", ans: "出す", options: ["出す", "出そう", "出して", "出し"] },
-      { q: "大学を 卒業したら、IMCで ___ と 思います。", ans: "働こう", options: ["働こう", "働く", "働いて", "働き"] },
-      { q: "お正月は実家に ___ つもりです。", ans: "帰る", options: ["帰る", "帰ろう", "帰って", "帰り"] }
+      { q: "漢字を 読むことが ___。", ans: "できます", options: ["できます", "できますな", "できまして", "できました"] },
+      { q: "ひらがな ___ 書けません。", ans: "しか", options: ["しか", "だけ", "も", "は"] },
+      { q: "お金 ___ あれば、買えます。", ans: "さえ", options: ["さえ", "だけ", "しか", "も"] },
+      { q: "日本語の 新聞が ___ ますか。", ans: "読め", options: ["読め", "読み", "読める", "読ん"] },
+      { q: "昨日 ３時間 ___ 寝ませんでした。", ans: "しか", options: ["しか", "だけ", "も", "は"] },
+      { q: "雨 ___ 降らなければ、出かけます。", ans: "さえ", options: ["さえ", "だけ", "しか", "も"] },
+      { q: "泳ぐ ___ ことが できません。", ans: "こと", options: ["こと", "もの", "の", "が"] },
+      { q: "テニス ___ できません。", ans: "しか", options: ["しか", "だけ", "も", "は"] },
+      { q: "暇 ___ あれば、遊びに行きます。", ans: "さえ", options: ["さえ", "だけ", "も", "は"] },
+      { q: "納豆は 食べ ___ ません。", ans: "られ", options: ["られ", "れ", "て", "した"] }
     ]
   },
   {
     chapter: 28,
     level: "N4",
-    title: "Simultaneous Actions",
-    desc: "Nagara / Shi",
+    title: "Simultaneous & Contrast",
+    desc: "Nagara / Ba / Noni",
     patterns: [
-      { id: "28.1", label: "～ながら", meaning: "While doing", explanation: "Two actions performed simultaneously by the same person.", examples: [{ jp: "音楽を聞きながら勉強します。", romaji: "Ongaku o kikinagara benkyou shimasu.", en: "I study while listening to music." }] },
-      { id: "28.2", label: "～し、～し", meaning: "Moreover / Not only... but also", explanation: "Listing reasons or descriptions.", examples: [{ jp: "彼はハンサムだし、親切です。", romaji: "Kare wa hansamu da shi, shinsetsu desu.", en: "He is handsome and (moreover) kind." }] }
+      { id: "28.1", label: "～ながら", meaning: "While doing...", explanation: "Two actions performed by the same person at the same time.", examples: [{ jp: "音楽を聞きながら勉強します。", romaji: "Ongaku o kikinagara benkyou shimasu.", en: "I study while listening to music." }] },
+      { id: "28.2", label: "～ば form (conditional)", meaning: "If...", explanation: "The conditional 'if' form. Group 1: u -> e + ba. Group 2: ru -> reba. Group 3: kuru -> kureba, suru -> sureba.", examples: [{ jp: "安ければ買います。", romaji: "Yasukereba kaimasu.", en: "If it's cheap, I'll buy it." }] },
+      { id: "28.3", label: "～のに", meaning: "Although / Even though", explanation: "Used to express an unexpected or regrettable result.", examples: [{ jp: "一生懸命勉強したのに、不合格でした。", romaji: "Isshoukenmei benkyou shita noni, fugoukaku deshita.", en: "Although I studied hard, I failed." }] }
     ],
     quiz: [
-      { q: "テレビを ___ ご飯を 食べます。", ans: "見ながら", options: ["見ながら", "見て", "見", "見ると"] },
+      { q: "テレビを ___ ごはんを 食べます。", ans: "見ながら", options: ["見ながら", "見て", "見れば", "見ると"] },
+      { q: "安く なれ ___、買います。", ans: "ば", options: ["ば", "たら", "ると", "ろう"] },
+      { q: "約束した ___、彼は 来ませんでした。", ans: "のに", options: ["のに", "ので", "から", "けど"] },
       { q: "働き ___ 大学に 通っています。", ans: "ながら", options: ["ながら", "て", "に", "を"] },
-      { q: "ガムを ___ 先生の 話を 聞いてはいけません。", ans: "かみながら", options: ["かみながら", "かんで", "かみ", "かむと"] },
-      { q: "駅から ___、近い ___、便利です。", ans: "近いし", options: ["近いし", "近くて", "近い", "近く"] },
-      { q: "この レストランは おいしい ___、安い です。", ans: "し", options: ["し", "て", "から", "ので"] },
-      { q: "雨も ___、風も 強い です。", ans: "降っているし", options: ["降っているし", "降っている", "降って", "降る"] },
-      { q: "休みは ___、暇 ___、どこかへ 行きましょう。", ans: "だし", options: ["だし", "は", "で", "に"] },
+      { q: "わからなけれ ___、先生に 聞いてください。", ans: "ば", options: ["ば", "たら", "ると", "ろう"] },
+      { q: "日曜日 ___、仕事が あります。", ans: "なのに", options: ["なのに", "ので", "から", "けど"] },
       { q: "歌を ___ 踊ります。", ans: "歌いながら", options: ["歌いながら", "歌って", "歌い", "歌うと"] },
-      { q: "お茶を ___ 話しましょう。", ans: "飲みながら", options: ["飲みながら", "飲んで", "飲み", "飲むと"] },
-      { q: "彼女は きれい ___、頭も いいです。", ans: "だし", options: ["だし", "で", "に", "は"] }
+      { q: "時間 が あれ ___ 行きます。", ans: "ば", options: ["ば", "たら", "ると", "ろう"] },
+      { q: "近い ___、タクシーに 乗りました。", ans: "のに", options: ["のに", "ので", "から", "けど"] },
+      { q: "コーヒーを ___ 話しましょう。", ans: "飲みながら", options: ["飲みながら", "飲んで", "飲み", "飲むと"] }
     ]
   },
   {
     chapter: 29,
     level: "N4",
-    title: "Giving & Receiving",
-    desc: "Ageru / Kureru / Morau",
+    title: "Preparations & Completion",
+    desc: "Te-shimau / Te-oku / Te-miru",
     patterns: [
-      { id: "29.1", label: "～てあげる / くれる / もらう", meaning: "Giving / Receiving services", explanation: "Doing something for someone, someone doing for you, or receiving a favor.", examples: [{ jp: "母に花を買ってあげました。", romaji: "Haha ni hana o katte agemashita.", en: "I bought flowers for my mother." }, { jp: "友達が手伝ってくれました。", romaji: "Tomodachi ga tetsudatte kuremashita.", en: "A friend helped me." }] }
+      { id: "29.1", label: "～てしまいます", meaning: "Completely finished / Regret", explanation: "Either indicates completion of an action or regret/regretful mistake.", examples: [{ jp: "宿題を全部やってしまいました。", romaji: "Shukudai o zenbu yatte shimaimashita.", en: "I finished all my homework." }, { jp: "パスポートを忘れてしまいました。", romaji: "Pasupo-to o wasurete shimaimashita.", en: "I unfortunately forgot my passport." }] },
+      { id: "29.2", label: "～ておきます", meaning: "Do in advance", explanation: "Doing something as preparation for a future action or event.", examples: [{ jp: "旅行の前に切符を買っておきます。", romaji: "Ryokou no mae ni kippu o katte okimasu.", en: "I'll buy the tickets before the trip." }] },
+      { id: "29.3", label: "～てみます", meaning: "Try doing...", explanation: "Doing something to see what it's like or to test it.", examples: [{ jp: "日本の料理を食べてみます。", romaji: "Nihon no ryouri o tabete mimasu.", en: "I'll try eating Japanese food." }] }
     ],
     quiz: [
-      { q: "わたしは 妹に 料理を ___ あげました。", ans: "作って", options: ["作って", "作り", "作る", "作った"] },
-      { q: "佐藤さんは わたしに 地図を ___ くれました。", ans: "書いて", options: ["書いて", "書き", "書く", "書いた"] },
-      { q: "わたしは 木村さんに 傘を ___ もらいました。", ans: "貸して", options: ["貸して", "貸し", "貸す", "貸した"] },
-      { q: "先生は 漢字を ___ くださいました。", ans: "教えて", options: ["教えて", "教え", "教える", "教えて"] },
-      { q: "おじいさんに 本を ___ さしあげました。", ans: "読んで", options: ["読んで", "読み", "読む", "読んだ"] },
-      { q: "山田さんは 傘を ___ くれました。", ans: "貸して", options: ["貸して", "貸し", "貸す", "貸した"] },
-      { q: "部長に お酒を ___ もらいました。", ans: "いただい", options: ["いただい", "もらっ", "くれ", "あげ"] },
-      { q: "子供に おもちゃを 買って ___。", ans: "やりました", options: ["やりました", "あげました", "くれました", "もらいました"] },
-      { q: "友達が 引っ越しを 手伝って ___。", ans: "くれました", options: ["くれました", "あげました", "もらいました", "いたしました"] },
-      { q: "駅まで 送って ___ ませんか。", ans: "くれ", options: ["くれ", "あげ", "もらえ", "さしあげ"] }
+      { q: "ワインを こぼして ___ ました。", ans: "しまい", options: ["しまい", "あり", "おき", "み"] },
+      { q: "パーティーの 前に 飲み物を 準備して ___ ます。", ans: "おき", options: ["おき", "しまい", "あり", "み"] },
+      { q: "美味しいかどうか 食べて ___ ください。", ans: "みて", options: ["みて", "しまって", "おいて", "あって"] },
+      { q: "全部 読んで ___ ました。", ans: "しまい", options: ["しまい", "あり", "おき", "み"] },
+      { q: "教科書を 片付けて ___ ください。", ans: "おいて", options: ["おいて", "しまって", "みて", "あって"] },
+      { q: "あの 靴を 履いて ___ も いいですか。", ans: "みて", options: ["みて", "しまって", "おいて", "あって"] },
+      { q: "宿題を 忘れて ___ ました。", ans: "しまい", options: ["しまい", "あり", "おき", "み"] },
+      { q: "明日までに 資料を 読んで ___ ください。", ans: "おいて", options: ["おいて", "しまって", "みて", "あって"] },
+      { q: "この ズボンを 試着して ___ も いいですか。", ans: "みて", options: ["みて", "しまって", "おいて", "あって"] },
+      { q: "全部 食べて ___ ください。", ans: "まって", options: ["まって", "みて", "おいて", "あって"] }
     ]
   },
   {
     chapter: 30,
     level: "N4",
-    title: "Conditions",
-    desc: "Tara / Nara",
+    title: "Transitive & Intransitive",
+    desc: "Opening / Closing / States",
     patterns: [
-      { id: "30.1", label: "～なら", meaning: "If it's the case that...", explanation: "Providing advice or options based on what the other person said.", examples: [{ jp: "日本へ行くなら、京都がいいですよ。", romaji: "Nihon e iku nara, Kyouto ga ii desu yo.", en: "If you're going to Japan, Kyoto is good." }] }
+      { id: "30.1", label: "Intransitive Verbs (自動詞)", meaning: "State/Movement without agent", explanation: "Focuses on the result or state. Uses particle 'ga'.", examples: [{ jp: "ドアが開きます。", romaji: "Doa ga akimasu.", en: "The door opens." }, { jp: "電気がつきました。", romaji: "Denki ga tsukimashita.", en: "The light came on." }] },
+      { id: "30.2", label: "Transitive Verbs (他動詞)", meaning: "Action performed by agent", explanation: "Focuses on the action. Uses particle 'wo'.", examples: [{ jp: "ドアを開けます。", romaji: "Doa o akemasu.", en: "I open the door." }, { jp: "電気をつけます。", romaji: "Denki o tsukemasu.", en: "I turn on the light." }] },
+      { id: "30.3", label: "～てある (Resulting State)", meaning: "Something has been done", explanation: "State resulting from a transitive action purposefully done.", examples: [{ jp: "壁に絵が掛けてあります。", romaji: "Kabe ni e ga kakete arimasu.", en: "A picture is hung on the wall." }] }
     ],
     quiz: [
-      { q: "パソコンを 買う ___、秋葉原が いいですよ。", ans: "なら", options: ["なら", "たら", "れば", "と"] },
-      { q: "スキー ___、北海道が 一番 です。", ans: "なら", options: ["なら", "たら", "れば", "と"] },
-      { q: "明日 雨 ___、行きません。", ans: "なら", options: ["なら", "たら", "れば", "と"] },
-      { q: "安く ___、買いたいです。", ans: "ないなら", options: ["ないなら", "ないたら", "なければ", "ないと"] },
-      { q: "疲れた ___、休んでください。", ans: "なら", options: ["なら", "たら", "れば", "と"] },
-      { q: "嫌い ___、食べなくても いいですよ。", ans: "なら", options: ["なら", "たら", "れば", "と"] },
-      { q: "暇 ___、遊びに来てください。", ans: "なら", options: ["なら", "たら", "れば", "と"] },
-      { q: "わからない ___、先生に 聞いてください。", ans: "なら", options: ["なら", "たら", "れば", "と"] },
-      { q: "映画を 見る ___、これが おすすめです。", ans: "なら", options: ["なら", "たら", "れば", "と"] },
-      { q: "暑い ___、エアコンを つけましょう。", ans: "なら", options: ["なら", "たら", "れば", "と"] }
+      { q: "ドア ___ 閉まります。", ans: "が", options: ["が", "を", "に", "は"] },
+      { q: "電気 ___ 消しました。", ans: "を", options: ["を", "が", "に", "は"] },
+      { q: "カレンダー ___ かけてあります。", ans: "が", options: ["が", "を", "に", "は"] },
+      { q: "窓 ___ 開きました。", ans: "が", options: ["が", "を", "に", "は"] },
+      { q: "砂糖 ___ 入れてあります。", ans: "が", options: ["が", "を", "に", "は"] },
+      { q: "袋 ___ 破れています。", ans: "が", options: ["が", "を", "に", "は"] },
+      { q: "お皿 ___ 割りました。", ans: "を", options: ["を", "が", "に", "は"] },
+      { q: "名前 ___ 書いてあります。", ans: "が", options: ["が", "を", "に", "は"] },
+      { q: "車 ___ 止まっています。", ans: "が", options: ["が", "を", "に", "は"] },
+      { q: "お湯 ___ 沸かしました。", ans: "を", options: ["を", "が", "に", "は"] }
     ]
   },
-
   {
     chapter: 31,
     level: "N4",
-    title: "Volitional Form",
-    desc: "V-ou / Omotte imasu",
+    title: "Intentions & Decisions",
+    desc: "Volitional / Omou / Tsumori",
     patterns: [
-      { id: "31.1", label: "意向形 (いこうけい)", meaning: "Volitional Form (Let's)", explanation: "Informal version of ~mashou.", examples: [{ jp: "明日、映画を見に行こう。", romaji: "Ashita, eiga o mi ni ikou.", en: "Let's go see a movie tomorrow." }] },
-      { id: "31.2", label: "～ようと思っています", meaning: "Thinking of doing", explanation: "Expresses a decision made some time ago.", examples: [{ jp: "将来、自分の店を持とうと思っています。", romaji: "Shourai, jibun no mise o motou to omotte imasu.", en: "I'm thinking of having my own shop in the future." }] }
+      { id: "31.1", label: "Volitional Form (意向形)", meaning: "Let's...", explanation: "Casual version of ~mashou. Group 1: u -> o-line + u. Group 2: ru -> you. Group 3: kuru -> koyou, suru -> shiyou.", examples: [{ jp: "明日、映画を見に行こう。", romaji: "Ashita, eiga o mi ni ikou.", en: "Let's go see a movie tomorrow." }] },
+      { id: "31.2", label: "～と思っています", meaning: "Thinking of doing...", explanation: "Used to express a decision or intent formed some time ago.", examples: [{ jp: "将来自分の店を持とうと思っています。", romaji: "Shourai jibun no mise o motou to omotte imasu.", en: "I am thinking of having my own shop in the future." }] },
+      { id: "31.3", label: "～つもりです", meaning: "Intend to...", explanation: "Used to express a firm intention to perform an action.", examples: [{ jp: "来月日本へ行くつもりです。", romaji: "Raigetsu nihon e iku tsumori desu.", en: "I intend to go to Japan next month." }] }
     ],
     quiz: [
       { q: "疲れたから、もう ___。", ans: "寝よう", options: ["寝よう", "寝る", "寝ます", "寝え"] },
-      { q: "お正月は 実家に ___ と 思っています。", ans: "帰ろう", options: ["帰ろう", "帰る", "帰り", "帰って"] },
-      { q: "会社を ___ と 思っています。", ans: "やめよう", options: ["やめよう", "やめる", "やめた", "やめ"] },
+      { q: "お正月は実家に ___ と思っています。", ans: "帰ろう", options: ["帰ろう", "帰る", "帰り", "帰って"] },
+      { q: "タバコを ___ つもりです。", ans: "やめる", options: ["やめる", "やめた", "やめよう", "やめて"] },
       { q: "駅まで ___ か。", ans: "走ろう", options: ["走ろう", "走る", "走り", "走って"] },
-      { q: "週末は 海へ ___ と 思います。", ans: "行こう", options: ["行こう", "行く", "行き", "行って"] },
-      { q: "今夜は 早く ___。", ans: "寝よう", options: ["寝よう", "寝る", "寝ます", "寝て"] },
-      { q: "漢字を もっと ___ と 思っています。", ans: "覚えよう", options: ["覚えよう", "覚える", "覚え", "覚えた"] },
-      { q: "結婚しても 仕事を ___ と 思っています。", ans: "続けよう", options: ["続けよう", "続ける", "続け", "続けた"] },
-      { q: "買い物に ___。", ans: "行こう", options: ["行こう", "行く", "行き", "行って"] },
-      { q: "一緒に 晩ご飯を ___。", ans: "食べよう", options: ["食べよう", "食べる", "食べ", "食べて"] }
+      { q: "将来 自分の店を ___ つもりです。", ans: "持つ", options: ["持つ", "持とう", "持って", "持ち"] },
+      { q: "週末は 海へ ___ と思っています。", ans: "行こう", options: ["行こう", "行く", "行き", "行って"] },
+      { q: "明日、部長に ___ つもりです。", ans: "会う", options: ["会う", "会おう", "会って", "会い"] },
+      { q: "疲れたから、早く ___。", ans: "寝よう", options: ["寝よう", "寝る", "寝ます", "寝て"] },
+      { q: "漢字を もっと ___ と思っています。", ans: "覚えよう", options: ["覚えよう", "覚える", "覚え", "覚えた"] },
+      { q: "来年 結婚 ___ つもりです。", ans: "する", options: ["する", "しよう", "した", "し"] }
     ]
   },
   {
     chapter: 32,
     level: "N4",
-    title: "Imperative & Prohibitive",
-    desc: "V-ro / V-na",
+    title: "Guesses & Appearances",
+    desc: "Sou / You / Mitai",
     patterns: [
-      { id: "32.1", label: "命令形 (めいれいけい)", meaning: "Imperative Form", explanation: "Strong command, used by men or in emergencies.", examples: [{ jp: "早くしろ！", romaji: "Hayaku shiro!", en: "Do it quickly!" }] },
-      { id: "32.2", label: "禁止形 (きんしけい)", meaning: "Prohibitive Form", explanation: "Strong prohibition: Do not...", examples: [{ jp: "ここに入るな。", romaji: "Koko ni hairu na.", en: "Do not enter here." }] }
+      { id: "32.1", label: "～そうです (Guess)", meaning: "Looks like / Seems", explanation: "Based on visual evidence. Verb stem + sou. I-adj (remove i) + sou.", examples: [{ jp: "今にも雨が降りそうです。", romaji: "Ima nimo ame ga furisou desu.", en: "It looks like it will rain at any moment." }, { jp: "このケーキは美味しそうです。", romaji: "Kono ke-ki wa oishisou desu.", en: "This cake looks delicious." }] },
+      { id: "32.2", label: "～ようです", meaning: "It seems / Appears that...", explanation: "Used to describe a situation based on evidence from any sense, or information.", examples: [{ jp: "外は暑いようです。", romaji: "Soto wa atsui you desu.", en: "It seems hot outside." }] },
+      { id: "32.3", label: "～みたいです", meaning: "Seems like (Casual)", explanation: "Colloquial version of ~you desu.", examples: [{ jp: "彼は日本人みたいです。", romaji: "Kare wa nihonjin mitai desu.", en: "He seems like a Japanese person." }] }
     ],
     quiz: [
-      { q: "もっと 勉強 ___！", ans: "しろ", options: ["しろ", "せよ", "する", "して"] },
-      { q: "そこに ___！", ans: "座るな", options: ["座るな", "座る", "座らな", "座れ"] },
-      { q: "危ない！ ___！", ans: "逃げろ", options: ["逃げろ", "逃げる", "逃げ", "逃げな"] },
-      { q: "エレベーターを ___ な。", ans: "使う", options: ["使う", "使っ", "使い", "使え"] },
-      { q: "時間を ___ な。", ans: "守れ", options: ["守れ", "守る", "守ら", "守れな"] },
-      { q: "騒ぐ ___。", ans: "な", options: ["な", "ください", "する", "じゃありません"] },
-      { q: "止まれは ___ という 意味です。", ans: "止まれ", options: ["止まれ", "止まる", "止まり", "止まるな"] },
-      { q: "「立入禁止」は 入る ___ という 意味です。", ans: "な", options: ["な", "しろ", "ください", "ません"] },
-      { q: "頑張れ！ は ___ という 意味です。", ans: "頑張れ", options: ["頑張れ", "頑張る", "頑張り", "頑張るな"] },
-      { q: "あきらめる ___！", ans: "な", options: ["な", "しろ", "する", "ください"] }
+      { q: "この 料理は 辛 ___ ですね。", ans: "そう", options: ["そう", "みたい", "らしい", "よう"] },
+      { q: "気分が 悪い ___ ですね。", ans: "よう", options: ["よう", "そう", "らしい", "みたい"] },
+      { q: "合格した ___ ですね。", ans: "みたい", options: ["みたい", "そう", "らしい", "よう"] },
+      { q: "荷物が 落ち ___ ですよ。", ans: "そう", options: ["そう", "みたい", "らしい", "よう"] },
+      { q: "外は 暑い ___ です。", ans: "よう", options: ["よう", "そう", "らしい", "みたい"] },
+      { q: "彼は お金持ち ___ です。", ans: "みたい", options: ["みたい", "そう", "らしい", "よう"] },
+      { q: "ボタンが 取れ ___ ですよ。", ans: "そう", options: ["そう", "みたい", "らしい", "よう"] },
+      { q: "誰か 来た ___ です。", ans: "よう", options: ["よう", "そう", "らしい", "みたい"] },
+      { q: "あのアニメ、面白い ___ ですよ。", ans: "みたい", options: ["みたい", "そう", "らしい", "よう"] },
+      { q: "火が 消え ___ です。", ans: "そう", options: ["そう", "みたい", "らしい", "よう"] }
     ]
   },
   {
     chapter: 33,
     level: "N4",
-    title: "Steps & Succession",
-    desc: "Toori ni / Ato de",
+    title: "Commands & Prohibitions",
+    desc: "Commands / Nasai / Do not",
     patterns: [
-      { id: "33.1", label: "～とおりに", meaning: "Exactly as...", explanation: "Doing something exactly as another person or guide did.", examples: [{ jp: "説明書の とおりに 組み立てます。", romaji: "Setsumeisho no toori ni kumitatemasu.", en: "Assemble exactly as the manual says." }] },
-      { id: "33.2", label: "～あとで", meaning: "After / Since", explanation: "Action sequence.", examples: [{ jp: "仕事の あとで 飲みに行きます。", romaji: "Shigoto no ato de nomi ni ikimasu.", en: "After work, let's go for a drink." }] }
+      { id: "33.1", label: "Imperative Form (命令形)", meaning: "Do it!", explanation: "Strong command. Group 1: u -> e. Group 2: ru -> ro. Group 3: kuru -> koi, suru -> shiro.", examples: [{ jp: "早くしろ！", romaji: "Hayaku shiro!", en: "Do it quickly!" }] },
+      { id: "33.2", label: "Prohibitive Form (禁止形)", meaning: "Don't do!", explanation: "Strong prohibition. Dictionary form + na.", examples: [{ jp: "ここに入るな。", romaji: "Koko ni hairu na.", en: "Don't enter here." }] },
+      { id: "33.3", label: "～なさい", meaning: "Do... (Polite command)", explanation: "Often used by parents/teachers to children.", examples: [{ jp: "早く寝なさい。", romaji: "Hayaku nenasai.", en: "Go to bed early." }] }
+    ],
+    quiz: [
+      { q: "騒ぐ ___！", ans: "な", options: ["な", "しろ", "なさい", "て"] },
+      { q: "明日までに 資料を ___！", ans: "出せ", options: ["出せ", "出せな", "出しなさい", "出さな"] },
+      { q: "もっと 勉強 ___！", ans: "しなさい", options: ["しなさい", "しろ", "するな", "して"] },
+      { q: "そこに ___ な。", ans: "座る", options: ["座る", "座れ", "座りなさい", "座ら"] },
+      { q: "危ない！ ___！", ans: "逃げろ", options: ["逃げろ", "逃げなさい", "逃げるな", "逃げ"] },
+      { q: "野菜を ちゃんと ___ なさい。", ans: "食べ", options: ["食べ", "食べて", "食べろ", "食べるな"] },
+      { q: "嘘を つく ___！", ans: "な", options: ["な", "しろ", "なさい", "て"] },
+      { q: "早く ___ なさい。", ans: "起き", options: ["起き", "起きて", "起きろ", "起きるな"] },
+      { q: "時間を 守れ！ は ___ という 意味です。", ans: "守れ", options: ["守れ", "守る", "守ら", "守れな"] },
+      { q: "あきらめる ___！", ans: "な", options: ["な", "しろ", "なさい", "て"] }
+    ]
+  },  {
+    chapter: 34,
+    level: "N4",
+    title: "Succession & Methods",
+    desc: "Toori ni / Ato de / Naide",
+    patterns: [
+      { id: "34.1", label: "～とおりに", meaning: "Exactly as...", explanation: "Doing something exactly as another person or guide did.", examples: [{ jp: "説明書の とおりに 組み立てます。", romaji: "Setsumeisho no toori ni kumitatemasu.", en: "Assemble exactly as the manual says." }] },
+      { id: "34.2", label: "～あとで", meaning: "After / Since", explanation: "Indicates an action happens after another.", examples: [{ jp: "仕事の あとで 飲みに行きます。", romaji: "Shigoto no ato de nomi ni ikimasu.", en: "After work, let's go for a drink." }] },
+      { id: "34.3", label: "～ないで", meaning: "Without doing...", explanation: "Performing an action without doing another, or as a state.", examples: [{ jp: "傘を 持たないで 出かけました。", romaji: "Kasa o motanaide dekakemashita.", en: "I went out without taking an umbrella." }] }
     ],
     quiz: [
       { q: "私が 言った ___ 書いてください。", ans: "とおりに", options: ["とおりに", "ように", "ことに", "あとに"] },
       { q: "仕事が 終わった ___ 飲みに行きました。", ans: "あとで", options: ["あとで", "まえに", "うちに", "あいだに"] },
+      { q: "昨夜は 歯を ___ ないで 寝てしまいました。", ans: "磨か", options: ["磨か", "磨き", "磨く", "磨け"] },
       { q: "矢印の ___ 行けば、着きますよ。", ans: "とおりに", options: ["とおりに", "ように", "あとで", "まえに"] },
       { q: "ご飯を 食べた ___ 歯を 磨きます。", ans: "あとで", options: ["あとで", "まえに", "ときに", "ながら"] },
-      { q: "映画を 見た ___ 感想を 書きました。", ans: "あとで", options: ["あとで", "ながら", "ときに", "まえに"] },
+      { q: "眼鏡を ___ ないで 本を 読みます。", ans: "かけ", options: ["かけ", "かけて", "かく", "かき"] },
       { q: "説明書の ___ 箱を 作ってください。", ans: "とおりに", options: ["とおりに", "ように", "あとで", "まえに"] },
       { q: "シャワーを 浴びた ___ 寝ます。", ans: "あとで", options: ["あとで", "ながら", "までに", "まえに"] },
-      { q: "見た ___ 話してください。", ans: "とおりに", options: ["とおりに", "ように", "あとで", "とき"] },
-      { q: "練習の ___ 試合を しました。", ans: "あとで", options: ["あとで", "まえに", "から", "までに"] },
-      { q: "スポーツの ___ ビールを 飲みます。", ans: "あとで", options: ["あとで", "まえに", "とき", "ながら"] }
+      { q: "砂糖を ___ ないで コーヒーを 飲みます。", ans: "入れ", options: ["入れ", "入れて", "入る", "入り"] },
+      { q: "練習の ___ 試合を しました。", ans: "あとで", options: ["あとで", "まえに", "から", "までに"] }
     ]
   },
   {
-    chapter: 34,
+    chapter: 35,
     level: "N4",
     title: "Conditional (Ba)",
     desc: "V-ba / Adj-kereba",
     patterns: [
-      { id: "34.1", label: "～ば", meaning: "If", explanation: "A general conditional form.", examples: [{ jp: "安ければ買います。", romaji: "Yasukereba kaimasu.", en: "If it's cheap, I'll buy it." }, { jp: "練習すれば上手になります。", romaji: "Renshuu sureba jouzu ni narimasu.", en: "If you practice, you'll become good at it." }] }
+      { id: "35.1", label: "～ば", meaning: "If", explanation: "A general conditional form emphasizing the condition.", examples: [{ jp: "安ければ 買います。", romaji: "Yasukereba kaimasu.", en: "If it's cheap, I'll buy it." }, { jp: "練習すれば 上手に なります。", romaji: "Renshuu sureba jouzu ni narimashita.", en: "If you practice, you will become good at it." }] }
     ],
     quiz: [
       { q: "時間が ___ 行きます。", ans: "あれば", options: ["あれば", "あったら", "あると", "あればなら"] },
@@ -756,13 +810,13 @@ export const GRAMMAR_DATA = [
     ]
   },
   {
-    chapter: 35,
+    chapter: 36,
     level: "N4",
     title: "Effort & Ability",
     desc: "You ni suru / You ni naru",
     patterns: [
-      { id: "35.1", label: "～ようにする", meaning: "Try to do", explanation: "Making a conscious effort to do (or not do) something.", examples: [{ jp: "野菜を食べるようにしています。", romaji: "Yasai o taberu you ni shite imasu.", en: "I'm trying to eat vegetables." }] },
-      { id: "35.2", label: "～ようになる", meaning: "Become able to / Start to", explanation: "A change in state or ability.", examples: [{ jp: "日本語が話せるようになりました。", romaji: "Nihongo ga hanaseru you ni narimashita.", en: "I've become able to speak Japanese." }] }
+      { id: "36.1", label: "～ようにする", meaning: "Try to do", explanation: "Making a conscious effort to do something regularly.", examples: [{ jp: "毎日 野菜を 食べるように しています。", romaji: "Mainichi yasai o taberu you ni shite imasu.", en: "I try to eat vegetables every day." }] },
+      { id: "36.2", label: "～ようになる", meaning: "Become able to / Start to", explanation: "A gradual change in ability or habit.", examples: [{ jp: "日本語が 話せるように なりました。", romaji: "Nihongo ga hanaseru you ni narimashita.", en: "I have become able to speak Japanese." }] }
     ],
     quiz: [
       { q: "毎日 運動する ___ しています。", ans: "ように", options: ["ように", "ために", "ことに", "とおりに"] },
@@ -771,19 +825,19 @@ export const GRAMMAR_DATA = [
       { q: "肉を 食べない ___ なりました。", ans: "ように", options: ["ように", "ために", "ことに", "うちに"] },
       { q: "早く 寝る ___ してください。", ans: "ように", options: ["ように", "ために", "ことに", "とおりに"] },
       { q: "だんだん わかる ___ なりました。", ans: "ように", options: ["ように", "ために", "ことに", "おりに"] },
-      { q: "忘れ物を しない ___ 気をつけてください。", ans: "ように", options: ["ように", "ために", "ことに", "とおりに"] },
+      { q: "忘れ物を しない ___ してください。", ans: "ように", options: ["ように", "ために", "ことに", "とおりに"] },
       { q: "一人で 行ける ___ なりましたか。", ans: "ように", options: ["ように", "ために", "ことに", "うちに"] },
       { q: "お酒を 飲まない ___ しています。", ans: "ように", options: ["ように", "ために", "ことに", "からに"] },
       { q: "漢字が 書ける ___ なりましたか。", ans: "ように", options: ["ように", "ために", "ことに", "まえに"] }
     ]
   },
   {
-    chapter: 36,
+    chapter: 37,
     level: "N4",
     title: "Passive Voice",
     desc: "V-rareru",
     patterns: [
-      { id: "36.1", label: "受身形 (うけみけい)", meaning: "Passive Form", explanation: "Indicates that the subject is acted upon.", examples: [{ jp: "先生に褒められました。", romaji: "Sensei ni homeraremashita.", en: "I was praised by the teacher." }] }
+      { id: "37.1", label: "受身形 (うけみけい)", meaning: "Passive Form", explanation: "Indicates that the subject is acted upon.", examples: [{ jp: "先生に 褒められました。", romaji: "Sensei ni homeraremashita.", en: "I was praised by the teacher." }] }
     ],
     quiz: [
       { q: "泥棒に 財布を ___。", ans: "盗まれました", options: ["盗まれました", "盗みました", "盗ませました", "盗んで"] },
@@ -799,12 +853,12 @@ export const GRAMMAR_DATA = [
     ]
   },
   {
-    chapter: 37,
+    chapter: 38,
     level: "N4",
     title: "Nominalization",
     desc: "V-no wa / V-no ga",
     patterns: [
-      { id: "37.1", label: "～のは / のが", meaning: "Nominalizer 'no'", explanation: "Turns a verb into a noun to make it a subject or object.", examples: [{ jp: "泳ぐのは 体にいいです。", romaji: "Oyogu no wa karada ni ii desu.", en: "Swimming is good for your body." }, { jp: "歌を歌うのが 好きです。", romaji: "Uta o utau no ga suki desu.", en: "I like singing songs." }] }
+      { id: "38.1", label: "～のは / のが", meaning: "Nominalizer 'no'", explanation: "Turns a verb into a noun to make it a subject or object.", examples: [{ jp: "泳ぐのは 体にいいです。", romaji: "Oyogu no wa karada ni ii desu.", en: "Swimming is good for your body." }, { jp: "歌を歌うのが 好きです。", romaji: "Uta o utau no ga suki desu.", en: "I like singing songs." }] }
     ],
     quiz: [
       { q: "テニスを する ___ 好きです。", ans: "のが", options: ["のが", "のは", "のを", "ので"] },
@@ -820,55 +874,56 @@ export const GRAMMAR_DATA = [
     ]
   },
   {
-    chapter: 38,
+    chapter: 39,
     level: "N4",
-    title: "Reason (Te / Node)",
-    desc: "Te / Node",
+    title: "Reason & Cause",
+    desc: "Te / Node / De",
     patterns: [
-      { id: "38.1", label: "～て (Reason)", meaning: "Because...", explanation: "The Te-form can express a cause or reason.", examples: [{ jp: "ニュースを聞いて、びっくりしました。", romaji: "Nyuusu o kiite, bikkuri shimashita.", en: "I was surprised to hear the news." }] },
-      { id: "38.2", label: "～ので", meaning: "Because / Since", explanation: "Polite and objective reason marker.", examples: [{ jp: "用事があるので、お先に失礼します。", romaji: "Youji ga aru node, osaki ni shitsurei shimasu.", en: "Since I have something to do, I'll excuse myself first." }] }
+      { id: "39.1", label: "～て / ～で", meaning: "Because of...", explanation: "Expressing a cause or reason using the Te-form or De-particle (for nouns).", examples: [{ jp: "ニュースを 聞いて、びっくりしました。", romaji: "Nyuusu o kiite, bikkuri shimashita.", en: "I was surprised to hear the news." }, { jp: "地震で ビルが 倒れました。", romaji: "Jishin de biru ga taoremashita.", en: "The building collapsed because of the earthquake." }] },
+      { id: "39.2", label: "～ので", meaning: "Because / Since", explanation: "A polite and objective way to state a reason.", examples: [{ jp: "用事が あるので、お先に 失礼します。", romaji: "Youji ga aru node, osaki ni shitsurei shimasu.", en: "Since I have some business, I'll excuse myself first." }] }
     ],
     quiz: [
       { q: "危ない ___、気をつけてください。", ans: "ので", options: ["ので", "から", "で", "に"] },
       { q: "バスが 来なくて、___。", ans: "困りました", options: ["困りました", "困ります", "困る", "困って"] },
       { q: "風邪を 引いた ___ 休みます。", ans: "ので", options: ["ので", "から", "で", "に"] },
-      { q: "道が 混んで ___ 遅れました。", ans: "いて", options: ["いて", "いるので", "いるから", "い"] },
       { q: "地震 ___ 山が 崩れました。", ans: "で", options: ["で", "ので", "から", "に"] },
-      { q: "難し ___ わかりませんでした。", ans: "くて", options: ["くて", "いので", "いから", "に"] },
-      { q: "用事があった ___ いけませんでした。", ans: "ので", options: ["ので", "から", "で", "に"] },
+      { q: "難しくて ___ ませんでした。", ans: "わかり", options: ["わかり", "わかる", "わかって", "わかった"] },
       { q: "気分が 悪い ___、早く 帰ります。", ans: "ので", options: ["ので", "から", "で", "に"] },
-      { q: "テストが 終わっ ___ 、安心しました。", ans: "て", options: ["て", "ので", "から", "に"] },
-      { q: "静か ___ 、よく 眠れました。", ans: "なので", options: ["なので", "から", "で", "に"] }
-    ]
-  },
-  {
-    chapter: 39,
-    level: "N4",
-    title: "Embedded Questions",
-    desc: "Ka / Ka dou ka",
-    patterns: [
-      { id: "39.1", label: "～か / かどうか", meaning: "Whether / If", explanation: "Used to include a question within a sentence.", examples: [{ jp: "いつ結婚するか、分かりません。", romaji: "Itsu kekkon suru ka, wakarimasen.", en: "I don't know when they will get married." }, { jp: "美味しいかどうか、食べてみます。", romaji: "Oishii ka dou ka, tabete mimasu.", en: "I'll try eating it to see if it's delicious or not." }] }
-    ],
-    quiz: [
-      { q: "何時 ___ 教えてください。", ans: "か", options: ["か", "に", "を", "は"] },
-      { q: "間違いが ない ___ 確認してください。", ans: "かどうか", options: ["かどうか", "か", "のに", "ので"] },
-      { q: "どこに ___ 忘れました。", ans: "置いたか", options: ["置いたか", "置く", "置いて", "置き"] },
-      { q: "気に入る ___ わかりません。", ans: "かどうか", options: ["かどうか", "か", "と", "が"] },
-      { q: "誰 ___ 知りません。", ans: "だか", options: ["だか", "か", "は", "に"] },
-      { q: "行く ___ まだ 決めていません。", ans: "かどうか", options: ["かどうか", "か", "と", "な"] },
-      { q: "何 ___ 忘れました。", ans: "だったか", options: ["だったか", "か", "は", "に"] },
-      { q: "間に合う ___ 走ります。", ans: "かどうか", options: ["かどうか", "か", "と", "で"] },
-      { q: "誰に ___ 忘れました。", ans: "あげたか", options: ["あげたか", "あげるか", "あげて", "あげ"] },
-      { q: "故障 ___ 調べてください。", ans: "かどうか", options: ["かどうか", "か", "の", "を"] }
+      { q: "事故 ___ 電車が 止まっています。", ans: "で", options: ["で", "ので", "から", "に"] },
+      { q: "テストが 終わって、___ しました。", ans: "安心", options: ["安心", "心配", "びっくり", "がっかり"] },
+      { q: "静か ___、よく 眠れました。", ans: "なので", options: ["なので", "から", "で", "に"] },
+      { q: "道が 混んで ___ 遅れました。", ans: "いて", options: ["いて", "いるので", "いるから", "い"] }
     ]
   },
   {
     chapter: 40,
     level: "N4",
-    title: "Giving & Receiving 2",
-    desc: "Itadaku / Yaru / Kureru",
+    title: "Embedded Questions",
+    desc: "Ka / Ka dou ka",
     patterns: [
-      { id: "40.1", label: "～ていただく / やる / くださる", meaning: "Humble/Respectful Giving/Receiving", explanation: "Doing something for a superior or inferior person.", examples: [{ jp: "先生に本を読んでいただきました。", romaji: "Sensei ni hon o yonde itadakimashita.", en: "I had the teacher read a book for me (humble)." }] }
+      { id: "40.1", label: "～か", meaning: "Embedded question", explanation: "Used to include a question (with an interrogative) within a sentence.", examples: [{ jp: "いつ 結婚するか、知りません。", romaji: "Itsu kekkon suru ka, shirimasen.", en: "I don't know when they will get married." }] },
+      { id: "40.2", label: "～かどうか", meaning: "Whether or not", explanation: "Used when the embedded question has no interrogative word.", examples: [{ jp: "美味しいか どうか、食べてみます。", romaji: "Oishii ka dou ka, tabete mimasu.", en: "I'll try eating it to see if it's delicious or not." }] }
+    ],
+    quiz: [
+      { q: "何時 ___ 教えてください。", ans: "か", options: ["か", "に", "を", "は"] },
+      { q: "間違いが ない ___ 確認してください。", ans: "かどうか", options: ["かどうか", "か", "のに", "ので"] },
+      { q: "どこに 置いた ___ 忘れました。", ans: "か", options: ["か", "に", "を", "は"] },
+      { q: "気に入る ___ わかりません。", ans: "かどうか", options: ["かどうか", "か", "と", "な"] },
+      { q: "誰 ___ 知りません。", ans: "だか", options: ["だか", "か", "は", "に"] },
+      { q: "行く ___ まだ 決めていません。", ans: "かどうか", options: ["かどうか", "か", "と", "な"] },
+      { q: "何だった ___ 忘れました。", ans: "か", options: ["か", "に", "を", "は"] },
+      { q: "間に合う ___ 走ります。", ans: "かどうか", options: ["かどうか", "か", "と", "な"] },
+      { q: "誰に あげた ___ 忘れました。", ans: "か", options: ["か", "に", "を", "は"] },
+      { q: "故障 ___ 調べてください。", ans: "かどうか", options: ["かどうか", "か", "を", "に"] }
+    ]
+  },
+  {
+    chapter: 41,
+    level: "N4",
+    title: "Giving & Receiving 2",
+    desc: "Itadaku / Kudasaru / Yaru",
+    patterns: [
+      { id: "41.1", label: "～ていただく / ～くださる", meaning: "Polite/Humble giving & receiving", explanation: "Humble/Respectful versions of morau/kureru/ageru for actions.", examples: [{ jp: "先生に 本を 読んで いただきました。", romaji: "Sensei ni hon o yonde itadakimashita.", en: "I had the teacher read a book for me (humble)." }, { jp: "社長が お土産を くださいました。", romaji: "Shachou ga omiyage o kudasaimashita.", en: "The president gave me a souvenir (respectful)." }] }
     ],
     quiz: [
       { q: "はなさんは 私に プレゼントを ___ ました。", ans: "ください", options: ["ください", "さしあげ", "いただき", "やり"] },
@@ -883,15 +938,14 @@ export const GRAMMAR_DATA = [
       { q: "先生、教えて ___ ませんか。", ans: "いただけ", options: ["いただけ", "くださり", "いただき", "さしあげ"] }
     ]
   },
-
   {
-    chapter: 41,
+    chapter: 42,
     level: "N4",
     title: "Purpose & Use",
     desc: "Tame ni / No ni",
     patterns: [
-      { id: "41.1", label: "～ために", meaning: "For / In order to", explanation: "Indicates a clear purpose or benefit.", examples: [{ jp: "家族のために 働いています。", romaji: "Kazoku no tame ni hataraite imasu.", en: "I am working for my family." }] },
-      { id: "41.2", label: "～のに (Use)", meaning: "For (doing something)", explanation: "Indicates the use or utility of an object.", examples: [{ jp: "このはさみは 花を切るのに 使います。", romaji: "Kono hasami wa hana o kiru no ni tsukaimasu.", en: "This pair of scissors is used for cutting flowers." }] }
+      { id: "42.1", label: "～ために", meaning: "For / In order to", explanation: "Indicates a benefit or purpose.", examples: [{ jp: "家族のために 働いています。", romaji: "Kazoku no tame ni hataraite imasu.", en: "I'm working for my family." }] },
+      { id: "42.2", label: "～のに (Use)", meaning: "For (doing something)", explanation: "Indicates the utility of an object.", examples: [{ jp: "このはさみは 花を 切るのに 使います。", romaji: "Kono hasami wa hana o kiru no ni tsukaimasu.", en: "This pair of scissors is used for cutting flowers." }] }
     ],
     quiz: [
       { q: "留学する ___ お金を 貯めています。", ans: "ために", options: ["ために", "ので", "のに", "から"] },
@@ -907,34 +961,35 @@ export const GRAMMAR_DATA = [
     ]
   },
   {
-    chapter: 42,
+    chapter: 43,
     level: "N4",
-    title: "Appearance (Looks like)",
-    desc: "Sou desu / Sou ni naru",
+    title: "Appearance & Attempt",
+    desc: "Sou desu / Te miru",
     patterns: [
-      { id: "42.1", label: "～そうです (Appearance)", meaning: "Looks like / It seems", explanation: "Based on visual evidence.", examples: [{ jp: "雨が 降りそうです。", romaji: "Ame ga furisou desu.", en: "It looks like it's going to rain." }, { jp: "この ケーキは 美味しそうです。", romaji: "Kono ke-ki wa oishisou desu.", en: "This cake looks delicious." }] }
+      { id: "43.1", label: "～そうです (Appearance)", meaning: "Looks like...", explanation: "Visual judgment based on appearance. V-stem + sou / Adj-stem + sou.", examples: [{ jp: "雨が 降りそうです。", romaji: "Ame ga furisou desu.", en: "It looks like it will rain." }, { jp: "この ケーキは 美味しそうです。", romaji: "Kono ke-ki wa oishisou desu.", en: "This cake looks delicious." }] },
+      { id: "43.2", label: "～てみる", meaning: "Try to do / Try out", explanation: "Doing something to see what it's like.", examples: [{ jp: "新しい 靴を 履いて みました。", romaji: "Atarashii kutsu o haite mimashita.", en: "I tried on new shoes." }] }
     ],
     quiz: [
       { q: "荷物が ___ そうです。", ans: "落ち", options: ["落ち", "落ちる", "落ちた", "落ちて"] },
-      { q: "ボタンが ___ そうです。", ans: "取れ", options: ["取れ", "取れる", "取れた", "取れて"] },
-      { q: "火が ___ そうです。", ans: "消え", options: ["消え", "消える", "消えた", "消えて"] },
-      { q: "今にも 雨が ___ そうです。", ans: "降り出し", options: ["降り出し", "降り出す", "降り出した", "降り出して"] },
       { q: "この 料理は 辛 ___ ですね。", ans: "そう", options: ["そう", "そうに", "ような", "みたい"] },
-      { q: "暇 ___ ですね。", ans: "そう", options: ["そう", "そうな", "そうに", "みだい"] },
-      { q: "暖か ___ ですね。", ans: "そう", options: ["そう", "そうで", "そうに", "みたい"] },
-      { q: "もうすぐ 仕事が ___ そうです。", ans: "終わり", options: ["終わり", "終わる", "終わった", "終わって"] },
-      { q: "彼女は 忙し ___ ですね。", ans: "そう", options: ["そう", "そうに", "そうで", "みたいな"] },
-      { q: "袋が ___ そうです。", ans: "破れ", options: ["破れ", "破れる", "破れた", "破れて"] }
+      { q: "一度 日本へ 行って ___ です。", ans: "みたい", options: ["みたい", "みた", "みって", "みる"] },
+      { q: "ボタンが ___ そうです。", ans: "取れ", options: ["取れ", "取れる", "取れた", "取れて"] },
+      { q: "暖か ___ ですね。", ans: "そう", options: ["そう", "ようで", "みたい", "みだ"] },
+      { q: "面白そう ___ 、見てみました。", ans: "なので", options: ["なので", "から", "で", "に"] },
+      { q: "火が ___ そうですよ。", ans: "消え", options: ["消え", "消える", "消えた", "消えて"] },
+      { q: "美味しそう ___ 食べました。", ans: "に", options: ["に", "を", "が", "は"] },
+      { q: "袋が ___ そうです。", ans: "破れ", options: ["破れ", "破れる", "破れた", "破れて"] },
+      { q: "もう一度 考えて ___ ください。", ans: "みて", options: ["みて", "みる", "みれ", "みろ"] }
     ]
   },
   {
-    chapter: 43,
+    chapter: 44,
     level: "N4",
-    title: "Ease & Difficulty",
+    title: "Excess & Ease",
     desc: "Sugiru / Yasui / Nikui",
     patterns: [
-      { id: "43.1", label: "～すぎる", meaning: "Too much / Excess", explanation: "Doing something to an excessive degree.", examples: [{ jp: "お酒を 飲みすぎました。", romaji: "Oshake o nomisugimashita.", en: "I drank too much." }] },
-      { id: "43.2", label: "～やすい / にくい", meaning: "Easy / Hard to do", explanation: "Indicates the ease or difficulty of an action.", examples: [{ jp: "書きやすい ペン です。", romaji: "Kakiyasui pen desu.", en: "It's an easy-to-write-with pen." }] }
+      { id: "44.1", label: "～すぎる", meaning: "Too much / Excess", explanation: "Performing an action or being in a state to an excessive degree.", examples: [{ jp: "お酒を 飲みすぎました。", romaji: "Oshake o nomisugimashita.", en: "I drank too much." }] },
+      { id: "44.2", label: "～やすい / ～にくい", meaning: "Easy / Hard to do", explanation: "Indicates the ease or difficulty of performing an action.", examples: [{ jp: "この ペンは 書きやすい です。", romaji: "Kono pen wa kakiyasui desu.", en: "This pen is easy to write with." }] }
     ],
     quiz: [
       { q: "食べ ___ ました。", ans: "すぎ", options: ["すぎ", "やすく", "にくく", "たい"] },
@@ -950,34 +1005,35 @@ export const GRAMMAR_DATA = [
     ]
   },
   {
-    chapter: 44,
+    chapter: 45,
     level: "N4",
-    title: "Conditions (Case)",
-    desc: "Baai / No ni",
+    title: "Cases & Contrast",
+    desc: "Baai / Noni",
     patterns: [
-      { id: "44.1", label: "～ばあい (場合)", meaning: "In case of / When", explanation: "Used for hypothetical situations or instructions.", examples: [{ jp: "火事の 場合は 119に 電話します。", romaji: "Kaji no baai wa 119 ni denwa shimasu.", en: "In case of fire, call 119." }] }
+      { id: "45.1", label: "～ばあい (場合)", meaning: "In case of...", explanation: "Used for hypothetical situations or instructions.", examples: [{ jp: "火事の 場合は 119に 電話します。", romaji: "Kaji no baai wa 119 ni denwa shimasu.", en: "In case of fire, call 119." }] },
+      { id: "45.2", label: "～のに (Contrast)", meaning: "Even though / Despite", explanation: "Expresses contrast or unexpected results.", examples: [{ jp: "約束した のに、彼が 来ませんでした。", romaji: "Yakusoku shita no ni, kare ga kimasen deshita.", en: "Even though we made a promise, he didn't come." }] }
     ],
     quiz: [
       { q: "領収書が 必要な ___ 言ってください。", ans: "場合は", options: ["場合は", "なかれば", "までに", "ので"] },
       { q: "遅れる ___ 連絡してください。", ans: "場合は", options: ["場合は", "ために", "のに", "ので"] },
+      { q: "一生懸命 勉強した ___ 、不合格でした。", ans: "のに", options: ["のに", "ので", "から", "けど"] },
       { q: "故障の ___ どこに 連絡しますか。", ans: "場合は", options: ["場合は", "ためには", "のには", "ので"] },
       { q: "会議に 間に合わない ___ 連絡してください。", ans: "場合は", options: ["場合は", "までに", "から", "ので"] },
-      { q: "カードを 無くした ___ どうしますか。", ans: "場合は", options: ["場合は", "ために", "なら", "から"] },
-      { q: "雨の ___ 中止します。", ans: "場合は", options: ["場合は", "なら", "ので", "から"] },
+      { q: "薬を 飲んだ ___ 、よくなりません。", ans: "のに", options: ["のに", "ので", "から", "けど"] },
+      { q: "雨 ___ 中止します。", ans: "の場合は", options: ["の場合は", "なら", "ので", "から"] },
+      { q: "静かな ___ 、よく 眠れません。", ans: "のに", options: ["のに", "ので", "から", "けど"] },
       { q: "わからない ___ 聞いてください。", ans: "場合は", options: ["場合は", "ために", "も", "ので"] },
-      { q: "火事 ___ 階段を 使ってください。", ans: "の場合は", options: ["の場合は", "ためには", "なら", "から"] },
-      { q: "道が 混んでいる ___ 遅れます。", ans: "場合は", options: ["場合は", "なら", "ので", "から"] },
-      { q: "パスポートを 無くした ___。", ans: "場合は", options: ["場合は", "なら", "たら", "ので"] }
+      { q: "日曜日 ___ 、働いています。", ans: "なのに", options: ["なのに", "ので", "から", "けど"] }
     ]
   },
   {
-    chapter: 45,
+    chapter: 46,
     level: "N4",
-    title: "Aspect (Time points)",
+    title: "Aspect & Recent Actions",
     desc: "Tokoro / Bakari",
     patterns: [
-      { id: "45.1", label: "～ところです", meaning: "About to / Just doing", explanation: "Indicates specific stages of an action.", examples: [{ jp: "今から ご飯を 食べる ところです。", romaji: "Ima kara gohan o taberu tokoro desu.", en: "I'm about to eat now." }] },
-      { id: "45.2", label: "～たばかり", meaning: "Just happened", explanation: "Something happened very recently (subjective).", examples: [{ jp: "さっき 食べた ばかり です。", romaji: "Sakki tabeta bakari desu.", en: "I just finished eating a moment ago." }] }
+      { id: "46.1", label: "～ところです", meaning: "Specific stage of action", explanation: "Indicates beginning, middle, or end of an action.", examples: [{ jp: "今から ご飯を 食べる ところです。", romaji: "Ima kara gohan o taberu tokoro desu.", en: "I'm about to eat now." }] },
+      { id: "46.2", label: "～たばかり", meaning: "Just finished doing", explanation: "Indicates that something occurred very recently (subjective).", examples: [{ jp: "さっき 食べた ばかり です。", romaji: "Sakki tabeta bakari desu.", en: "I just finished eating a moment ago." }] }
     ],
     quiz: [
       { q: "今、ご飯を ___ ところです。", ans: "食べている", options: ["食べている", "食べた", "食べる", "食べて"] },
@@ -993,55 +1049,55 @@ export const GRAMMAR_DATA = [
     ]
   },
   {
-    chapter: 46,
-    level: "N4",
-    title: "Appearance (Seems like)",
-    desc: "Sou / You / Mitai",
-    patterns: [
-      { id: "46.1", label: "～そうです (Hearsay)", meaning: "I heard that...", explanation: "Used to relay information from another source.", examples: [{ jp: "明日は 雨だ そうです。", romaji: "Ashita wa ame da sou desu.", en: "I heard it will rain tomorrow." }] },
-      { id: "46.2", label: "～ようです", meaning: "It seems / It looks like", explanation: "Conjecture based on sensory evidence.", examples: [{ jp: "外は 暑い ようです。", romaji: "Soto wa atsui you desu.", en: "It seems hot outside." }] }
-    ],
-    quiz: [
-      { q: "天気予報によると 雨が ___ そうです。", ans: "降る", options: ["降る", "降り", "降って", "降った"] },
-      { q: "部長は 忙しい ___ です。", ans: "ようです", options: ["ようです", "そうです", "らしいです", "みたいです"] },
-      { q: "隣の 部屋に 誰か ___ ようです。", ans: "いる", options: ["いる", "ある", "いた", "あって"] },
-      { q: "彼は お金持ちだ ___ です。", ans: "そうです", options: ["そうです", "ようです", "らしいです", "みたいです"] },
-      { q: "この リンゴは 甘い ___ です。", ans: "ようです", options: ["ようです", "そうです", "らしいです", "みたいな"] },
-      { q: "うわさでは あの人たちは 離婚する ___ です。", ans: "そうです", options: ["そうです", "ようです", "らしい", "みた"] },
-      { q: "誰も いない ___ です。", ans: "ようです", options: ["ようです", "そうです", "らしい", "みて"] },
-      { q: "明日は 寒い ___ です。", ans: "そうです", options: ["そうです", "ようです", "らしい", "みだ"] },
-      { q: "気分が 悪い ___ ですね。", ans: "よう", options: ["よう", "そう", "らしい", "みたい"] },
-      { q: "合格した ___ ですね。", ans: "よう", options: ["よう", "そう", "らしい", "みたい"] }
-    ]
-  },
-  {
     chapter: 47,
     level: "N4",
-    title: "Causative Form",
-    desc: "V-saseru",
+    title: "Hearsay & Conjecture",
+    desc: "Sou desu / You desu",
     patterns: [
-      { id: "47.1", label: "使役形 (しえきけい)", meaning: "Causative Form", explanation: "Making or letting someone do something.", examples: [{ jp: "子供に 野菜を 食べさせました。", romaji: "Kodomo ni yasai o tabesasemashita.", en: "I made the child eat vegetables." }] }
+      { id: "47.1", label: "～そうです (Hearsay)", meaning: "I heard that...", explanation: "Used to relay information from another source. Plain form + sou desu.", examples: [{ jp: "明日は 雨だ そうです。", romaji: "Ashita wa ame da sou desu.", en: "I heard that it will rain tomorrow." }] },
+      { id: "47.2", label: "～ようです", meaning: "It seems / Appears", explanation: "Conjecture based on sensory evidence or information. Plain form + you desu.", examples: [{ jp: "隣の 部屋に 誰か いる ようです。", romaji: "Tonari no heya ni dareka iru you desu.", en: "It seems like someone is in the next room." }] }
     ],
     quiz: [
-      { q: "先生は 学生に 掃除を ___ ました。", ans: "させ", options: ["させ", "られ", "し", "して"] },
-      { q: "母は 弟を 買い物に ___ ました。", ans: "行かせ", options: ["行かせ", "行かされ", "行き", "行っ"] },
-      { q: "部長は 山田さんを 出張 ___ ました。", ans: "させ", options: ["させ", "られ", "し", "して"] },
-      { q: "子供に 本を ___ ました。", ans: "読ませ", options: ["読ませ", "読まれ", "読み", "読ん"] },
-      { q: "彼を 1時間も ___ ました。", ans: "待たせ", options: ["待たせ", "待たされ", "待ち", "待っ"] },
-      { q: "妹に ピアノを ___ ました。", ans: "弾かせ", options: ["弾かせ", "弾かれ", "弾き", "弾い"] },
-      { q: "子供を 公園で ___ ました。", ans: "遊ばせ", options: ["遊ばせ", "遊ばさ", "遊び", "遊ん"] },
-      { q: "社員に 意見を ___ ました。", ans: "言わせ", options: ["言わせ", "言われ", "言い", "言っ"] },
-      { q: "息子に 部屋を 掃除 ___ ました。", ans: "させ", options: ["させ", "し", "され", "して"] },
-      { q: "彼女を ___ しまいました。", ans: "泣かせて", options: ["泣かせて", "泣かれて", "泣き", "泣いて"] }
+      { q: "天気予報に よると 雨が ___ そうです。", ans: "降る", options: ["降る", "降り", "降って", "降った"] },
+      { q: "部長は 忙しい ___ です。", ans: "ようです", options: ["ようです", "そうです", "らしいです", "みたいです"] },
+      { q: "彼は お金持ちだ ___ です。", ans: "そうです", options: ["そうです", "ようです", "らしいです", "みたいです"] },
+      { q: "この リンゴは 甘い ___ です。", ans: "ようです", options: ["ようです", "そうです", "らしいです", "みたいな"] },
+      { q: "うわさでは その映画は 面白い ___ ですよ。", ans: "そうです", options: ["そうです", "ようです", "らしい", "みた"] },
+      { q: "誰も いない ___ ですね。", ans: "ようです", options: ["ようです", "そうです", "らしい", "みて"] },
+      { q: "明日は 寒い ___ です。", ans: "そうです", options: ["そうです", "ようです", "らしい", "みだ"] },
+      { q: "火が 消えた ___ です。", ans: "よう", options: ["よう", "そう", "らしい", "みたい"] },
+      { q: "あの方は 日本人 ___ ですね。", ans: "のよう", options: ["のよう", "なよう", "そう", "たよう"] },
+      { q: "咳が 出る ___ ですね。 風邪ですか。", ans: "よう", options: ["よう", "そう", "らしい", "みたい"] }
     ]
   },
   {
     chapter: 48,
     level: "N4",
-    title: "Respectful Honorifics",
-    desc: "Sonkeigo",
+    title: "Causative Form",
+    desc: "使役形 (V-saseru)",
     patterns: [
-      { id: "48.1", label: "尊敬語 (そんけいご)", meaning: "Respectful Language", explanation: "Used to show respect to the person you are talking about.", examples: [{ jp: "社長は もう お帰りに なりました。", romaji: "Shachou wa mou okaeri ni narimashita.", en: "The president has already returned." }] }
+      { id: "48.1", label: "使役形 (しえきけい)", meaning: "Make / Let someone do", explanation: "Used when one person makes or lets another perform an action.", examples: [{ jp: "母は 弟を 買い物に 行かせました。", romaji: "Haha wa otouto o kaimono ni ikasemashita.", en: "My mother made my younger brother go shopping." }] }
+    ],
+    quiz: [
+      { q: "先生は 学生に 掃除を ___ ました。", ans: "させ", options: ["させ", "し", "られ", "して"] },
+      { q: "母は 弟を 買い物に ___ ました。", ans: "行かせ", options: ["行かせ", "行かされ", "行き", "行っ"] },
+      { q: "部長は 山田さんを 出張 ___ ました。", ans: "させ", options: ["させ", "し", "られ", "して"] },
+      { q: "子供に ピアノを ___ ました。", ans: "習わせ", options: ["習わせ", "習わされ", "習い", "習っ"] },
+      { q: "彼を 1時間も ___ ました。", ans: "待たせ", options: ["待たせ", "待たされ", "待ち", "待っ"] },
+      { q: "妹に ピアノを ___ ました。", ans: "弾かせ", options: ["弾かせ", "弾き", "弾かれ", "弾い"] },
+      { q: "子供を 公園で ___ ました。", ans: "遊ばせ", options: ["遊ばせ", "遊び", "遊ばさ", "遊ん"] },
+      { q: "息子に 部屋を 掃除 ___ ました。", ans: "させ", options: ["させ", "し", "され", "して"] },
+      { q: "彼女を ___ しまいました。", ans: "泣かせて", options: ["泣かせて", "泣き", "泣いて", "泣かれた"] },
+      { q: "ここでの 駐車は ___ ください。", ans: "させないで", options: ["させないで", "しないで", "させるな", "されるな"] }
+    ]
+  },
+  {
+    chapter: 49,
+    level: "N4",
+    title: "Respectful Honorifics",
+    desc: "尊敬語 (Sonkeigo)",
+    patterns: [
+      { id: "49.1", label: "尊敬語 (そんけいご)", meaning: "Respectful Language", explanation: "Used to show respect to someone above you by raising their actions.", examples: [{ jp: "社長は もう お帰りに なりました。", romaji: "Shachou wa mou okaeri ni narimashita.", en: "The president has already returned." }] }
     ],
     quiz: [
       { q: "先生、何を ___ か。", ans: "召し上がります", options: ["召し上がります", "食べます", "いただきます", "食べられます"] },
@@ -1057,17 +1113,17 @@ export const GRAMMAR_DATA = [
     ]
   },
   {
-    chapter: 49,
+    chapter: 50,
     level: "N4",
     title: "Humble Honorifics",
-    desc: "Kenjougo",
+    desc: "謙譲語 (Kenjougo)",
     patterns: [
-      { id: "49.1", label: "謙譲語 (けんじょうご)", meaning: "Humble Language", explanation: "Used to lower yourself to show respect to the other person.", examples: [{ jp: "明日、5時に 参ります。", romaji: "Ashita, goji ni maimasu.", en: "I will come at 5 o'clock (humble)." }] }
+      { id: "50.1", label: "謙譲語 (けんじょうご)", meaning: "Humble Language", explanation: "Used to show respect by lowering your own actions.", examples: [{ jp: "明日、5時に 参ります。", romaji: "Ashita, goji ni maimasu.", en: "I will come at 5 o'clock (humble)." }] }
     ],
     quiz: [
       { q: "私は 田中と ___。", ans: "申します", options: ["申します", "言います", "おっしゃいます", "まします"] },
       { q: "明日、10時に ___。", ans: "参ります", options: ["参ります", "行きます", "いらっしゃいます", "おいでです"] },
-      { q: "私が ご案内 ___。", ans: "します", options: ["します", "いたし", "させ", "なれ"] },
+      { q: "私が ご案内 ___。", ans: "いたし", options: ["いたし", "し", "させ", "なれ"] },
       { q: "お名前を ___ か。", ans: "お伺いして", options: ["お伺いして", "聞いて", "おっしゃって", "申しあげて"] },
       { q: "荷物を お持ち ___ ます。", ans: "いたし", options: ["いたし", "し", "させ", "なれ"] },
       { q: "社長に 本を ___ ました。", ans: "いただき", options: ["いただき", "もらい", "ください", "やり"] },
@@ -1077,867 +1133,903 @@ export const GRAMMAR_DATA = [
       { q: "明日、また お目にかかり ___。", ans: "たいです", options: ["たいです", "ます", "ましょう", "ましたか"] }
     ]
   },
-  {
-    chapter: 50,
-    level: "N4",
-    title: "Review & Advanced Particles",
-    desc: "Summary of N4",
-    patterns: [
-      { id: "50.1", label: "N4 総まとめ", meaning: "N4 Summary", explanation: "Focus on particles like 'node', 'noni', 'baai', etc.", examples: [{ jp: "日本は 綺麗だし、便利なので、また行きたです。", romaji: "Nihon wa kirei dashi, benri nanode, mata ikitai desu.", en: "Japan is beautiful and convenient, so I want to go again." }] }
-    ],
-    quiz: [
-      { q: "この パソコンは 軽くて 持ち ___ です。", ans: "運びやすい", options: ["運びやすい", "運びにくい", "すぎます", "運べます"] },
-      { q: "遅くなって ___。", ans: "すみません", options: ["すみません", "お疲れ様", "失礼します", "どうも"] },
-      { q: "雨が ___ そうです。", ans: "降り", options: ["降り", "降る", "降った", "降って"] },
-      { q: "明日は 休み ___ 嬉しいです。", ans: "なので", options: ["なので", "から", "のに", "でも"] },
-      { q: "頑張れば ___ なります。", ans: "上手く", options: ["上手く", "上手に", "上手だ", "上手"] },
-      { q: "もう少し 安く ___ なりませんか。", ans: "なり", options: ["なり", "して", "なれ", "させ"] },
-      { q: "何を ___ か判りません。", ans: "買えばいい", options: ["買えばいい", "買う", "買った", "買って"] },
-      { q: "どこに ___ か教えてください。", ans: "行けばいい", options: ["行けばいい", "行くか", "行っても", "行く"] },
-      { q: "もうすぐ 咲き ___ です。", ans: "そう", options: ["そう", "よう", "らしい", "みた"] },
-      { q: "使い ___ くて 困っています。", ans: "にく", options: ["にく", "やす", "すぎ", "たい"] }
-    ]
-  },
 
   // --- JLPT N3 CORE CURRICULUM ---
+  // --- JLPT N3 CONTENT (Shin Kanzen Master) ---
   {
     chapter: 51,
     level: "N3",
-    title: "ように (so that)",
-    desc: "Result ya purpose batane ke liye",
+    title: "Expansion & Explanation 1",
+    desc: "Wake da / Wake dewa nai",
     patterns: [
-      { id: "51.1", label: "～ように", meaning: "So that / In order to", explanation: "Describes a goal or result, often with potential or negative verbs.", examples: [{ jp: "日本語が 話せるように、毎日 勉強しています。", romaji: "Nihongo ga hanaseru you ni, mainichi benkyou shite imasu.", en: "I study every day so that I can speak Japanese." }] }
+      { id: "51.1", label: "～わけだ / ～というわけだ", meaning: "So that means... / No wonder", explanation: "Used to express a logical conclusion or explain the reason behind a fact.", examples: [{ jp: "夜更かししたのか。眠いわけだ。", romaji: "Yofukashi shita no ka. Nemui wake da.", en: "Did you stay up late? No wonder you're sleepy." }, { jp: "20年も日本にいるのか。日本語が上手なわけだ。", romaji: "Nijuunen mo Nihon ni iru no ka. Nihongo ga jouzu na wake da.", en: "You've been in Japan for 20 years? That explains why your Japanese is so good." }] },
+      { id: "51.2", label: "～わけではない / ～というわけではない", meaning: "It doesn't mean that... / Not necessarily", explanation: "Used for partial negation or to say that something isn't always true.", examples: [{ jp: "日本人がみんな寿司が好きだというわけではない。", romaji: "Nihonjin ga minna sushi ga suki da to iu wake de wa nai.", en: "It's not that all Japanese people like sushi." }, { jp: "嫌いなわけではないが、今は食べたくない。", romaji: "Kirai na wake de wa nai ga, ima wa tabetakunai.", en: "It's not that I hate it, but I don't want to eat it now." }] }
     ],
     quiz: [
-      { q: "忘れない ___、メモします。", ans: "ように", options: ["ように", "ために", "ことに", "おりに"] },
-      { q: "聞こえる ___、大きく言いました。", ans: "ように", options: ["ように", "ために", "のに", "ので"] },
-      { q: "風邪を 引かない ___。気をつけてください。", ans: "ように", options: ["ように", "ために", "ので", "のに"] },
-      { q: "漢字が 書ける ___ なりました。", ans: "ように", options: ["ように", "ために", "ことに", "とおりに"] },
-      { q: "皆さんに 聞こえる ___ 話してください。", ans: "ように", options: ["ように", "ために", "まえに", "うちに"] },
-      { q: "遅れない ___ 急ぎましょう。", ans: "ように", options: ["ように", "ために", "とおりに", "ことに"] },
-      { q: "合格できる ___ 祈っています。", ans: "ように", options: ["ように", "ために", "こと", "のと"] },
-      { q: "速く 走れる ___ 練習しています。", ans: "ように", options: ["ように", "ために", "とおりに", "ことに"] },
-      { q: "子供でも 分かる ___ 説明しました。", ans: "ように", options: ["ように", "ために", "ので", "のに"] },
-      { q: "間に合う ___ タクシーに 乗りました。", ans: "ように", options: ["ように", "ために", "ことに", "おりに"] }
+      { q: "エアコンがついていない。暑い ___。", ans: "わけだ", options: ["わけだ", "はずだ", "ことだ", "ものだ"] },
+      { q: "高いからといって、いい ___。", ans: "わけではない", options: ["わけではない", "わけだ", "はずがない", "ことにした"] },
+      { q: "5キロも走ったんだ。疲れる ___。", ans: "わけだ", options: ["わけだ", "ことだ", "ものだ", "ばかりだ"] },
+      { q: "嫌いな ___ が、今は会いたくない。", ans: "わけではない", options: ["わけではない", "わけだ", "はずがない", "ばかりだ"] },
+      { q: "鍵が開いている。誰かいる ___。", ans: "わけだ", options: ["わけだ", "はずだ", "ことだ", "ものだ"] },
+      { q: "いつも暇な ___。", ans: "わけではない", options: ["わけではない", "ものだから", "おかげで", "せいで"] },
+      { q: "雨が降っている。寒い ___。", ans: "わけだ", options: ["わけだ", "ことだ", "はずだ", "ものだ"] },
+      { q: "お金持ちがみんな幸せな ___。", ans: "わけではない", options: ["わけではない", "わけだ", "はずだ", "ことだ"] },
+      { q: "毎日練習しているから、上手になる ___。", ans: "わけだ", options: ["わけだ", "ものだ", "ことだ", "どころか"] },
+      { q: "全くできない ___。", ans: "わけではない", options: ["わけではない", "はずがない", "わけだ", "ことにした"] }
     ]
   },
   {
     chapter: 52,
     level: "N3",
-    title: "ために (because / for)",
-    desc: "Strong reason or purpose",
+    title: "Expansion & Explanation 2",
+    desc: "Mono / Koto Patterns",
     patterns: [
-      { id: "52.1", label: "～ために", meaning: "Because of / For the sake of", explanation: "Indicates a strong reason or a concrete objective.", examples: [{ jp: "試験のために、日本語を 勉強しています。", romaji: "Shiken no tame ni, nihongo o benkyou shite imasu.", en: "I study Japanese for the exam." }] }
+      { id: "52.1", label: "～ものだ / ～ものだから", meaning: "General truth / Because (excuse)", explanation: "Mono da expresses a general truth or deep emotion. Mono dakara is used for explaining a reason or making an excuse.", examples: [{ jp: "時間は早く過ぎるものだ。", romaji: "Jikan wa hayaku sugiru mono da.", en: "Time sure passes quickly (general truth)." }, { jp: "遅れてすみません。道が混んでいたものだから。", romaji: "Okurete sumimasen. Michi ga konde ita mono dakara.", en: "Sorry I'm late. It's because the roads were crowded." }] },
+      { id: "52.2", label: "～ことだ / ～ということだ", meaning: "Advice / That means (hearsay)", explanation: "Koto da is used for giving strong advice. To iu koto da indicates a conclusion or hearsay.", examples: [{ jp: "日本語が上手になりたければ、毎日練習することだ。", romaji: "Nihongo ga jouzu ni naritakereba, mainichi renshuu suru koto da.", en: "If you want to become good at Japanese, you should practice every day." }, { jp: "物価が上がるということです。", romaji: "Bukka ga agaru to iu koto desu.", en: "It means that prices will go up (hearsay/result)." }] }
     ],
     quiz: [
-      { q: "留学する ___ お金を 貯めています。", ans: "ために", options: ["ために", "ように", "のに", "ので"] },
-      { q: "家族の ___ 働いています。", ans: "ために", options: ["ために", "ように", "ので", "のに"] },
-      { q: "健康の ___ 毎日 歩いています。", ans: "ために", options: ["ために", "ように", "から", "ので"] },
-      { q: "引越しの ___ 車を 借りました。", ans: "ために", options: ["ために", "ように", "ので", "から"] },
-      { q: "結婚祝の ___ 何が いいですか。", ans: "ために", options: ["ために", "ように", "のと", "のに"] },
-      { q: "将来 ___ 貯金しています。", ans: "のために", options: ["のために", "に", "を", "は"] },
-      { q: "出張の ___ 航空券を 買いました。", ans: "ために", options: ["ために", "ように", "ので", "から"] },
-      { q: "家を 買う ___ 仕事を 頑張ります。", ans: "ために", options: ["ために", "ように", "ので", "から"] },
-      { q: "平和の ___ 祈りましょう。", ans: "ために", options: ["ために", "に", "を", "は"] },
-      { q: "子供の ___ 頑張ります。", ans: "ために", options: ["ために", "ように", "ので", "から"] }
+      { q: "子供の成長は早い ___。", ans: "ものだ", options: ["ものだ", "ことだ", "はずだ", "わけだ"] },
+      { q: "どうして食べないの？ 「嫌い ___。」", ans: "なんだもの", options: ["なんだもの", "わけだ", "ことだ", "はずだ"] },
+      { q: "合格したければ、もっと勉強する ___。", ans: "ことだ", options: ["ことだ", "ものだ", "わけだ", "はずだ"] },
+      { q: "不合格だった。つまり、来年も受ける ___。", ans: "ということだ", options: ["ということだ", "ものだ", "ことにした", "わけだ"] },
+      { q: "暑かった ___、エアコンをつけました。", ans: "ものだから", options: ["ものだから", "わけで", "ことなので", "はずで"] },
+      { q: "親切にされたら、お礼を言う ___ だ。", ans: "もの", options: ["もの", "こと", "はず", "わけ"] },
+      { q: "健康になりたければ、タバコをやめる ___。", ans: "ことだ", options: ["ことだ", "ものだ", "わけだ", "はずだ"] },
+      { q: "ニュースによると、来週は休み ___。", ans: "ということだ", options: ["ということだ", "ものだ", "はずだ", "わけだ"] },
+      { q: "知らなかった ___、失礼しました。", ans: "ものだから", options: ["ものだから", "わけで", "ことなので", "はずで"] },
+      { q: "昔はよくここで遊んだ ___。", ans: "ものだ", options: ["ものだ", "ことだ", "はずだ", "わけだ"] }
     ]
   },
   {
     chapter: 53,
     level: "N3",
-    title: "のに (although / despite)",
-    desc: "Unexpected result",
+    title: "Advanced Conditionals 1",
+    desc: "Usage Nuances & Sae",
     patterns: [
-      { id: "53.1", label: "～のに", meaning: "Even though / Despite", explanation: "Expresses a result that contradicts the expected outcome.", examples: [{ jp: "雨なのに、出かけます。", romaji: "Ame nanoni, dekakemasu.", en: "Even though it’s raining, I will go out." }] }
+      { id: "53.1", label: "～ば / ～たら / ～と / ～なら", meaning: "Advanced Conditionals", explanation: "Refined usage of the four 'if' forms. Ba (general), Tara (sequential), To (natural result), Nara (contextual).", examples: [{ jp: "安ければ買います。", romaji: "Yasukereba kaimasu.", en: "If it's cheap, I'll buy it (logic)." }, { jp: "嫌ならやめてもいいですよ。", romaji: "Iya nara yamete mo ii desu yo.", en: "If you hate it, you can quit (context)." }] },
+      { id: "53.2", label: "～さえ～ば", meaning: "If only...", explanation: "Emphasizes that if at least one condition is met, the rest will follow.", examples: [{ jp: "薬を飲みさえすれば、よくなります。", romaji: "Kusuri o nomi sae sureba, yoku narimasu.", en: "If you just take medicine, you will get better." }] }
     ],
     quiz: [
-      { q: "薬を飲んだ ___、よくなりません。", ans: "のに", options: ["のに", "ので", "から", "ので"] },
-      { q: "勉強した ___、不合格でした。", ans: "のに", options: ["のに", "ので", "から", "けど"] },
-      { q: "日曜日 ___、働いています。", ans: "なのに", options: ["なのに", "ので", "から", "けど"] },
-      { q: "約束した ___、彼は 来ませんでした。", ans: "のに", options: ["のに", "ので", "から", "けど"] },
-      { q: "安い ___、美味しいです。", ans: "のに", options: ["のに", "ので", "から", "けど"] },
-      { q: "春 ___、寒いです。", ans: "なのに", options: ["なのに", "ので", "から", "けど"] },
-      { q: "近い ___、歩きません。", ans: "のに", options: ["のに", "ので", "から", "けど"] },
-      { q: "若い ___、元気がないです。", ans: "のに", options: ["のに", "ので", "から", "けど"] },
-      { q: "注意した ___、また 間違えました。", ans: "のに", options: ["のに", "ので", "から", "けど"] },
-      { q: "電話した ___、誰も 出ませんでした。", ans: "のに", options: ["のに", "ので", "から", "けど"] }
+      { q: "お金 ___ あれば、買えます。", ans: "さえ", options: ["さえ", "こそ", "ばかり", "だけ"] },
+      { q: "春に ___ 桜が咲きます。", ans: "なると", options: ["なると", "なれば", "なったら", "なら"] },
+      { q: "時間が ___ 会いましょう。", ans: "あったら", options: ["あったら", "あれば", "あると", "ある"] },
+      { q: "ひらがな ___ 書ければいいです。", ans: "さえ", options: ["さえ", "こそ", "ばかり", "だけ"] },
+      { q: "雨 ___ 降らなければ行きます。", ans: "さえ", options: ["さえ", "まで", "から", "ので"] },
+      { q: "嫌 ___ やめてもいいですよ。", ans: "なら", options: ["なら", "だったら", "であれば", "だと"] },
+      { q: "水 ___ 飲めれば大丈夫です。", ans: "さえ", options: ["さえ", "だけ", "しか", "も"] },
+      { q: "安く ___ 買います。", ans: "なれば", options: ["なれば", "なったら", "ならな", "なると"] },
+      { q: "君 ___ いれば、何もいらない。", ans: "さえ", options: ["さえ", "しか", "だけ", "も"] },
+      { q: "説明書を ___ わかります。", ans: "読めば", options: ["読めば", "読んだら", "読むと", "読み"] }
     ]
   },
   {
     chapter: 54,
     level: "N3",
-    title: "ばかり (just did / only)",
-    desc: "Recent action or repetition",
+    title: "Advanced Conditionals 2",
+    desc: "Limits & Sequence",
     patterns: [
-      { id: "54.1", label: "～ばかり", meaning: "Just finished / Only", explanation: "Indicates that an action has just been completed or that something is the only thing done.", examples: [{ jp: "食べたばかりです。", romaji: "Tabeta bakari desu.", en: "I just ate." }] }
+      { id: "54.1", label: "～ない限り", meaning: "Unless / As long as not", explanation: "Something will continue unless a certain condition is met.", examples: [{ jp: "頑張らない限り、合格しません。", romaji: "Ganbaranai kagiri, goukaku shimasen.", en: "Unless you work hard, you won't pass." }] },
+      { id: "54.2", label: "～以上（は）", meaning: "Now that / Since", explanation: "Since a situation has occurred, there is a natural consequence or obligation.", examples: [{ jp: "約束した以上、守ります。", romaji: "Yakusoku shita ijou, mamorimasu.", en: "Now that I've promised, I'll keep it." }] },
+      { id: "54.3", label: "～最中に / ～途中で", meaning: "In the middle of", explanation: "Doing something exactly when another action is happening.", examples: [{ jp: "料理の最中に、電話がかかってきた。", romaji: "Ryouri no saichuu ni, denwa ga kakatte kita.", en: "In the middle of cooking, a phone call came." }] }
     ],
     quiz: [
-      { q: "さっき 着いた ___ です。", ans: "ばかり", options: ["ばかり", "ところ", "まえに", "うちに"] },
-      { q: "日本に来た ___ です。", ans: "ばかり", options: ["ばかり", "ところ", "まえに", "から"] },
-      { q: "テレビ ___ 見ています。", ans: "ばかり", options: ["ばかり", "だけ", "しか", "も"] },
-      { q: "ゲーム ___ してはいけません。", ans: "ばかり", options: ["ばかり", "だけ", "しか", "も"] },
-      { q: "買った ___ なのに、壊れました。", ans: "ばかり", options: ["ばかり", "ところ", "のに", "ので"] },
-      { q: "肉 ___ 食べないでください。", ans: "ばかり", options: ["ばかり", "だけ", "しか", "も"] },
-      { q: "寝た ___ なのに、もう起きました。", ans: "ばかり", options: ["ばかり", "ところ", "のに", "から"] },
-      { q: "文句 ___ 言っています。", ans: "ばかり", options: ["ばかり", "だけ", "しか", "も"] },
-      { q: "嘘 ___ ついています。", ans: "ばかり", options: ["ばかり", "だけ", "しか", "も"] },
-      { q: "泣いて ___ います。", ans: "ばかり", options: ["ばかり", "だけ", "しか", "も"] }
+      { q: "雨が降ら ___ 、野球をします。", ans: "ない限り", options: ["ない限り", "ないで", "なければ", "なくて"] },
+      { q: "一度決めた ___ 、最後までやります。", ans: "以上", options: ["以上", "からに", "からには", "うえに"] },
+      { q: "食事の ___ 、誰か来た。", ans: "最中に", options: ["最中に", "うちに", "まえに", "ばかりに"] },
+      { q: "謝ら ___ 、許しません。", ans: "ない限り", options: ["ない限り", "ないで", "なければ", "なくて"] },
+      { q: "日本に来た ___ 、日本語をマスターしたい。", ans: "以上", options: ["以上", "ものの", "反面", "わりに"] },
+      { q: "電話の ___ 、ドアベルが鳴った。", ans: "最中に", options: ["最中に", "とおりに", "うちに", "ために"] },
+      { q: "辞め ___ 、自由になれません。", ans: "ない限り", options: ["ない限り", "ないで", "なければ", "なくて"] },
+      { q: "引き受けた ___ 、責任を持ってください。", ans: "以上", options: ["以上", "からこそ", "つもりで", "おかげで"] },
+      { q: "試験の ___ 、お腹が痛くなった。", ans: "最中に", options: ["最中に", "ながら", "つつ", "おりに"] },
+      { q: "特別な事情が ___ 、休みません。", ans: "ない限り", options: ["ない限り", "ないで", "なければ", "なくて"] }
     ]
   },
   {
     chapter: 55,
     level: "N3",
-    title: "てしまう (finish / regret)",
-    desc: "Completion or regret",
+    title: "Cause & Reason 1",
+    desc: "Tame / Okage / Sei",
     patterns: [
-      { id: "55.1", label: "～てしまう", meaning: "To do completely / To regret", explanation: "Expresses completion of an action or regret that it happened.", examples: [{ jp: "宿題を 忘れてしまいました。", romaji: "Shukudai o wasurete shimaimashita.", en: "I unfortunately forgot my homework." }] }
+      { id: "55.1", label: "～ため（に）", meaning: "Because of / Due to", explanation: "A formal way to express a reason or cause.", examples: [{ jp: "大雨のため、電車が遅れています。", romaji: "Ooume no tame, densha ga okurete imasu.", en: "Due to heavy rain, the trains are delayed." }] },
+      { id: "55.2", label: "～おかげで / ～せいで", meaning: "Thanks to / Because of (negative)", explanation: "Okage de is used for positive results, while Sei de is used for negative ones.", examples: [{ jp: "先生のおかげで、合格できました。", romaji: "Sensei no okage de, goukaku dekimashita.", en: "Thanks to my teacher, I was able to pass." }, { jp: "寒さのせいで、風邪を引いた。", romaji: "Samusa no sei de, kaze o hiita.", en: "Because of the cold, I caught a cold." }] }
     ],
     quiz: [
-      { q: "パスポートを 無くして ___ ました。", ans: "しまい", options: ["しまい", "あり", "おき", "み"] },
-      { q: "全部 食べて ___ ました。", ans: "しまい", options: ["しまい", "おき", "み", "あり"] },
-      { q: "宿題を 忘れて ___ ました。", ans: "しまい", options: ["しまい", "あり", "おき", "み"] },
-      { q: "電車を 乗り違えて ___ ました。", ans: "しまい", options: ["しまい", "あり", "み", "おき"] },
-      { q: "コーヒーを こぼして ___ ました。", ans: "しまい", options: ["しまい", "あり", "おき", "み"] },
-      { q: "財布を 落として ___ ました。", ans: "しまい", options: ["しまい", "あり", "おき", "み"] },
-      { q: "雨に 降られて ___ ました。", ans: "しまい", options: ["しまい", "あり", "おき", "み"] },
-      { q: "風邪を 引いて ___ ました。", ans: "しまい", options: ["しまい", "あり", "おき", "み"] },
-      { q: "コップを 割って ___ ました。", ans: "しまい", options: ["しまい", "あり", "おき", "み"] },
-      { q: "バスが 行って ___ ました。", ans: "しまい", options: ["しまい", "あり", "おき", "み"] }
+      { q: "事故 ___ 、道が混んでいる。", ans: "のため", options: ["のため", "のおかげで", "のせいで", "のことだ"] },
+      { q: "あなた ___ 、助かりました。", ans: "のおかげで", options: ["のおかげで", "のせいで", "のために", "のことだ"] },
+      { q: "雪 ___ 、飛行機が飛ばない。", ans: "のせいで", options: ["のせいで", "のおかげで", "のために", "のことだ"] },
+      { q: "工事 ___ 、通行止めだ。", ans: "のため", options: ["のため", "おかげで", "せいで", "ばかりに"] },
+      { q: "雨が降った ___ 、涼しくなった。", ans: "おかげで", options: ["おかげで", "せいで", "ために", "ことだ"] },
+      { q: "飲みすぎた ___ 、頭が痛い。", ans: "せいで", options: ["せいで", "おかげで", "ために", "ことだ"] },
+      { q: "不注意 ___ 、怪我をした。", ans: "のため", options: ["のため", "おかげで", "せいで", "ばかりだ"] },
+      { q: "友達 ___ 、楽しい一日だった。", ans: "のおかげで", options: ["のおかげで", "のせいで", "のために", "のことで"] },
+      { q: "渋滞 ___ 、間に合わなかった。", ans: "のせいで", options: ["のせいで", "のおかげで", "のために", "のことだ"] },
+      { q: "台風 ___ 、学校が休みになった。", ans: "のため", options: ["のため", "おかげで", "せいで", "ばかりに"] }
     ]
   },
   {
     chapter: 56,
     level: "N3",
-    title: "そうだ (looks like)",
-    desc: "Visual judgment",
+    title: "Cause & Reason 2",
+    desc: "Yotte / Koso / Bakari",
     patterns: [
-      { id: "56.1", label: "～そうです (Appearance)", meaning: "Looks like / It seems", explanation: "Based on visual evidence.", examples: [{ jp: "雨が 降りそうです。", romaji: "Ame ga furisou desu.", en: "It looks like it'll rain." }] }
+      { id: "56.1", label: "～によって", meaning: "Due to / Because of (formal)", explanation: "Used to indicate a cause, means, or agent (in passive).", examples: [{ jp: "不注意によって、火事になった。", romaji: "Fuchuui ni yotte, kaji ni natta.", en: "Due to carelessness, a fire broke out." }] },
+      { id: "56.2", label: "～からこそ / ～ばかりに", meaning: "Precisely because / Just because (regret)", explanation: "Karaso emphasizes the reason. Bakari ni highlights a single cause leading to a bad result.", examples: [{ jp: "好きだからこそ、厳しくするのです。", romaji: "Suki dakara koso, kibishiku suru no desu.", en: "It's precisely because I like you that I'm strict." }, { jp: "お金がないばかりに、旅行に行けない。", romaji: "Okane ga nai bakari ni, ryokou ni ikenai.", en: "Just because I have no money, I can't go on a trip." }] }
     ],
     quiz: [
-      { q: "この ケーキは 美味し ___ ですね。", ans: "そう", options: ["そう", "みたい", "らしい", "よう"] },
-      { q: "荷物が 落ち ___ ですよ。", ans: "そう", options: ["そう", "みたい", "らしい", "よう"] },
-      { q: "楽し ___ ですね。", ans: "そう", options: ["そう", "みたい", "らしい", "よう"] },
-      { q: "雨が 降り ___ です。", ans: "そう", options: ["そう", "みたい", "らしい", "よう"] },
-      { q: "忙し ___ ですね。", ans: "そう", options: ["そう", "みたい", "らしい", "よう"] },
-      { q: "暇 ___ ですね。", ans: "そう", options: ["そう", "みたい", "らしい", "よう"] },
-      { q: "寒く ___ ですね。", ans: "なさそう", options: ["なさそう", "なさみたい", "なさそうに", "なくそう"] },
-      { q: "よさ ___ ですね。", ans: "そう", options: ["そう", "すぎ", "みたい", "らしい"] },
-      { q: "この お菓子、甘 ___ ですね。", ans: "そう", options: ["そう", "みたい", "らしい", "よう"] },
-      { q: "ボタンが 取れ ___ ですよ。", ans: "そう", options: ["そう", "みたい", "らしい", "よう"] }
+      { q: "地震 ___ 、多くの建物が壊れた。", ans: "によって", options: ["によって", "として", "にとって", "についても"] },
+      { q: "あなたのことを思っている ___ 、言うんです。", ans: "からこそ", options: ["からこそ", "からには", "ばかりに", "おかげで"] },
+      { q: "ちょっとしたミスをした ___ 、大変なことに成った。", ans: "ばかりに", options: ["ばかりに", "からこそ", "おかげで", "せいで"] },
+      { q: "努力 ___ 、成功を掴んだ。", ans: "によって", options: ["によって", "として", "にとって", "について"] },
+      { q: "忙しい ___ 、健康に気をつけなければならない。", ans: "からこそ", options: ["からこそ", "ばかりに", "おかげで", "せいで"] },
+      { q: "嘘をついた ___ 、信用を失った。", ans: "ばかりに", options: ["ばかりに", "からこそ", "おかげで", "せいで"] },
+      { q: "不祥事 ___ 、社長が辞任した。", ans: "によって", options: ["によって", "として", "にとって", "についても"] },
+      { q: "近い ___ 、いつでも会える。", ans: "からこそ", options: ["からこそ", "ばかりに", "からには", "わりに"] },
+      { q: "鍵を忘れた ___ 、中に入れなかった。", ans: "ばかりに", options: ["ばかりに", "からこそ", "おかげで", "せいで"] },
+      { q: "科学の進歩 ___ 、生活が便利になった。", ans: "によって", options: ["によって", "として", "にとって", "について"] }
     ]
   },
   {
     chapter: 57,
     level: "N3",
-    title: "らしい (hearsay / typical)",
-    desc: "Information from others",
+    title: "Contrast & Opposition",
+    desc: "Noni / Ippou / Hanmen",
     patterns: [
-      { id: "57.1", label: "～らしい", meaning: "It seems / Typical of", explanation: "Based on information from others or characteristic behavior.", examples: [{ jp: "田中さんは 来ないらしいです。", romaji: "Tanaka-san wa konai rashii desu.", en: "I heard Tanaka won’t come." }] }
+      { id: "57.1", label: "～のに", meaning: "Despite / Even though", explanation: "Expresses surprise or dissatisfaction at an unexpected result.", examples: [{ jp: "日曜日なのに、仕事です。", romaji: "Nichiyoubi na no ni, shigoto desu.", en: "Even though it's Sunday, I'm working." }] },
+      { id: "57.2", label: "～一方で / ～反面", meaning: "On the other hand", explanation: "Ippou de is used for two parallel aspects. Hanmen is specifically for two opposite sides of the same thing.", examples: [{ jp: "勉強する一方で、遊びも大切だ。", romaji: "Benkyou suru ippou de, asobi mo taisetsu da.", en: "While studying is important, playing is also important." }, { jp: "都会は便利な反面、ストレスも多い。", romaji: "Tokai wa benri na hanmen, sutoresu mo ooi.", en: "Cities are convenient, but on the other hand, they are stressful." }] }
     ],
     quiz: [
-      { q: "明日は 雨 ___ です。", ans: "らしい", options: ["らしい", "みたい", "そう", "だ"] },
-      { q: "あの人は 日本人 ___ です。", ans: "らしい", options: ["らしい", "みたい", "そう", "だ"] },
-      { q: "うわさでは 彼は 結婚する ___ です。", ans: "らしい", options: ["らしい", "みたい", "そう", "だ"] },
-      { q: "今日は 春 ___ 暖かいですね。", ans: "らしい", options: ["らしい", "みたい", "そう", "だ"] },
-      { q: "学生 ___ 学生です。", ans: "らしい", options: ["らしい", "みたい", "そう", "だ"] },
-      { q: "あの映画は 面白い ___ ですよ。", ans: "らしい", options: ["らしい", "みたい", "そう", "だ"] },
-      { q: "部長は 忙しい ___ です。", ans: "らしい", options: ["らしい", "みたい", "そう", "だ"] },
-      { q: "京都は 寒い ___ ですね。", ans: "らしい", options: ["らしい", "みたい", "そう", "だ"] },
-      { q: "この店、美味しい ___ ですよ。", ans: "らしい", options: ["らしい", "みたい", "そう", "だ"] },
-      { q: "休みの ___ 休みがないです。", ans: "らしい", options: ["らしい", "みたい", "そう", "だ"] }
+      { q: "雨が降っている ___ 、傘をささない。", ans: "のに", options: ["のに", "ので", "から", "けど"] },
+      { q: "彼は優しい ___ 、厳しいところもある。", ans: "反面", options: ["反面", "に限らず", "ばかりか", "にしたら"] },
+      { q: "人口が増える ___ 、食料が不足している。", ans: "一方で", options: ["一方で", "反面", "に比べ", "わりに"] },
+      { q: "薬を飲んだ ___ 、熱が下がらない。", ans: "のに", options: ["のに", "から", "ので", "なら"] },
+      { q: "一人暮らしは自由な ___ 、寂しい。", ans: "反面", options: ["反面", "によって", "として", "にとって"] },
+      { q: "仕事が忙しい ___ 、子供との時間も作っている。", ans: "一方で", options: ["一方で", "反面", "について", "にとって"] },
+      { q: "春 ___ 、寒いです。", ans: "なのに", options: ["なのに", "ので", "から", "けど"] },
+      { q: "ネットは便利な ___ 、トラブルも起きやすい。", ans: "反面", options: ["反面", "ものなら", "に限り", "どころか"] },
+      { q: "物価が上がる ___ 、給料は上がらない。", ans: "一方で", options: ["一方で", "反面", "に沿って", "を除いて"] },
+      { q: "好きな ___ 、会いたくない。", ans: "のに", options: ["のに", "から", "ので", "なら"] }
     ]
   },
   {
     chapter: 58,
     level: "N3",
-    title: "そうだ (hearsay)",
-    desc: "Reported information",
+    title: "Limitation & Addition",
+    desc: "Kawari / Ni Kuwaete",
     patterns: [
-      { id: "58.1", label: "～そうです (Hearsay)", meaning: "I heard that...", explanation: "Relaying information learned from another source.", examples: [{ jp: "ニュースによると、台風が 来るそうです。", romaji: "Nyuusu ni yoru to, taifu ga kuru sou desu.", en: "According to the news, a typhoon is coming." }] }
+      { id: "58.1", label: "～かわりに / ～にかわって", meaning: "Instead of / In place of", explanation: "Kawari relates to actions/things. Ni kawatte relates to people/representatives.", examples: [{ jp: "コーヒーのかわりに、お茶を飲みます。", romaji: "Koohii no kawari ni, ocha o nomimasu.", en: "Instead of coffee, I drink tea." }, { jp: "父にかわって、私があいさつします。", romaji: "Chichi ni kawatte, watashi ga aisatsu shimasu.", en: "In place of my father, I will give the greeting." }] },
+      { id: "58.2", label: "～に加えて / ～はもちろん", explanation: "Ni kuwaete means 'in addition to'. Wa mochiron means 'not to mention' or 'as well as'.", meaning: "In addition / As well as", examples: [{ jp: "雨に加えて、風も強くなってきた。", romaji: "Ame ni kuwaete, kaze mo tsuyoku natte kita.", en: "In addition to rain, the wind has become stronger." }, { jp: "彼女は日本語はもちろん、英語もできる。", romaji: "Kanojo wa nihongo wa mochiron, eigo mo dekiru.", en: "She can speak English, not to mention Japanese." }] }
     ],
     quiz: [
-      { q: "天気予報によると 雨が ___ そうです。", ans: "降る", options: ["降る", "降り", "降って", "降った"] },
-      { q: "うわさでは あの人たちは 離婚 ___ そうです。", ans: "した", options: ["した", "する", "して", "し"] },
-      { q: "彼は お金持ち ___ そうです。", ans: "だ", options: ["だ", "の", "な", "に"] },
-      { q: "この リンゴ、甘い ___ です。", ans: "そう", options: ["そう", "よう", "みたい", "らしい"] },
-      { q: "先生は まだ 若い ___ です。", ans: "そう", options: ["そう", "よう", "みたい", "らしい"] },
-      { q: "テレビで 言っていましたが、明日は 休み ___ そうです。", ans: "だ", options: ["だ", "に", "の", "な"] },
-      { q: "合格した ___ ですね。おめでとう。", ans: "そう", options: ["そう", "よう", "みたい", "らしい"] },
-      { q: "駅は 遠くない ___ です。", ans: "そう", options: ["そう", "よう", "みたい", "らしい"] },
-      { q: "あのアニメ、面白い ___ ですよ。", ans: "そう", options: ["そう", "よう", "みたい", "らしい"] },
-      { q: "メールによると 辞める ___ そうだ。", ans: "らしい", options: ["らしい", "つもりだ", "そうだ", "みたいだ"] }
+      { q: "旅行に行く ___ 、家で休みます。", ans: "かわりに", options: ["かわりに", "にかわって", "に加えて", "はもとより"] },
+      { q: "田中さん ___ 、鈴木さんが出席します。", ans: "にかわって", options: ["にかわって", "かわりに", "に加えて", "はもちろん"] },
+      { q: "英語 ___ 、フランス語も勉強している。", ans: "に加えて", options: ["に加えて", "かわりに", "にかわって", "はもとより"] },
+      { q: "勉強 ___ 、スポーツも得意だ。", ans: "はもちろん", options: ["はもちろん", "にかわって", "によって", "について"] },
+      { q: "タクシーに載る ___ 、歩きましょう。", ans: "かわりに", options: ["かわりに", "に反して", "に際して", "において"] },
+      { q: "社長 ___ 、秘書が返事をします。", ans: "にかわって", options: ["にかわって", "に対して", "とともに", "に沿って"] },
+      { q: "寒さ ___ 、雪まで降ってきた。", ans: "に加えて", options: ["に加えて", "にとって", "について", "として"] },
+      { q: "ひらがな ___ 、漢字も書けます。", ans: "はもちろん", options: ["はもちろん", "代わりに", "に従って", "につれて"] },
+      { q: "肉を食べる ___ 、魚を食べなさい。", ans: "かわりに", options: ["かわりに", "に加えて", "はもとより", "に限って"] },
+      { q: "基本 ___ 、応用も大切だ。", ans: "はもちろん", options: ["はもちろん", "にかわって", "によって", "に際して"] }
     ]
   },
   {
     chapter: 59,
     level: "N3",
-    title: "ようだ／みたいだ (seems like)",
-    desc: "Guess / appearance",
+    title: "Degree & Variation",
+    desc: "Hodo / Kurai / Yotte",
     patterns: [
-      { id: "59.1", label: "～ようだ / みたいだ", meaning: "It seems / It looks like", explanation: "Expressing a guess based on sensory evidence.", examples: [{ jp: "雨が 降るようです。", romaji: "Ame ga furu you desu.", en: "It seems it will rain." }] }
+      { id: "59.1", label: "～ほど / ～くらい", meaning: "Degree / Extent", explanation: "Describes the degree or extent of something.", examples: [{ jp: "死ぬほど疲れた。", romaji: "Shinu hodo tsukareta.", en: "I'm tired enough to die." }, { jp: "飽きるくらい食べた。", romaji: "Akiru kurai tabeta.", en: "I ate so much I got tired of it." }] },
+      { id: "59.2", label: "～ほど～ない / ～によって", meaning: "Not as much as / Depending on", explanation: "Hodo... nai is for comparison. Yotte shows variation based on something.", examples: [{ jp: "今年は去年ほど暑くない。", romaji: "Kotoshi wa kyonen hodo atsukunai.", en: "This year isn't as hot as last year." }, { jp: "人によって考え方が違う。", romaji: "Hito ni yotte kangaekata ga chigau.", en: "Thinking differs depending on the person." }] }
     ],
     quiz: [
-      { q: "隣の部屋に 誰か ___ ようです。", ans: "いる", options: ["いる", "ある", "いた", "あって"] },
-      { q: "気分が 悪い ___ ですね。", ans: "よう", options: ["よう", "そう", "らしい", "みたい"] },
-      { q: "合格した ___ ですね。", ans: "よう", options: ["よう", "そう", "らしい", "みたい"] },
-      { q: "誰も いない ___ です。", ans: "よう", options: ["よう", "そう", "らしい", "みて"] },
-      { q: "この店は 美味しい ___ ですよ。", ans: "みたい", options: ["みたい", "そう", "らしい", "よう"] },
-      { q: "泥棒 ___ 格好です。", ans: "みたい", options: ["みたい", "よう", "そう", "らしい"] },
-      { q: "外、暑い ___ ですね。", ans: "よう", options: ["よう", "そう", "らしい", "みたい"] },
-      { q: "故障した ___ です。動きません。", ans: "よう", options: ["よう", "そう", "らしい", "みたい"] },
-      { q: "彼女は 忙しい ___ ですよ。", ans: "よう", options: ["よう", "そう", "らしい", "みたい"] },
-      { q: "誰かが 来た ___ です。", ans: "よう", options: ["よう", "そう", "らしい", "みたい"] }
+      { q: "泣きたい ___ 嬉しい。", ans: "ほど", options: ["ほど", "ばかり", "から", "まで"] },
+      { q: "日本は私の国 ___ 暑くない。", ans: "ほど", options: ["ほど", "くらい", "より", "から"] },
+      { q: "国 ___ 文化が違う。", ans: "によって", options: ["によって", "として", "にとって", "について"] },
+      { q: "山 ___ 高いビルだ。", ans: "ほど", options: ["ほど", "くらい", "どころか", "ばかりだ"] },
+      { q: "今日は昨日 ___ 寒くない。", ans: "ほど", options: ["ほど", "より", "から", "まで"] },
+      { q: "場合 ___ 中止します。", ans: "によって", options: ["によって", "として", "にとって", "について"] },
+      { q: "嫌になる ___ 待たされた。", ans: "くらい", options: ["くらい", "だけに", "わりに", "に際して"] },
+      { q: "私 ___ 背が高くない。", ans: "ほど", options: ["ほど", "より", "から", "まで"] },
+      { q: "季節 ___ 景色が変わる。", ans: "によって", options: ["によって", "として", "にとって", "についても"] },
+      { q: "死ぬ ___ びっくりした。", ans: "ほど", options: ["ほど", "ばかり", "から", "に"] }
     ]
   },
   {
     chapter: 60,
     level: "N3",
-    title: "ことにする (decide)",
-    desc: "Speaker’s decision",
+    title: "Comparison & Unexpectedness",
+    desc: "Ni Shite wa / Ni Kurabete / Wari ni",
     patterns: [
-      { id: "60.1", label: "～ことにする", meaning: "Decide to do", explanation: "Indicates a decision made by the speaker.", examples: [{ jp: "毎日 走ることにしました。", romaji: "Mainichi hashiru koto ni shimashita.", en: "I decided to run every day." }] }
+      { id: "60.1", label: "～にしては / ～わりに（は）", meaning: "For a... / Considering...", explanation: "Used when the result is unexpected given the circumstances.", examples: [{ jp: "初めてにしては上手ですね。", romaji: "Hajimete ni shite wa jouzu desu ne.", en: "You're good at it for a first-timer." }, { jp: "この店は値段のわりに美味しい。", romaji: "Kono mise wa nedan no wari ni oishii.", en: "This shop is delicious considering the price." }] },
+      { id: "60.2", label: "～に比べて", meaning: "Compared to", explanation: "A standard way to compare two or more things.", examples: [{ jp: "兄に比べて、弟は内気だ。", romaji: "Ani ni kurabete, otouto wa uchiki da.", en: "The younger brother is shy compared to his older brother." }] }
     ],
     quiz: [
-      { q: "今日から 甘いものを 食べない ___ しました。", ans: "ことに", options: ["ことに", "ように", "ために", "おりに"] },
-      { q: "結婚しても 仕事を 続ける ___ しました。", ans: "ことに", options: ["ことに", "ように", "ために", "おりに"] },
-      { q: "明日から 早く 起きる ___ します。", ans: "ことに", options: ["ことに", "ように", "ために", "おりに"] },
-      { q: "旅行に 行く ___ しました。", ans: "ことに", options: ["ことに", "ように", "ために", "おりに"] },
-      { q: "タバコを やめる ___ しました。", ans: "ことに", options: ["ことに", "ように", "ために", "おりに"] },
-      { q: "車を 買わない ___ しました。", ans: "ことに", options: ["ことに", "ように", "ために", "おりに"] },
-      { q: "自分を 信じる ___ します。", ans: "ことに", options: ["ことに", "ように", "ために", "おりに"] },
-      { q: "頑張る ___ します。", ans: "ことに", options: ["ことに", "ように", "ために", "おりに"] },
-      { q: "一人で 頑張る ___ しました。", ans: "ことに", options: ["ことに", "ように", "ために", "おりに"] },
-      { q: "お酒を 飲まない ___ しました。", ans: "ことに", options: ["ことに", "ように", "ために", "おりに"] }
+      { q: "子供 ___ よく知っている。", ans: "にしては", options: ["にしては", "わりに", "に比べて", "に際して"] },
+      { q: "値段 ___ 質がいい。", ans: "のわりに", options: ["のわりに", "にしては", "に比べて", "によって"] },
+      { q: "東京は大阪 ___ 物価が高い。", ans: "に比べて", options: ["に比べて", "にしては", "わりに", "によって"] },
+      { q: "4月 ___ 寒いですね。", ans: "にしては", options: ["にしては", "わりに", "に際して", "において"] },
+      { q: "彼は年 ___ 若く見える。", ans: "のわりに", options: ["のわりに", "にしては", "に比べて", "によって"] },
+      { q: "去年 ___ 雪が多い。", ans: "に比べて", options: ["に比べて", "にしては", "わりに", "によって"] },
+      { q: "外国人 ___ 日本語が上手だ。", ans: "にしては", options: ["にしては", "わりに", "に際して", "において"] },
+      { q: "走った ___ お腹が空かない。", ans: "わりに", options: ["わりに", "にしては", "に比べて", "によって"] },
+      { q: "昨日 ___ 今日は暑い。", ans: "に比べて", options: ["に比べて", "にしては", "わりに", "によって"] },
+      { q: "病気 ___ 元気そうですね。", ans: "にしては", options: ["にしては", "わりに", "に際して", "において"] }
     ]
   },
   {
     chapter: 61,
     level: "N3",
-    title: "ことになる (be decided)",
-    desc: "Decision by situation or rule",
+    title: "Purpose & Effort",
+    desc: "Tame / You ni / You ni suru",
     patterns: [
-      { id: "61.1", label: "～ことになる", meaning: "It has been decided that...", explanation: "Indicates a decision made by an outside force, situation, or rule.", examples: [{ jp: "来月 日本へ 行くことになりました。", romaji: "Raigetsu Nihon e iku koto ni narimashita.", en: "It has been decided that I’ll go to Japan next month." }] }
+      { id: "61.1", label: "～ために / ～ように", meaning: "In order to / So that", explanation: "Tame ni is for conscious purpose. You ni is for goals involving potential/negative verbs.", examples: [{ jp: "家を買うために、貯金しています。", romaji: "Ie o kau tame ni, chokin shite imasu.", en: "I'm saving money in order to buy a house." }, { jp: "忘れないように、メモします。", romaji: "Wasurenai you ni, memo shimasu.", en: "I'll take a memo so that I don't forget." }] },
+      { id: "61.2", label: "～ようにする / ～ようになる", meaning: "Make an effort to / Reach a point where", explanation: "Effort or change in lifestyle/ability.", examples: [{ jp: "毎日、水を2リットル飲むようにしている。", romaji: "Mainichi, mizu o niritto-ru nomu you ni shite iru.", en: "I make an effort to drink 2 liters of water every day." }] }
     ],
     quiz: [
-      { q: "来月から 給料が 上がる ___ なりました。", ans: "ことに", options: ["ことに", "ように", "ために", "おりに"] },
-      { q: "明日、部長に 会う ___ なっています。", ans: "ことに", options: ["ことに", "ように", "うちに", "まえに"] },
-      { q: "この部屋では タバコを 吸わない ___ なっています。", ans: "ことに", options: ["ことに", "ように", "ために", "おりに"] },
-      { q: "結婚する ___ なりました。", ans: "ことに", options: ["ことに", "ように", "ために", "おりに"] },
-      { q: "転勤する ___ なりました。", ans: "ことに", options: ["ことに", "ように", "ために", "おりに"] },
-      { q: "法律で 決まっている ___ なっています。", ans: "ことに", options: ["ことに", "ように", "うちに", "おりに"] },
-      { q: "来週から テストが 始まる ___ なりました。", ans: "ことに", options: ["ことに", "ように", "ために", "とおりに"] },
-      { q: "明日 休み ___ なりました。", ans: "ことに", options: ["ことに", "ように", "ために", "ので"] },
-      { q: "ここで 靴を 脱ぐ ___ なっています。", ans: "ことに", options: ["ことに", "ように", "ために", "うちに"] },
-      { q: "中止に する ___ なりました。", ans: "ことに", options: ["ことに", "ように", "ために", "おりに"] }
+      { q: "健康の ___ 野菜を食べる。", ans: "ために", options: ["ために", "ように", "のに", "ので"] },
+      { q: "遅れない ___ 急ぎましょう。", ans: "ように", options: ["ように", "ために", "おりに", "ときに"] },
+      { q: "甘いものを食べない ___ している。", ans: "ように", options: ["ように", "ために", "ことに", "とおりに"] },
+      { q: "留学する ___ お金を貯める。", ans: "ために", options: ["ために", "ように", "ころに", "うちに"] },
+      { q: "聞こえる ___ 大きな声で話す。", ans: "ように", options: ["ように", "ために", "とおりに", "ことに"] },
+      { q: "野菜を食べる ___ なった。", ans: "ように", options: ["ように", "ために", "ことに", "おりに"] },
+      { q: "試験の ___ 勉強する。", ans: "ために", options: ["ために", "ように", "ので", "から"] },
+      { q: "間違えない ___ 気をつける。", ans: "ように", options: ["ように", "ために", "こと", "のと"] },
+      { q: "タバコをやめる ___ した。", ans: "ように", options: ["ように", "ために", "ことに", "おりに"] },
+      { q: "平和の ___ 祈る。", ans: "ために", options: ["ために", "ように", "おりに", "うちに"] }
     ]
   },
   {
     chapter: 62,
     level: "N3",
-    title: "ところ (timing)",
-    desc: "Just before / during / after",
+    title: "Intention & Attempt",
+    desc: "Tsumori / You to suru",
     patterns: [
-      { id: "62.1", label: "～ところ", meaning: "Point in time / Just about to", explanation: "Indicates the specific stage of an action (beginning, middle, or end).", examples: [{ jp: "今 出かけるところです。", romaji: "Ima dekakeru tokoro desu.", en: "I’m just about to go out." }] }
+      { id: "62.1", label: "～つもりだ / ～つもりだった", meaning: "Intend to / Had intended to", explanation: "Expresses a firm intention or a past intention that didn't happen.", examples: [{ jp: "来年、日本へ行くつもりです。", romaji: "Rainen, Nihon e iku tsumori desu.", en: "I intend to go to Japan next year." }, { jp: "行くつもりだったが、雨で行けなかった。", romaji: "Iku tsumori datta ga, ame de ikenakatta.", en: "I had intended to go, but couldn't because of the rain." }] },
+      { id: "62.2", label: "～ようとする / ～ようと思っている", meaning: "Try to / About to / Thinking of doing", explanation: "Indicates an attempt or a vague intention.", examples: [{ jp: "寝ようとした時、電話が鳴った。", romaji: "Neyou to shita toki, denwa ga natta.", en: "The phone rang just as I was trying to sleep." }] }
     ],
     quiz: [
-      { q: "今、ご飯を ___ ところです。", ans: "食べている", options: ["食べている", "食べた", "食べる", "食べて"] },
-      { q: "ちょうど 終わった ___ です。", ans: "ところ", options: ["ところ", "ばかり", "まえに", "うちに"] },
-      { q: "今から 会議が ___ ところです。", ans: "始まる", options: ["始まる", "始まっている", "始まった", "始まり"] },
-      { q: "さっき 着いた ___ です。", ans: "ところ", options: ["ところ", "ばかり", "うちに", "まえに"] },
-      { q: "今、宿題を ___ ところです。", ans: "している", options: ["している", "した", "する", "し"] },
-      { q: "これから 外出する ___ です。", ans: "ところ", options: ["ところ", "ばかり", "まえに", "うちに"] },
-      { q: "今、バスを ___ ところです。", ans: "待っている", options: ["待っている", "待つ", "待った", "待ち"] },
-      { q: "お風呂に 入る ___ です。", ans: "ところ", options: ["ところ", "ばかり", "まえに", "までに"] },
-      { q: "ちょうど 掃除が 終わった ___ です。", ans: "ところ", options: ["ところ", "ばかり", "うちに", "まえに"] },
-      { q: "これから 勉強 ___ ところです。", ans: "する", options: ["する", "している", "した", "し"] }
+      { q: "明日、映画を見に ___ です。", ans: "行くつもり", options: ["行くつもり", "行こうとする", "行くようになる", "行くことにする"] },
+      { q: "家を出 ___ とした時、雨が降ってきた。", ans: "よう", options: ["よう", "まい", "そう", "たな"] },
+      { q: "留学 ___ と思っている。", ans: "しよう", options: ["しよう", "する", "した", "し"] },
+      { q: "買う ___ でしたが、やめました。", ans: "つもり", options: ["つもり", "ために", "ように", "こと"] },
+      { q: "食べ ___ とした時、虫がいた。", ans: "よう", options: ["よう", "まい", "そう", "だ"] },
+      { q: "来年、結婚する ___ だ。", ans: "つもり", options: ["つもり", "みたい", "らしい", "こと"] },
+      { q: "話そう ___ としたが、声が出なかった。", ans: "に", options: ["に", "と", "を", "が"] },
+      { q: "教える ___ だったが、忘れてしまった。", ans: "つもり", options: ["つもり", "ために", "ように", "こと"] },
+      { q: "逃げ ___ としたが、捕まった。", ans: "よう", options: ["よう", "まい", "そう", "だ"] },
+      { q: "会社を辞め ___ と思っている。", ans: "よう", options: ["よう", "る", "た", "るの"] }
     ]
   },
   {
     chapter: 63,
     level: "N3",
-    title: "ながら (while)",
-    desc: "Two actions at same time",
+    title: "Time & Sequence 1",
+    desc: "Uchi ni / Shidai / Tabi ni",
     patterns: [
-      { id: "63.1", label: "～ながら", meaning: "While doing...", explanation: "Describes two actions happening simultaneously by the same person.", examples: [{ jp: "音楽を 聞きながら 勉強します。", romaji: "Ongaku o kikinagara benkyou shimasu.", en: "I study while listening to music." }] }
+      { id: "63.1", label: "～うちに", meaning: "While / Before... / During", explanation: "Used to show a window of opportunity or a change during a state.", examples: [{ jp: "若いうちに、たくさん勉強しなさい。", romaji: "Wakai uchi ni, takusan benkyou shinasai.", en: "While you're young, study a lot." }, { jp: "アイスを食べているうちに、溶けてしまった。", romaji: "Aisu o tabete iru uchi ni, tokete shimatta.", en: "While I was eating the ice cream, it melted." }] },
+      { id: "63.2", label: "～次第 / ～たびに", meaning: "As soon as / Every time", explanation: "Shidai is for formal immediate sequence. Tabi ni emphasizes repetition.", examples: [{ jp: "準備ができ次第、出発します。", romaji: "Junbi ga deki shidai, shuppatsu shimasu.", en: "As soon as we're ready, we'll depart." }, { jp: "この曲を聴くたびに、故郷を思い出す。", romaji: "Kono kyoku o kiku tabi ni, furusato o omoidasu.", en: "Every time I listen to this song, I remember my hometown." }] }
     ],
     quiz: [
-      { q: "テレビを ___ ご飯を 食べます。", ans: "見ながら", options: ["見ながら", "見て", "見れば", "見ると"] },
-      { q: "歩き ___ 話しましょう。", ans: "ながら", options: ["ながら", "つつ", "こと", "から"] },
-      { q: "ガムを ___ 運転してはいけません。", ans: "噛みながら", options: ["噛みながら", "噛んで", "噛むと", "噛めば"] },
-      { q: "働き ___ 大学に 通っています。", ans: "ながら", options: ["しながら", "ながら", "つつ", "ので"] },
-      { q: "お茶を ___ 待ちましょう。", ans: "飲みながら", options: ["飲みながら", "飲んで", "飲むと", "飲めば"] },
-      { q: "辞書を ___ 本を 読みます。", ans: "引きながら", options: ["引きながら", "引いて", "引くと", "引けば"] },
-      { q: "考え ___ 書いてください。", ans: "ながら", options: ["ながら", "つつ", "こと", "から"] },
-      { q: "歌を ___ 料理します。", ans: "歌いながら", options: ["歌いながら", "歌って", "歌うと", "歌えば"] },
-      { q: "コーヒーを ___ おしゃべりしましょう。", ans: "飲みながら", options: ["飲みながら", "飲んで", "飲むと", "飲めば"] },
-      { q: "笑い ___ 話しました。", ans: "ながら", options: ["ながら", "つつ", "こと", "から"] }
+      { q: "忘れない ___ メモします。", ans: "うちに", options: ["うちに", "次第", "たびに", "ばかりに"] },
+      { q: "分かり ___ 連絡します。", ans: "次第", options: ["次第", "うちに", "たびに", "まえに"] },
+      { q: "会う ___ 綺麗になりますね。", ans: "たびに", options: ["たびに", "うちに", "次第", "のと"] },
+      { q: "雨が降ら ___ 帰りましょう。", ans: "ないうちに", options: ["ないうちに", "ない次第", "ないたびに", "ないまえに"] },
+      { q: "駅に着き ___ 電話してください。", ans: "次第", options: ["次第", "うちに", "まえに", "うちに"] },
+      { q: "旅行に行く ___ お土産を買います。", ans: "たびに", options: ["たびに", "うちに", "ときに", "わけで"] },
+      { q: "暗くなら ___ 帰りましょう。", ans: "ないうちに", options: ["ないうちに", "てから", "まえに", "までに"] },
+      { q: "完成 ___ お送りします。", ans: "し次第", options: ["し次第", "しはじめに", "しながら", "しつつ"] },
+      { q: "買い物に行く ___ 無駄遣いしてしまう。", ans: "たびに", options: ["たびに", "最中に", "うちに", "ながら"] },
+      { q: "温かい ___ 食べてください。", ans: "うちに", options: ["うちに", "次第", "ながら", "ときに"] }
     ]
   },
   {
     chapter: 64,
     level: "N3",
-    title: "ば / たら / と (condition)",
-    desc: "If conditions",
+    title: "Time & Sequence 2",
+    desc: "Tokoro datta / Tsuide ni",
     patterns: [
-      { id: "64.1", label: "～ば / ～たら / ～と", meaning: "If / When / Whenever", explanation: "Used to express different types of conditional relationships.", examples: [{ jp: "雨が 降ったら、行きません。", romaji: "Ame ga futtara, ikimasen.", en: "If it rains, I won’t go." }] }
+      { id: "64.1", label: "～ところだった / ～ついでに", meaning: "Was about to / While doing X, also Y", explanation: "Tokoro datta shows a near miss. Tsuide ni indicates performing a second action along with the primary one.", examples: [{ jp: "もう少しで遅刻するところだった。", romaji: "Mou sukoshi de chikoku suru tokoro datta.", en: "I was almost late." }, { jp: "散歩のついでに、手紙を出してきた。", romaji: "Sanpo no tsuide ni, tegami o dashite kita.", en: "While going for a walk, I also posted a letter." }] },
+      { id: "64.2", label: "～最中に / ～途中で", meaning: "In the middle of / On the way", explanation: "Emphasizes that something unexpected happened during an action.", examples: [{ jp: "会議の最中に、お腹が鳴った。", romaji: "Kaigi no saichuu ni, onaka ga natta.", en: "In the middle of the meeting, my stomach growled." }] }
     ],
     quiz: [
-      { q: "安ければ ___。", ans: "買います", options: ["買います", "買う", "買った", "買って"] },
-      { q: "時間が ___ 会いましょう。", ans: "あったら", options: ["あったら", "あれば", "あると", "ある"] },
-      { q: "春に ___ 桜が 咲きます。", ans: "なると", options: ["なると", "なれば", "なったら", "なり"] },
-      { q: "嫌 ___ やめてもいいですよ。", ans: "なら", options: ["なら", "だったら", "であれば", "だと"] },
-      { q: "ボタンを ___ 切符が 出ます。", ans: "押すと", options: ["押すと", "押せば", "押したら", "押し"] },
-      { q: "行け ___ 行きます。", ans: "れば", options: ["れば", "たら", "と", "なら"] },
-      { q: "暇 ___ 行きます。", ans: "だったら", options: ["だったら", "なら", "であれば", "だと"] },
-      { q: "薬を ___ よくなります。", ans: "飲めば", options: ["飲めば", "飲んだら", "飲むと", "飲む"] },
-      { q: "先生に ___ わかりますよ。", ans: "聞けば", options: ["聞けば", "聞いたら", "聞くと", "聞く"] },
-      { q: "見 ___ わかります。", ans: "れば", options: ["れば", "たら", "と", "なら"] }
+      { q: "危うく転ぶ ___ 。", ans: "ところだった", options: ["ところだった", "ついでに", "ばかりだ", "ことだ"] },
+      { q: "買い物の ___ 、友達に会った。", ans: "ついでに", options: ["ついでに", "最中に", "ときに", "うちに"] },
+      { q: "テストの ___ 、鼻血が出た。", ans: "最中に", options: ["最中に", "うちに", "ために", "ばかりに"] },
+      { q: "もう少しで忘れる ___ 。", ans: "ところだった", options: ["ところだった", "ばかりだ", "つもりだ", "ことだ"] },
+      { q: "コンビニに行く ___ 、アイスも買ってきて。", ans: "ついでに", options: ["ついでに", "最中に", "ながら", "おりに"] },
+      { q: "食事の ___ 、誰か来た。", ans: "最中に", options: ["最中に", "まえに", "うちに", "とおりに"] },
+      { q: "もう少しで騙される ___ 。", ans: "ところだった", options: ["ところだった", "つもりだった", "ばかりだ", "わけだ"] },
+      { q: "仕事の ___ 、実家に寄った。", ans: "ついでに", options: ["ついでに", "最中に", "ながら", "ときに"] },
+      { q: "電話の ___ 、ドアベルが鳴った。", ans: "最中に", options: ["最中に", "うちに", "のと", "から"] },
+      { q: "あと少しで合格する ___ 。", ans: "ところだった", options: ["ところだった", "わけだ", "はずだ", "ことだ"] }
     ]
   },
   {
     chapter: 65,
     level: "N3",
-    title: "ようになる (change over time)",
-    desc: "Ability / habit change",
+    title: "Giving & Receiving",
+    desc: "Ageru / Morau / Kureru",
     patterns: [
-      { id: "65.1", label: "～ようになる", meaning: "To become able to / To reach a state where...", explanation: "Indicates a gradual change in ability or habit.", examples: [{ jp: "日本語が 話せるようになりました。", romaji: "Nihongo ga hanaseru you ni narimashita.", en: "I became able to speak Japanese." }] }
+      { id: "65.1", label: "～てあげる / ～てもらう / ～てくれる", meaning: "Giving/Receiving actions", explanation: "Advanced usage involving varying levels of politeness and social direction.", examples: [{ jp: "母にプレゼントを買ってあげました。", romaji: "Haha ni purezento o katte agemashita.", en: "I bought a present for my mother." }, { jp: "先生に教えていただきました。", romaji: "Sensei ni oshiete itadakimashita.", en: "I received the favor of my teacher teaching me (humble)." }] },
+      { id: "65.2", label: "～てやる / ～てさしあげる / ～てくださる", meaning: "Social Hierarchy", explanation: "Specific verbs for lower, higher, and equal social status.", examples: [{ jp: "犬にエサをやってください。", romaji: "Inu ni esa o yatte kudasai.", en: "Please give food to the dog." }] }
     ],
     quiz: [
-      { q: "やっと 泳げる ___ なりました。", ans: "ように", options: ["ように", "ために", "ことに", "とおりに"] },
-      { q: "最近、眼鏡を かけない ___ なりました。", ans: "ように", options: ["ように", "ために", "ことに", "おりに"] },
-      { q: "子供が 一人で 歩ける ___ なりました。", ans: "ように", options: ["ように", "ために", "ことに", "おりに"] },
-      { q: "日本に来て 日本料理が 食べられる ___ なりました。", ans: "ように", options: ["ように", "ために", "ことに", "おりに"] },
-      { q: "早く 起きられる ___ なりました。", ans: "ように", options: ["ように", "ために", "ことに", "おりに"] },
-      { q: "自分で ニュースが 読める ___ なりました。", ans: "ように", options: ["ように", "ために", "ことに", "おりに"] },
-      { q: "前より 上手に 歌える ___ なりました。", ans: "ように", options: ["ように", "ために", "ことに", "おりに"] },
-      { q: "一人で 行ける ___ なりました。", ans: "ように", options: ["ように", "ために", "ことに", "おりに"] },
-      { q: "漢字が 1000個 覚えられる ___ なりました。", ans: "ように", options: ["ように", "ために", "ことに", "おりに"] },
-      { q: "お酒を 飲まない ___ なりました。", ans: "ように", options: ["ように", "ために", "ことに", "おりに"] }
+      { q: "友達が宿題を手伝って ___ ました。", ans: "くれ", options: ["くれ", "あげ", "もらい", "やり"] },
+      { q: "私は先生に本を貸して ___ ました。", ans: "いただき", options: ["いただき", "あげ", "やり", "さしあげ"] },
+      { q: "弟にお菓子を買って ___ ました。", ans: "あげ", options: ["あげ", "いただき", "くださり", "さしあげ"] },
+      { q: "誰かが財布を拾って ___ ました。", ans: "くれ", options: ["くれ", "もらい", "あげ", "さしあげ"] },
+      { q: "木に水を ___ ください。", ans: "やって", options: ["やって", "くださって", "いただいて", "差し上げて"] },
+      { q: "知らない人が道を教えて ___ ました。", ans: "くれ", options: ["くれ", "あげ", "もらい", "やり"] },
+      { q: "私は部長にネクタイを貸して ___ ました。", ans: "さしあげ", options: ["さしあげ", "やり", "もらい", "くれ"] },
+      { q: "田中さんに傘を貸して ___ ました。", ans: "もらい", options: ["もらい", "くれ", "やり", "くださり"] },
+      { q: "花に水を ___ ました。", ans: "やり", options: ["やり", "あげ", "さしあげ", "くださり"] },
+      { q: "先生が私の名前を呼んで ___ ました。", ans: "ください", options: ["ください", "さしあげ", "いただき", "やり"] }
     ]
   },
   {
     chapter: 66,
     level: "N3",
-    title: "ようにする (make effort)",
-    desc: "Conscious effort",
+    title: "Passive & Causative",
+    desc: "Rareru / Saseru / Saserareru",
     patterns: [
-      { id: "66.1", label: "～ようにする", meaning: "To make an effort to / To try to", explanation: "Indicates a conscious effort to establish a habit or perform an action.", examples: [{ jp: "毎日 勉強するようにしています。", romaji: "Mainichi benkyou suru you ni shite imasu.", en: "I try to study every day." }] }
+      { id: "66.1", label: "受身 (Passive) / 使役 (Causative)", meaning: "Passive / Causative", explanation: "Passive (rareru) shows receiving an action. Causative (saseru) shows making/letting someone do something.", examples: [{ jp: "泥棒に財布を盗まれた。", romaji: "Dorobou ni saifu o nusumareta.", en: "My wallet was stolen by a thief." }, { jp: "母に勉強させられた。", romaji: "Haha ni benkyou saserareta.", en: "I was made to study by my mother (Causative-Passive)." }] }
     ],
     quiz: [
-      { q: "野菜を 食べる ___ しています。", ans: "ように", options: ["ように", "ために", "ことに", "とおりに"] },
-      { q: "寝る前に スマホを 見ない ___ しています。", ans: "ように", options: ["ように", "ために", "ことに", "おりに"] },
-      { q: "毎日 30分 歩く ___ しましょう。", ans: "ように", options: ["ように", "ために", "ことに", "おりに"] },
-      { q: "甘いものを 食べすぎない ___ しています。", ans: "ように", options: ["ように", "ために", "ことに", "おりに"] },
-      { q: "遅れない ___ してください。", ans: "ように", options: ["ように", "ために", "ことに", "おりに"] },
-      { q: "忘れ物を しない ___ しています。", ans: "ように", options: ["ように", "ために", "ことに", "おりに"] },
-      { q: "なるべく 自分で 作る ___ しています。", ans: "ように", options: ["ように", "ために", "ことに", "おりに"] },
-      { q: "安すぎるものは 買わない ___ しています。", ans: "ように", options: ["ように", "ために", "ことに", "おりに"] },
-      { q: "エレベーターを 使わない ___ しています。", ans: "ように", options: ["ように", "ために", "ことに", "おりに"] },
-      { q: "漢字を 書く ___ 練習しています。", ans: "ように", options: ["ように", "ために", "ことに", "おりに"] }
+      { q: "雨に ___ ました。", ans: "降られ", options: ["降られ", "降らせ", "降らされ", "降ら"] },
+      { q: "先生に ___ ました。", ans: "褒められ", options: ["褒められ", "褒めさせ", "褒めさせられ", "褒め"] },
+      { q: "子供に野菜を ___ ます。", ans: "食べさせ", options: ["食べさせ", "食べられ", "食べさせられ", "食べ"] },
+      { q: "友達に秘密を ___ ました。", ans: "言われ", options: ["言われ", "言わせ", "言わせられ", "言い"] },
+      { q: "母に買い物を ___ ました。", ans: "頼まれ", options: ["頼まれ", "頼ませ", "頼ませられ", "頼み"] },
+      { q: "誰かに背中を ___ ました。", ans: "押され", options: ["押され", "押させ", "押させられ", "押し"] },
+      { q: "先生は生徒を ___ ます。", ans: "走らせ", options: ["走らせ", "走られ", "走らせられ", "走り"] },
+      { q: "弟におもちゃを ___ ました。", ans: "壊され", options: ["壊され", "壊させ", "壊させられ", "壊し"] },
+      { q: "部長に酒を ___ ました。", ans: "飲まされ", options: ["飲まされ", "飲まれ", "飲ませ", "飲まされ"] },
+      { q: "隣の人に夜中まで ___ ました。", ans: "騒がれ", options: ["騒がれ", "騒がせ", "騒がせられ", "騒ぎ"] }
     ]
   },
   {
     chapter: 67,
     level: "N3",
-    title: "しか～ない (only)",
-    desc: "Limited option",
+    title: "Appearance & Guess 1",
+    desc: "Sou / You / Mitai",
     patterns: [
-      { id: "67.1", label: "～しか～ない", meaning: "Only (but usually implies not enough)", explanation: "Used with a negative verb to indicate that something is the only option or amount.", examples: [{ jp: "100円しか ありません。", romaji: "Hyakuen shika arimasen.", en: "I have only 100 yen." }] }
+      { id: "67.1", label: "～そうだ (Appearance)", meaning: "Looks like (visual)", explanation: "Based on what you see right now.", examples: [{ jp: "美味しそうなケーキですね。", romaji: "Oishisou na ke-ki desu ne.", en: "That cake looks delicious." }] },
+      { id: "67.2", label: "～ようだ / ～みたいだ", meaning: "It seems / Like", explanation: "Based on sensory evidence or comparison.", examples: [{ jp: "雨が降っているようです。", romaji: "Ame ga futte iru you desu.", en: "It seems to be raining." }] }
     ],
     quiz: [
-      { q: "ひらがな ___ 書けません。", ans: "しか", options: ["しか", "だけ", "も", "は"] },
-      { q: "日曜日 ___ 休みがありません。", ans: "しか", options: ["しか", "だけ", "も", "は"] },
-      { q: "昨日、3時間 ___ 寝ていません。", ans: "しか", options: ["しか", "だけ", "も", "は"] },
-      { q: "冷蔵庫に 水 ___ ありません。", ans: "しか", options: ["しか", "だけ", "も", "は"] },
-      { q: "一人 ___ 来ませんでした。", ans: "しか", options: ["しか", "だけ", "も", "は"] },
-      { q: "これ ___ 持っていません。", ans: "しか", options: ["しか", "だけ", "も", "は"] },
-      { q: "英語 ___ 分かりません。", ans: "しか", options: ["しか", "だけ", "も", "は"] },
-      { q: "10分 ___ ありません。", ans: "しか", options: ["しか", "だけ", "も", "は"] },
-      { q: "アニメ ___ 見ません。", ans: "しか", options: ["しか", "だけ", "も", "は"] },
-      { q: "パン ___ 食べませんでした。", ans: "しか", options: ["しか", "だけ", "も", "は"] }
+      { q: "忙し ___ ですね。", ans: "そう", options: ["そう", "みたい", "らしい", "よう"] },
+      { q: "誰もいない ___ です。", ans: "よう", options: ["よう", "そう", "らしい", "みたい"] },
+      { q: "この店は美味しい ___ ですよ。", ans: "みたい", options: ["みたい", "そう", "らしい", "よう"] },
+      { q: "雨が降り ___ です。", ans: "そう", options: ["そう", "みたい", "らしい", "よう"] },
+      { q: "田中さんは来ない ___ です。", ans: "よう", options: ["よう", "そう", "らしい", "みたい"] },
+      { q: "泥棒 ___ 格好です。", ans: "みたい", options: ["みたい", "よう", "そう", "らしい"] },
+      { q: "気分が悪い ___ ですね。", ans: "よう", options: ["よう", "そう", "らしい", "みたい"] },
+      { q: "荷物が落ち ___ ですよ。", ans: "そう", options: ["そう", "みたい", "らしい", "よう"] },
+      { q: "故障した ___ です。", ans: "よう", options: ["よう", "そう", "らしい", "みたい"] },
+      { q: "よさ ___ ですね。", ans: "そう", options: ["そう", "すぎ", "みたい", "よう"] }
     ]
   },
   {
     chapter: 68,
     level: "N3",
-    title: "さえ (even)",
-    desc: "Extreme example",
+    title: "Appearance & Guess 2",
+    desc: "Rashii / Ppoi",
     patterns: [
-      { id: "68.1", label: "～さえ", meaning: "Even...", explanation: "Emphasizes that if something extreme is true, then other things are naturally true as well.", examples: [{ jp: "名前さえ 書けば いいです。", romaji: "Namae sae kakeba ii desu.", en: "You just need to write your name (even just the name is fine)." }] }
+      { id: "68.1", label: "～らしい", meaning: "Typical of / I heard that", explanation: "Based on character or hearsay.", examples: [{ jp: "今日は春らしい暖かい日だ。", romaji: "Kyou wa haru rashii atatakai hi da.", en: "Today is a warm day, typical of spring." }] },
+      { id: "68.2", label: "～っぽい", meaning: "Ish / Like (casual)", explanation: "Describes a quality or tendency, often negative.", examples: [{ jp: "この料理は油っぽい。", romaji: "Kono ryouri wa aburappoi.", en: "This food is oily." }, { jp: "彼は子供っぽい。", romaji: "Kare wa kodomoppoi.", en: "He is childish." }] }
     ],
     quiz: [
-      { q: "ひらがな ___ 書けない。", ans: "さえ", options: ["さえ", "こそ", "ばかり", "だけ"] },
-      { q: "自分の名前 ___ 忘れてしまった。", ans: "さえ", options: ["さえ", "こそ", "ばかり", "から"] },
-      { q: "忙しくて、寝る時間 ___ ない。", ans: "さえ", options: ["さえ", "まで", "から", "ので"] },
-      { q: "子供 ___ 知っている。", ans: "さえ", options: ["さえ", "こそ", "ばかり", "から"] },
-      { q: "歩くこと ___ できない。", ans: "さえ", options: ["さえ", "まで", "から", "ので"] },
-      { q: "これ ___ あれば 大丈夫です。", ans: "さえ", options: ["さえ", "こそ", "まで", "から"] },
-      { q: "雨 ___ 降らなければ 行きます。", ans: "さえ", options: ["さえ", "こそ", "まで", "から"] },
-      { q: "一口 ___ 食べませんでした。", ans: "さえ", options: ["さえ", "まで", "から", "ので"] },
-      { q: "先生 ___ 分からない 難しい 問題だ。", ans: "さえ", options: ["さえ", "まで", "から", "ので"] },
-      { q: "水 ___ 洗えば 綺麗に なります。", ans: "さえ", options: ["さえ", "まで", "から", "ので"] }
+      { q: "明日は雨 ___ です。", ans: "らしい", options: ["らしい", "っぽい", "そう", "だ"] },
+      { q: "この服は安 ___ 見える。", ans: "っぽく", options: ["っぽく", "らしく", "そうに", "ように"] },
+      { q: "田中さんは日本人 ___ です。", ans: "らしい", options: ["らしい", "っぽい", "そう", "だ"] },
+      { q: "忘れ ___ 性格だ。", ans: "っぽい", options: ["っぽい", "らしい", "そうな", "ような"] },
+      { q: "女 ___ 格好だ。", ans: "らしい", options: ["らしい", "っぽい", "そうに", "ように"] },
+      { q: "水 ___ スープだ。", ans: "っぽい", options: ["っぽい", "らしい", "そうな", "ような"] },
+      { q: "大学生 ___ 大学生だ。", ans: "らしい", options: ["らしい", "っぽい", "そうに", "ように"] },
+      { q: "熱 ___ ですね。", ans: "っぽい", options: ["っぽい", "らしい", "そうな", "ような"] },
+      { q: "冬 ___ 寒さだ。", ans: "らしい", options: ["らしい", "っぽい", "そうな", "ような"] },
+      { q: "白 ___ 服を着ている。", ans: "っぽい", options: ["っぽい", "らしい", "そうな", "ような"] }
     ]
   },
   {
     chapter: 69,
     level: "N3",
-    title: "など (etc.)",
-    desc: "Give examples",
+    title: "Ability & Tendency",
+    desc: "Yasui / Nikui / Gachi",
     patterns: [
-      { id: "69.1", label: "～など", meaning: "Etc. / And so on", explanation: "Used to give examples among many possibilities.", examples: [{ jp: "本や ノートなどを 買いました。", romaji: "Hon ya nooto nado o kaimashita.", en: "I bought books, notebooks, etc." }] }
+      { id: "69.1", label: "～やすい / ～にくい", meaning: "Easy to / Hard to", explanation: "Describes physical or objective difficulty.", examples: [{ jp: "このペンは書きやすい。", romaji: "Kono pen wa kakiyasui.", en: "This pen is easy to write with." }] },
+      { id: "69.2", label: "～がち / ～気味", meaning: "Tendency / A feeling of", explanation: "Gachi describes negative repeated actions. Gimi describes a slight state.", examples: [{ jp: "最近、遅れがちだ。", romaji: "Saikin, okuregachi da.", en: "Recently, I tend to be late." }, { jp: "風邪気味で、喉が痛い。", romaji: "Kazegimi de, nodo ga itai.", en: "I have a touch of a cold, and my throat hurts." }] }
     ],
     quiz: [
-      { q: "りんごや バナナ ___ を 食べます。", ans: "など", options: ["など", "ばかり", "しか", "さえ"] },
-      { q: "テニスや サッカー ___ が 好きです。", ans: "など", options: ["など", "くらい", "ほど", "まで"] },
-      { q: "日曜日や 祝日 ___ は 休みです。", ans: "など", options: ["など", "まで", "から", "に"] },
-      { q: "カバンや 靴 ___ を 売っています。", ans: "など", options: ["など", "ばかり", "さえ", "から"] },
-      { q: "映画や 音楽 ___ に 興味があります。", ans: "など", options: ["など", "ほど", "まで", "に"] },
-      { q: "薬や 包帯 ___ を 準備してください。", ans: "など", options: ["など", "まで", "に", "を"] },
-      { q: "日本や 韓国 ___ に 行きました。", ans: "など", options: ["など", "ばかり", "さえ", "まで"] },
-      { q: "ペンや 紙 ___ を 貸してください。", ans: "など", options: ["など", "を", "に", "は"] },
-      { q: "ドラマや アニメ ___ を 見ます。", ans: "など", options: ["など", "ばかり", "しか", "まで"] },
-      { q: "お茶や コーヒー ___ を 飲みましょう。", ans: "など", options: ["など", "ばかり", "さえ", "のみ"] }
+      { q: "この本は読み ___ 。", ans: "やすい", options: ["やすい", "にくい", "がち", "気味"] },
+      { q: "最近、曇り ___ の日が多い。", ans: "がち", options: ["がち", "ぎみ", "やすい", "にくい"] },
+      { q: "緊張 ___ で、手が震える。", ans: "ぎみ", options: ["ぎみ", "がち", "やすい", "にくい"] },
+      { q: "ここは滑り ___ から気をつけて。", ans: "やすい", options: ["やすい", "にくい", "がち", "きみ"] },
+      { q: "この薬は飲み ___ 。", ans: "にくい", options: ["にくい", "やすい", "がち", "きみ"] },
+      { q: "休み ___ な生活をやめよう。", ans: "がち", options: ["がち", "ぎみ", "やすい", "にくい"] },
+      { q: "太り ___ だからダイエットしよう。", ans: "ぎみ", options: ["ぎみ", "がち", "やすい", "にくい"] },
+      { q: "使い ___ 道具だ。", ans: "やすい", options: ["やすい", "にくい", "がち", "きみ"] },
+      { q: "忘れ ___ なのでメモする。", ans: "がち", options: ["がち", "きみ", "やすい", "にくい"] },
+      { q: "疲れ ___ だから休もう。", ans: "ぎみ", options: ["ぎみ", "がち", "やすい", "にくい"] }
     ]
   },
   {
     chapter: 70,
     level: "N3",
-    title: "について (about)",
-    desc: "Topic",
+    title: "Formal Connections 1",
+    desc: "Ni Kanshite / Ni Taishite",
     patterns: [
-      { id: "70.1", label: "～について", meaning: "About / Regarding", explanation: "Used to introduce a topic or subject of study/discussion.", examples: [{ jp: "日本文化について 勉強しています。", romaji: "Nihon bunka ni tsuite benkyou shite imasu.", en: "I’m studying about Japanese culture." }] }
+      { id: "70.1", label: "～に関して / ～について", meaning: "Regarding / About", explanation: "Kanshite is more formal than Tsuite.", examples: [{ jp: "環境問題に関して、調査する。", romaji: "Kankyou mondai ni kanshite, chousa suru.", en: "Investigate regarding environmental issues." }] },
+      { id: "70.2", label: "～に対して", meaning: "Towards / Against / In contrast to", explanation: "Shows a target or comparative contrast.", examples: [{ jp: "先生に対して、失礼だ。", romaji: "Sensei ni taishite, shitsurei da.", en: "It's rude toward the teacher." }, { jp: "兄が静かなのに対して、弟はうるさい。", romaji: "Ani ga shizuka na no ni taishite, otouto wa urusai.", en: "While the older brother is quiet, the younger brother is noisy." }] }
     ],
     quiz: [
-      { q: "将来の夢 ___ 話してください。", ans: "について", options: ["について", "にとって", "によって", "にわたって"] },
-      { q: "この問題 ___ どう思いますか。", ans: "について", options: ["について", "にとって", "に対して", "に応えて"] },
-      { q: "新しい仕事 ___ 調べています。", ans: "について", options: ["について", "によって", "にとって", "につれて"] },
-      { q: "先生から 日本の歴史 ___ 聞きました。", ans: "について", options: ["について", "にとって", "に関わって", "に際して"] },
-      { q: "環境問題 ___ 記事を 読みました。", ans: "について", options: ["について", "にとって", "に向けて", "に従って"] },
-      { q: "彼のこと ___ 何か 聞きましたか。", ans: "について", options: ["について", "を", "に", "は"] },
-      { q: "最近の ニュース ___ 話しましょう。", ans: "について", options: ["について", "に", "を", "は"] },
-      { q: "日本語の助詞 ___ 質問があります。", ans: "について", options: ["について", "に", "を", "は"] },
-      { q: "今回のイベント ___ 詳細を教えてください。", ans: "について", options: ["について", "の", "に", "を"] },
-      { q: "自分の 家族 ___ 紹介してください。", ans: "について", options: ["について", "を", "に", "は"] }
+      { q: "日本文化 ___ 興味がある。", ans: "に関して", options: ["に関して", "に反して", "にとって", "によって"] },
+      { q: "客 ___ 丁寧な言葉を使う。", ans: "に対して", options: ["に対して", "にとって", "について", "から"] },
+      { q: "計画 ___ 意見を言う。", ans: "に関して", options: ["に関して", "に向けて", "に沿って", "に際して"] },
+      { q: "都市部 ___ 田舎は不便だ。", ans: "に対して", options: ["に対して", "によって", "にとって", "について"] },
+      { q: "ゴミ問題 ___ 考える。", ans: "に関して", options: ["に関して", "に反して", "に当たって", "に従って"] },
+      { q: "自分 ___ 厳しい。", ans: "に対して", options: ["に対して", "によって", "にとって", "について"] },
+      { q: "将来 ___ 不安がある。", ans: "に関して", options: ["に関して", "に際して", "において", "に従って"] },
+      { q: "去年 ___ 今年は雪が多い。", ans: "に対して", options: ["に対して", "によって", "にとって", "について"] },
+      { q: "事件 ___ 証言する。", ans: "に関して", options: ["に関して", "にとって", "について", "に向けて"] },
+      { q: "女性 ___ 男性の方が背が高い。", ans: "に対して", options: ["に対して", "によって", "にとって", "について"] }
     ]
   },
   {
     chapter: 71,
     level: "N3",
-    title: "によって (depending on)",
-    desc: "Cause / difference",
+    title: "Formal Connections 2",
+    desc: "Tooshite / Watatte / Sotte",
     patterns: [
-      { id: "71.1", label: "～によって", meaning: "Depending on / By / Due to", explanation: "Indicates a cause, a creator, or variation depending on the subject.", examples: [{ jp: "人によって 考え方が 違います。", romaji: "Hito ni yotte kangaekata ga chigaimasu.", en: "Thinking differs depending on the person." }] }
+      { id: "71.1", label: "～を通して / ～を通じて", meaning: "Through / Via", explanation: "Shows a medium or a continuous period.", examples: [{ jp: "友達を通して、知り合った。", romaji: "Tomodachi o tooshite, shiriatta.", en: "We met through a friend." }] },
+      { id: "71.2", label: "～にわたって / ～に沿って", meaning: "Over a period / Along / In accordance with", explanation: "Watatte shows range. Sotte shows following a path/plan.", examples: [{ jp: "10キロにわたって、渋滞している。", romaji: "Juukkiro ni watatte, juutai shite iru.", en: "The traffic jam extends over 10 kilometers." }, { jp: "計画に沿って、進める。", romaji: "Keikaku ni sotte, susumeru.", en: "Proceed according to the plan." }] }
     ],
     quiz: [
-      { q: "国 ___ 習慣が 違います。", ans: "によって", options: ["によって", "にとって", "について", "に対して"] },
-      { q: "このビルは 有名な 建築家 ___ 設計されました。", ans: "によって", options: ["によって", "にとって", "について", "に対して"] },
-      { q: "台風 ___ 木が 倒れました。", ans: "によって", options: ["によって", "について", "にとって", "に関わって"] },
-      { q: "物価は 年 ___ 変わります。", ans: "によって", options: ["によって", "にとって", "に対して", "に際して"] },
-      { q: "不注意 ___ 事故が 起きました。", ans: "によって", options: ["によって", "について", "にとって", "に従って"] },
-      { q: "人 ___ 好きな 食べ物が 違います。", ans: "によって", options: ["によって", "に", "を", "は"] },
-      { q: "天気 ___ 中止に なるかも しれません。", ans: "によって", options: ["によって", "に", "を", "は"] },
-      { q: "この本は 彼 ___ 書かれました。", ans: "によって", options: ["によって", "に", "を", "は"] },
-      { q: "法律 ___ 決まっています。", ans: "によって", options: ["によって", "に", "を", "は"] },
-      { q: "インターネット ___ 情報が 広まりました。", ans: "によって", options: ["によって", "に", "を", "は"] }
+      { q: "テレビ ___ ニュースを知る。", ans: "を通して", options: ["を通して", "にわたって", "に沿って", "について"] },
+      { q: "広範囲 ___ 被害が出た。", ans: "にわたって", options: ["にわたって", "を通して", "に沿って", "にとって"] },
+      { q: "川 ___ 歩く。", ans: "に沿って", options: ["に沿って", "にわたって", "を通して", "に対して"] },
+      { q: "1年 ___ 勉強した。", ans: "を通して", options: ["を通して", "にとって", "について", "に対して"] },
+      { q: "3日間 ___ 会議が行われた。", ans: "にわたって", options: ["にわたって", "を通して", "に沿って", "に向けて"] },
+      { q: "マニュアル ___ 操作する。", ans: "に沿って", options: ["に沿って", "にわたって", "を通して", "に対して"] },
+      { q: "読書 ___ 知識を得る。", ans: "を通して", options: ["を通して", "にとらわれず", "にとって", "について"] },
+      { q: "数十キロ ___ 渋滞だ。", ans: "にわたって", options: ["にわたって", "に際して", "において", "に関して"] },
+      { q: "線路 ___ 家が並んでいる。", ans: "に沿って", options: ["に沿って", "に反して", "にわたって", "に向けて"] },
+      { q: "実体験 ___ 学ぶ。", ans: "を通して", options: ["を通して", "に対して", "にとって", "について"] }
     ]
   },
   {
     chapter: 72,
     level: "N3",
-    title: "おかげで / せいで",
-    desc: "Reason (good/bad)",
+    title: "Commands & Advice 1",
+    desc: "Beki / Koto da",
     patterns: [
-      { id: "72.1", label: "～おかげで / ～せいで", meaning: "Thanks to / Because of (bad result)", explanation: "Used to express reason for a positive (okage de) or negative (sei de) result.", examples: [{ jp: "雨のせいで 行けませんでした。", romaji: "Ame no sei de ikemasen deshita.", en: "I couldn’t go because of the rain." }] }
+      { id: "72.1", label: "～べき / ～べきではない", meaning: "Should / Shouldn't", explanation: "Expresses a strong moral or social obligation.", examples: [{ jp: "約束は守るべきだ。", romaji: "Yakusoku wa mamoru beki da.", en: "You should keep your promises." }] },
+      { id: "72.2", label: "～ことだ", meaning: "Advice / You should", explanation: "Used to give strong advice or suggestions.", examples: [{ jp: "強くなりたければ、練習することだ。", romaji: "Tsuyoku naritakereba, renshuu suru koto da.", en: "If you want to get strong, you should practice." }] }
     ],
     quiz: [
-      { q: "先生の ___ 合格できました。", ans: "おかげで", options: ["おかげで", "せいで", "ために", "のに"] },
-      { q: "渋滞の ___ 遅れました。", ans: "せいで", options: ["せいで", "おかげで", "ために", "から"] },
-      { q: "薬を飲んだ ___ すっかり よくなりました。", ans: "おかげで", options: ["おかげで", "せいで", "しあわせで", "ので"] },
-      { q: "暑い ___ 寝られません。", ans: "せいで", options: ["せいで", "おかげで", "ために", "から"] },
-      { q: "あなたが 手伝ってくれた ___ 助かりました。", ans: "おかげで", options: ["おかげで", "せいで", "ために", "のに"] },
-      { q: "不注意の ___ ケガをしました。", ans: "せいで", options: ["せいで", "おかげで", "ために", "から"] },
-      { q: "日本に来た ___ たくさん 友達が できました。", ans: "おかげで", options: ["おかげで", "せいで", "ために", "のに"] },
-      { q: "飲みすぎた ___ 頭が 痛いです。", ans: "せいで", options: ["せいで", "おかげで", "ために", "から"] },
-      { q: "いい 先生に 出会えた ___ 日本語が 好きに なりました。", ans: "おかげで", options: ["おかげで", "せいで", "ために", "のに"] },
-      { q: "景気が 悪い ___ 仕事が 見つかりません。", ans: "せいで", options: ["せいで", "おかげで", "ために", "から"] }
+      { q: "お年寄りには親切に ___ 。", ans: "するべきだ", options: ["するべきだ", "することだ", "するわけだ", "するものだ"] },
+      { q: "成功したければ、努力 ___ 。", ans: "することだ", options: ["することだ", "するべきだ", "するわけだ", "するものだ"] },
+      { q: "嘘をつく ___ ではない。", ans: "べき", options: ["べき", "こと", "わけ", "もの"] },
+      { q: "上手になりたければ、毎日 ___ 。", ans: "練習することだ", options: ["練習することだ", "練習するべきだ", "練習するわけだ", "練習するものだ"] },
+      { q: "他人の悪口を言う ___ ではない。", ans: "べき", options: ["べき", "こと", "わけ", "もの"] },
+      { q: "健康になりたければ、早く ___ 。", ans: "寝ることだ", options: ["寝ることだ", "寝るべきだ", "寝るわけだ", "寝るものだ"] },
+      { q: "もっと勉強 ___ だった。", ans: "するべき", options: ["するべき", "すること", "するわけ", "するもの"] },
+      { q: "痩せたければ、運動 ___ 。", ans: "することだ", options: ["することだ", "するべきだ", "するわけだ", "するものだ"] },
+      { q: "親を大切に ___ 。", ans: "するべきだ", options: ["するべきだ", "することだ", "するわけだ", "するものだ"] },
+      { q: "合格したければ、一生懸命 ___ 。", ans: "頑張ることだ", options: ["頑張ることだ", "頑張るべきだ", "頑張るわけだ", "頑張るものだ"] }
     ]
   },
   {
     chapter: 73,
     level: "N3",
-    title: "ほど (degree)",
-    desc: "Degree / comparison",
+    title: "Commands & Advice 2",
+    desc: "Te Hoshii / Wake ni wa Ikanai",
     patterns: [
-      { id: "73.1", label: "～ほど", meaning: "To the extent / Not as much as", explanation: "Indicates an extreme degree or compares things (negative sentences).", examples: [{ jp: "歩けないほど 疲れました。", romaji: "Arukenai hodo tsukaremashita.", en: "I was so tired I couldn’t walk." }] }
+      { id: "73.1", label: "～てほしい / ～てもらいたい", meaning: "Want someone to do", explanation: "Expresses a desire for someone else to perform an action.", examples: [{ jp: "あなたに日本語を教えてほしい。", romaji: "Anata ni nihongo o oshiete hoshii.", en: "I want you to teach me Japanese." }] },
+      { id: "73.2", label: "～わけにはいかない", meaning: "Must not / Cannot (moral)", explanation: "Cannot do something due to social or moral reasons.", examples: [{ jp: "大切な会議だから、休むわけにはいかない。", romaji: "Taisetsu na kaigi dakara, yasumu wake ni wa ikanai.", en: "It's an important meeting, so I cannot miss it." }] },
+      { id: "73.3", label: "～ざるを得ない", meaning: "Have no choice but to", explanation: "Forced to do something against one's will (formal).", examples: [{ jp: "雨なので、中止にせざるを得ない。", romaji: "Ame na no de, chuushi ni sezaru o enai.", en: "Since it's raining, we have no choice but to cancel." }] }
     ],
     quiz: [
-      { q: "去年 ___ 暑くないです。", ans: "ほど", options: ["ほど", "くらい", "より", "から"] },
-      { q: "死ぬ ___ 疲れました。", ans: "ほど", options: ["ほど", "くらい", "まで", "から"] },
-      { q: "これ ___ 美味しいものは ありません。", ans: "ほど", options: ["ほど", "くらい", "より", "から"] },
-      { q: "寝られない ___ 痛いです。", ans: "ほど", options: ["ほど", "くらい", "まで", "から"] },
-      { q: "忘れられない ___ 思い出です。", ans: "ほど", options: ["ほど", "くらい", "まで", "から"] },
-      { q: "言葉に できない ___ 嬉しいです。", ans: "ほど", options: ["ほど", "くらい", "より", "から"] },
-      { q: "山 ___ 高い ビルだ。", ans: "ほど", options: ["ほど", "くらい", "まで", "から"] },
-      { q: "昨日 ___ 寒くないですよ。", ans: "ほど", options: ["ほど", "くらい", "より", "から"] },
-      { q: "泣きたい ___ 悲しいです。", ans: "ほど", options: ["ほど", "くらい", "より", "から"] },
-      { q: "信じられない ___ 綺麗です。", ans: "ほど", options: ["ほど", "くらい", "より", "から"] }
+      { q: "彼に真実を ___ 。", ans: "話してほしい", options: ["話してほしい", "話したい", "話すつもりだ", "話すことにした"] },
+      { q: "試験中だから、しゃべる ___ 。", ans: "わけにはいかない", options: ["わけにはいかない", "わけではない", "はずがない", "べきではない"] },
+      { q: "嫌だが、 ___ 。", ans: "やらざるを得ない", options: ["やらざるを得ない", "やらないわけにはいかない", "やるべきではない", "やるはずがない"] },
+      { q: "先生にここに来て ___ 。", ans: "もらいたい", options: ["もらいたい", "あげたい", "やりたい", "さしあげたい"] },
+      { q: "親切にされたら、お礼を言わない ___ 。", ans: "わけにはいかない", options: ["わけにはいかない", "わけではない", "はずがいない", "べきではない"] },
+      { q: "台風で中止 ___ 。", ans: "にせざるを得ない", options: ["にせざるを得ない", "にするべきではない", "にしないわけにはいかない", "にするはずがない"] },
+      { q: "もっと優しく ___ 。", ans: "してほしい", options: ["してほしい", "したほうがいい", "しなければならない", "しなくてもいい"] },
+      { q: "病気の母を置いて、行く ___ 。", ans: "わけにはいかない", options: ["わけにはいかない", "わけではない", "はずがない", "べきではない"] },
+      { q: "お金がないから、 ___ 。", ans: "諦めざるを得ない", options: ["諦めざるを得ない", "諦めないわけにはいかない", "諦めるべきだ", "諦めるはずがない"] },
+      { q: "明日、会いに ___ 。", ans: "来てほしい", options: ["来てほしい", "来るつもりだ", "来ることにした", "来ればいい"] }
     ]
   },
   {
     chapter: 74,
     level: "N3",
-    title: "てから (after doing)",
-    desc: "Sequence",
+    title: "Emotion & Extent",
+    desc: "Te Tamaranai / Ni Koshita koto wa nai",
     patterns: [
-      { id: "74.1", label: "～てから", meaning: "Since doing / After doing", explanation: "Indicates that an action or state started after a specific event.", examples: [{ jp: "日本へ 来てから、日本語を 勉強しました。", romaji: "Nihon e kite kara, nihongo o benkyou shimashita.", en: "After coming to Japan, I studied Japanese." }] }
+      { id: "74.1", label: "～てたまらない / ～てならない", meaning: "Extremely / Cannot help but", explanation: "Tamaranai is for personal feelings. Naranai is more formal/spontaneous.", examples: [{ jp: "喉が渇いてたまらない。", romaji: "Nodo ga kawaite tamaranai.", en: "I'm extremely thirsty." }, { jp: "残念でなりません。", romaji: "Zannen de narimasen.", en: "It is extremely regrettable." }] },
+      { id: "74.2", label: "～に越したことはない", meaning: "It's best to... / Nothing is better than", explanation: "Shows the ideal choice, though others may exist.", examples: [{ jp: "安いに越したことはない。", romaji: "Yasui ni koshita koto wa nai.", en: "It's best if it's cheap." }] }
     ],
     quiz: [
-      { q: "手を 洗って ___ 食べましょう。", ans: "から", options: ["から", "ので", "のに", "まえに"] },
-      { q: "大学を 卒業して ___ 働きます。", ans: "から", options: ["から", "ので", "のに", "まえに"] },
-      { q: "日本に来て ___ 3年に なります。", ans: "から", options: ["から", "ので", "のに", "まえに"] },
-      { q: "シャワーを 浴びて ___ 寝ます。", ans: "から", options: ["から", "ので", "のに", "まえに"] },
-      { q: "映画を 見て ___ 帰りましょう。", ans: "から", options: ["から", "ので", "のに", "まえに"] },
-      { q: "仕事を 終えて ___ 飲みに行きます。", ans: "から", options: ["から", "ので", "のに", "まえに"] },
-      { q: "考えて ___ 話してください。", ans: "から", options: ["から", "ので", "のに", "まえに"] },
-      { q: "薬を 飲んで ___ 休みます。", ans: "から", options: ["から", "ので", "のに", "まえに"] },
-      { q: "よく 読んで ___ サインしてください。", ans: "から", options: ["から", "ので", "のに", "まえに"] },
-      { q: "タバコを やめて ___ 体調が いいです。", ans: "から", options: ["から", "ので", "のに", "まえに"] }
+      { q: "会いたくて ___ 。", ans: "たまらない", options: ["たまらない", "ならない", "越したことはない", "わけではない"] },
+      { q: "不思議で ___ 。", ans: "なりません", options: ["なりません", "たまらない", "越したことはない", "わけだ"] },
+      { q: "準備は早めに ___ 。", ans: "するに越したことはない", options: ["するに越したことはない", "するべきだ", "することだ", "するわけだ"] },
+      { q: "お腹が空いて ___ 。", ans: "たまらない", options: ["たまらない", "ならない", "越したことはない", "わけではない"] },
+      { q: "将来が不安で ___ 。", ans: "なりません", options: ["なりません", "たまらない", "越したことはない", "わけだ"] },
+      { q: "健康 ___ 。", ans: "であるに越したことはない", options: ["であるに越したことはない", "であるべきだ", "であることだ", "であるわけだ"] },
+      { q: "眠くて ___ 。", ans: "たまらない", options: ["たまらない", "ならない", "越したことはない", "わけではない"] },
+      { q: "残念で ___ 。", ans: "なりません", options: ["なりません", "たまらない", "越したことはない", "わけだ"] },
+      { q: "用心 ___ 。", ans: "するに越したことはない", options: ["するに越したことはない", "するべきだ", "することだ", "するわけだ"] },
+      { q: "嬉しくて ___ 。", ans: "たまらない", options: ["たまらない", "ならない", "越したことはない", "わけではない"] }
     ]
   },
   {
     chapter: 75,
     level: "N3",
-    title: "うちに (while / before change)",
-    desc: "Limited time",
+    title: "Fixed Expressions & Nuance",
+    desc: "Koto wa... ga / Mono de wa nai",
     patterns: [
-      { id: "75.1", label: "～うちに", meaning: "While / Before a change happens", explanation: "Indicates an action should be done while a certain state or condition exists.", examples: [{ jp: "若いうちに 勉強したほうがいいです。", romaji: "Wakai uchi ni benkyou shita hou ga ii desu.", en: "You should study while you’re young." }] }
+      { id: "75.1", label: "～ことは～が", meaning: "It's true that... but", explanation: "Admits a fact but adds a qualifying statement.", examples: [{ jp: "読めることは読めるが、意味がわからない。", romaji: "Yomeru koto wa yomeru ga, imi ga wakaranai.", en: "I can read it, but I don't understand the meaning." }] },
+      { id: "75.2", label: "～ものではない / ～というものでもない", meaning: "Shouldn't / It doesn't mean that", explanation: "Mono de wa nai is for social rules/common sense. To iu mono de mo nai is for partial negation of a general idea.", examples: [{ jp: "目上の人にそんなことを言うものではない。", romaji: "Meue no hito ni sonna koto o iu mono de wa nai.", en: "You shouldn't say such things to your superiors." }] }
     ],
     quiz: [
-      { q: "忘れない ___ メモしてください。", ans: "うちに", options: ["うちに", "までに", "まえに", "ときに"] },
-      { q: "明るい ___ 帰りましょう。", ans: "うちに", options: ["うちに", "までに", "まえに", "ときに"] },
-      { q: "温かい ___ 食べてください。", ans: "うちに", options: ["うちに", "までに", "まえに", "ときに"] },
-      { q: "元気な ___ 旅行に 行きたいです。", ans: "うちに", options: ["うちに", "までに", "まえに", "ときに"] },
-      { q: "独身の ___ たくさん 遊びなさい。", ans: "うちに", options: ["うちに", "までに", "まえに", "ときに"] },
-      { q: "雨が 降らない ___ 帰りましょう。", ans: "うちに", options: ["うちに", "までに", "まえに", "ときに"] },
-      { q: "若いうちに ___ ほうがいいです。", ans: "勉強した", options: ["勉強した", "勉強する", "勉強して", "勉強し"] },
-      { q: "今の ___ 準備しておきましょう。", ans: "うちに", options: ["うちに", "までに", "まえに", "ときに"] },
-      { q: "子供が 寝ている ___ 掃除します。", ans: "うちに", options: ["うちに", "までに", "まえに", "ときに"] },
-      { q: "日本に いる ___ 富士山に 登りたいです。", ans: "うちに", options: ["うちに", "までに", "まえに", "ときに"] }
+      { q: "行ける ___ 行けるが、時間がかかる。", ans: "ことは", options: ["ことは", "のでは", "とは", "にわ"] },
+      { q: "そんなに怒る ___ 。", ans: "ものではない", options: ["ものではない", "というものではない", "わけではない", "はずがない"] },
+      { q: "お金があれば幸せだ ___ 。", ans: "というものでもない", options: ["というものでもない", "ものではない", "わけではない", "はずがない"] },
+      { q: "美味しい ___ 美味しいが、少し高い。", ans: "ことは", options: ["ことは", "のでは", "とは", "にわ"] },
+      { q: "嘘をつく ___ 。", ans: "ものではない", options: ["ものではない", "というものでもない", "わけではない", "はずがない"] },
+      { q: "何でも多ければいい ___ 。", ans: "というものでもない", options: ["というものでもない", "ものではない", "わけではない", "はずがない"] },
+      { q: "便利な ___ 便利だが、使いにくい。", ans: "ことは", options: ["ことは", "のでは", "とは", "にわ"] },
+      { q: "人前で泣く ___ 。", ans: "ものではない", options: ["ものではない", "というものでもない", "わけではない", "はずがない"] },
+      { q: "努力すれば必ず成功する ___ 。", ans: "というものでもない", options: ["というものでもない", "ものではない", "わけではない", "はずがない"] },
+      { q: "知っている ___ 知っているが、詳しくは知らない。", ans: "ことは", options: ["ことは", "のでは", "とは", "にわ"] }
     ]
   },
   {
     chapter: 76,
     level: "N2",
-    title: "ことに (it is ~ that…)",
-    desc: "Speaker's strong feeling",
+    title: "Certainty & Judgement",
+    desc: "Must be / Definitely / Logic",
     patterns: [
-      { id: "76.1", label: "～ことに", meaning: "It is ~ that...", explanation: "Used to emphasize the speaker's emotional state or reaction to a fact.", examples: [{ jp: "うれしいことに、試験に 合格しました。", romaji: "Ureshii koto ni, shiken ni goukaku shimashita.", en: "It is happy (to my joy) that I passed the exam." }] }
+      { id: "76.1", label: "～に違いない", meaning: "Must be / Surely", explanation: "Indicates a high degree of certainty based on evidence.", examples: [{jp: "明日はきっと晴れるに違いない。", romaji: "Ashita wa kitto hareru ni chigai nai.", en: "It must definitely be sunny tomorrow." }] },
+      { id: "76.2", label: "～に決まっている", meaning: "Definitely / Obvious", explanation: "Stronger than ni chigai nai, expressing something that is undeniably obvious.", examples: [{jp: "そんなの、嘘に決まっているよ。", romaji: "Sonna no, uso ni kimatte iru yo.", en: "That's definitely a lie." }] },
+      { id: "76.3", label: "～はずだ / ～はずがない", meaning: "Should be / Cannot be", explanation: "Hazu da is expectation based on logic. Hazu ga nai is strong logical denial.", examples: [{jp: "彼はもう着いているはずだ。", romaji: "Kare wa mou tsuite iru hazu da.", en: "He should have arrived by now." }, {jp: "真面目な彼が遅刻するはずがない。", romaji: "Majime na kare ga chikoku suru hazu ga nai.", en: "There's no way a serious person like him would be late." }] }
     ],
     quiz: [
-      { q: "驚いた ___、彼は もう 帰ったそうだ。", ans: "ことに", options: ["ことに", "ように", "ために", "おりに"] },
-      { q: "残念な ___、雨で 中止に なりました。", ans: "ことに", options: ["ことに", "うちに", "まえに", "ばかりに"] },
-      { q: "幸せな ___、家族全員 元気です。", ans: "ことに", options: ["ことに", "どころか", "ものなら", "おかげで"] },
-      { q: "困った ___、財布を 忘れてしまった。", ans: "ことに", options: ["ことに", "ばかりに", "さえ", "こそ"] },
-      { q: "不思議な ___、同じ 夢を 見た。", ans: "ことに", options: ["ことに", "ままに", "ついでに", "わりに"] },
-      { q: "ありがたい ___、皆さんが 助けてくれました。", ans: "ことに", options: ["ことに", "あまり", "からには", "うえに"] },
-      { q: "悲しい ___、飼っていた 犬が 死にました。", ans: "ことに", options: ["ことに", "うちに", "かわりに", "うえで"] },
-      { q: "幸運な ___、宝くじが 当たった。", ans: "ことに", options: ["ことに", "にしたがって", "に際して", "において"] },
-      { q: "腹立たしい ___、また 嘘を つかれた。", ans: "ことに", options: ["ことに", "末に", "あげく", "ばかり"] },
-      { q: "面白い ___、彼らも 同じ 意見だった。", ans: "ことに", options: ["ことに", "反面", "とともに", "次第"] }
+      { q: "犯人は彼 ___ 。", ans: "に違いない", options: ["に違いない", "はずだ", "わけだ", "ものだ"] },
+      { q: "そんなの無理 ___ 。", ans: "に決まっている", options: ["に決まっている", "に違いない", "わけがない", "べきだ"] },
+      { q: "田中さんは昨日、徹夜した ___ 。顔色が悪い。", ans: "はずだ", options: ["はずだ", "に決まっている", "ものだ", "ことだ"] },
+      { q: "彼がそんなこと、___ 。", ans: "言うはずがない", options: ["言うはずがない", "言わないべきだ", "言うわけだ", "言いたいものだ"] },
+      { q: "一生懸命勉強したんだから、合格する ___ 。", ans: "に違いない", options: ["に違いない", "わけだ", "ことだ", "ものではない"] },
+      { q: "日本に10年も住んでいるのだから、日本語が話せない ___ 。", ans: "はずがない", options: ["はずがない", "わけにはいかない", "ものだ", "べきではない"] },
+      { q: "これは私の傘 ___ 。名前が書いてある。", ans: "に決まっている", options: ["に決まっている", "にすぎない", "どころではない", "ものか"] },
+      { q: "あの雲の様子だと、夕方から雨が降る ___ 。", ans: "はずだ", options: ["はずだ", "に違いない", "に決まっている", "わけだ"] },
+      { q: "部長が欠席するなんて、何かあった ___ 。", ans: "に違いない", options: ["に違いない", "ものだ", "わけではない", "ことだ"] },
+      { q: "彼が嘘をつく ___ 。正直者で有名なんだ。", ans: "はずがない", options: ["はずがない", "に違いない", "に限らない", "まい"] }
     ]
   },
   {
     chapter: 77,
     level: "N2",
-    title: "ことから (because / from fact)",
-    desc: "The reason or origin",
+    title: "Cause & Logical Results",
+    desc: "Because / Trigger / Relation",
     patterns: [
-      { id: "77.1", label: "～ことから", meaning: "Because / From the fact that", explanation: "Indicates a reason based on a fact or the origin of a name/situation.", examples: [{ jp: "雨が 降っていることから、試合は 中止です。", romaji: "Ame ga futte iru koto kara, shiai wa chuushi desu.", en: "Because it’s raining (based on that fact), the match is canceled." }] }
+      { id: "77.1", label: "～ため（に）", meaning: "Because of / Due to (Objective)", explanation: "Indicates a cause-and-effect relationship, usually for objective reasons/results.", examples: [{jp: "大雨のため、電車が遅れています。", romaji: "Oame no tame, densha ga okurete imasu.", en: "Because of heavy rain, the train is delayed." }] },
+      { id: "77.2", label: "～ことから", meaning: "From the fact that / Because", explanation: "Explains the reason for a name, a guess, or a result based on facts.", examples: [{jp: "景色が美しいことから、富士山は有名です。", romaji: "Keshiki ga utsukushii koto kara, Fujisan wa yuumei desu.", en: "Mount Fuji is famous because (from the fact that) the scenery is beautiful." }] },
+      { id: "77.3", label: "～をきっかけに", meaning: "As a result of / Triggered by", explanation: "Indicates a turning point or a trigger that started something new.", examples: [{jp: "日本のアニメを見たのをきっかけに、日本語を勉強し始めた。", romaji: "Nihon no anime o mita no o kikkake ni, nihongo o benkyou shihajimeta.", en: "Triggered by watching Japanese anime, I started studying Japanese." }] }
     ],
     quiz: [
-      { q: "窓が 割れている ___、泥棒が 入ったと わかった。", ans: "ことから", options: ["ことから", "ことに", "ばかりに", "おかげで"] },
-      { q: "声が 似ている ___、親子だと 思われた。", ans: "ことから", options: ["ことから", "反面", "に連れて", "に際して"] },
-      { q: "道が 濡れている ___、雨が 降ったことが わかる。", ans: "ことから", options: ["ことから", "うえに", "がてら", "つつ"] },
-      { q: "名前が 同じ ___、間違えられた。", ans: "ことから", options: ["ことから", "ばかり", "こそ", "どころか"] },
-      { q: "富士山が 見える ___、この町は 富士見町と 呼ばれる。", ans: "ことから", options: ["ことから", "ものなら", "わけだ", "どころか"] },
-      { q: "表情が 暗い ___、何かあったと 察した。", ans: "ことから", options: ["ことから", "わりに", "のみならず", "に限り"] },
-      { q: "信号が 赤だった ___、事故が 起きた。", ans: "ことから", options: ["ことから", "どころか", "ばかりか", "にしたら"] },
-      { q: "足跡が ある ___、誰か来たことが わかる。", ans: "ことから", options: ["ことから", "に加えて", "を除いて", "を通して"] },
-      { q: "物価が 上がった ___、生活が 苦しくなった。", ans: "ことから", options: ["ことから", "ものの", "のみか", "につき"] },
-      { q: "彼が 遅刻した ___、会議が 遅れた。", ans: "ことから", options: ["ことから", "うちに", "際して", "上で"] }
+      { q: "雪の ___ 、高速道路が通行止めになった。", ans: "ため", options: ["ため", "ころから", "際", "うちに"] },
+      { q: "窓が割れている ___ 、泥棒が入ったとわかった。", ans: "ことから", options: ["ことから", "ために", "ばかりに", "おかげで"] },
+      { q: "大学入学 ___ 、一人暮らしを始めた。", ans: "をきっかけに", options: ["をきっかけに", "に伴って", "につれて", "に沿って"] },
+      { q: "不注意の ___ 、大きな事故を起こしてしまった。", ans: "ため", options: ["ため", "反面", "わりに", "ものの"] },
+      { q: "声が似ている ___ 、親子だと思われた。", ans: "ことから", options: ["ことから", "を機に", "に際して", "において"] },
+      { q: "入院したの ___ 、健康の大切さを知った。", ans: "をきっかけに", options: ["をきっかけに", "ばかりに", "ものなら", "とともに"] },
+      { q: "環境破壊の ___ 、多くの動物が絶滅の危機にある。", ans: "ため", options: ["ため", "につれて", "に合わせて", "のみならず"] },
+      { q: "地名が「松田」である ___ 、昔ここには松の木が多かったことがわかる。", ans: "ことから", options: ["ことから", "ばかりか", "に限り", "さえ"] },
+      { q: "引っ越し ___ 、家具を全部買い換えた。", ans: "をきっかけに", options: ["をきっかけに", "の代わりに", "を問わず", "を除いて"] },
+      { q: "準備不足 ___ 、計画は失敗に終わった。", ans: "のため", options: ["のため", "あげく", "末に", "次第"] }
     ]
   },
   {
     chapter: 78,
     level: "N2",
-    title: "に違いない (must be)",
-    desc: "Strong conviction",
+    title: "Conditions & Hypotheticals",
+    desc: "If / Unless / Now that",
     patterns: [
-      { id: "78.1", label: "～に違いない", meaning: "Must be / Surely", explanation: "Indicates the speaker's strong belief or logical certainty (higher conviction than 'sou da' or 'deshou').", examples: [{ jp: "彼は 忙しいに違いない。", romaji: "Kare wa isogashii ni chigai nai.", en: "He must be busy." }] }
+      { id: "78.1", label: "～ば～ほど", meaning: "The more... the more", explanation: "Indicates that as one condition increases, another state changes proportionally.", examples: [{jp: "日本語は勉強すればするほど難しくなる。", romaji: "Nihongo wa benkyou sureba suru hodo muzukashiku naru.", en: "The more you study Japanese, the harder it gets." }] },
+      { id: "78.2", label: "～ない限り", meaning: "Unless / As long as not", explanation: "States that if a condition is not met, the result will not change.", examples: [{jp: "雨が降らない限り、試合はあります。", romaji: "Ame ga furanai kagiri, shiai wa arimasu.", en: "Unless it rains, there will be a match." }] },
+      { id: "78.3", label: "～以上（は）", meaning: "Now that / Since", explanation: "Strong resolve or obligation because a certain fact exists.", examples: [{jp: "やるからには、最後までやり遂げる。", romaji: "Yaru kara ni wa, saigo made yaritogeru.", en: "Since I'm doing it, I'll finish it to the end." }] }
     ],
     quiz: [
-      { q: "あんなに 勉強したんだから、合格する ___。", ans: "に違いない", options: ["に違いない", "はずだ", "わけだ", "べきだ"] },
-      { q: "この味は お母さんが 作った ___。", ans: "に違いない", options: ["に違いない", "に決まっている", "ものだ", "ことだ"] },
-      { q: "犯人は 彼 ___。", ans: "に違いない", options: ["に違いない", "にすぎない", "どころではない", "わけがない"] },
-      { q: "彼女は 怒っている ___。", ans: "に違いない", options: ["に違いない", "といっても", "わりに", "に際して"] },
-      { q: "明日は 雨 ___。", ans: "に違いない", options: ["に違いない", "おかげで", "せいで", "というより"] },
-      { q: "彼は 知っている ___。", ans: "に違いない", options: ["に違いない", "ばかりに", "のみならず", "に先立って"] },
-      { q: "これは 夢 ___。", ans: "に違いない", options: ["に違いない", "にしては", "にかかわらず", "とともに"] },
-      { q: "彼女は 泣いた ___。", ans: "に違いない", options: ["に違いない", "ばかりに", "あげく", "以上"] },
-      { q: "彼は 嘘を ついている ___。", ans: "に違いない", options: ["に違いない", "反面", "につれて", "次第"] },
-      { q: "これは 高価なもの ___。", ans: "に違いない", options: ["に違いない", "に沿って", "を除いて", "にかけて"] }
+      { q: "この本は読めば ___ 面白くなる。", ans: "読むほど", options: ["読むほど", "読んだら", "読むまでに", "読みつつ"] },
+      { q: "頑張らない ___ 、成功はあり得ない。", ans: "限り", options: ["限り", "にしても", "以上に", "反面"] },
+      { q: "約束した ___ 、守らなければならない。", ans: "以上", options: ["以上", "ものの", "わりに", "際して"] },
+      { q: "給料が高ければ ___ いいというものでもない。", ans: "高いほど", options: ["高いほど", "高かったら", "高いとしても", "高さに"] },
+      { q: "君が謝らない ___ 、許してあげないよ。", ans: "限り", options: ["限り", "以上に", "に際して", "に伴って"] },
+      { q: "日本に住んでいる ___ 、日本のルールに従うべきだ。", ans: "以上は", options: ["以上は", "からには", "ばかりに", "として"] },
+      { q: "安ければ ___ 売れるわけではない。", ans: "安いほど", options: ["安いほど", "安くなって", "安さで", "安いために"] },
+      { q: "平和でない ___ 、自由な生活は望めない。", ans: "限り", options: ["限り", "を機に", "にわたって", "さえ"] },
+      { q: "留学する ___ 、しっかり勉強してきなさい。", ans: "からには", options: ["からには", "ものなら", "ばかりか", "にすぎない"] },
+      { q: "早ければ ___ いい。", ans: "早いほど", options: ["早いほど", "早くして", "早くて", "早ければこそ"] }
     ]
   },
   {
     chapter: 79,
     level: "N2",
-    title: "に決まっている (definitely)",
-    desc: "Natural/Obvious certainty",
+    title: "Contrast & Opposition",
+    desc: "But / Although / On the other hand",
     patterns: [
-      { id: "79.1", label: "～に決まっている", meaning: "Definitely / It's obvious that...", explanation: "Used when the speaker is absolutely certain, often based on common sense or intuition.", examples: [{ jp: "これは 難しいに決まっている。", romaji: "Kore wa muzukashii ni kimatte iru.", en: "This is definitely difficult." }] }
+      { id: "79.1", label: "～一方で", meaning: "On the other hand / At the same time", explanation: "Used to describe two contrasting sides or simultaneous actions.", examples: [{jp: "彼は歌手である一方で、小説家でもある。", romaji: "Kare wa kashu de aru ippou de, shousetsuka demo aru.", en: "While he is a singer, he is also a novelist." }] },
+      { id: "79.2", label: "～反面", meaning: "On the other hand (contrary)", explanation: "Expresses dual, opposite natures of the same thing.", examples: [{jp: "都会の生活は便利な反面、忙しすぎて疲れる。", romaji: "Tokai no seikatsu wa benri na hanmen, isogashisugite tsukareru.", en: "City life is convenient, but on the other hand, it's exhausting from being too busy." }] },
+      { id: "79.3", label: "～とはいえ", meaning: "Nevertheless / Having said that", explanation: "Acknowledges a fact but introduces an exception or different nuance.", examples: [{jp: "春になったとはいえ、まだ寒い日が続く。", romaji: "Haru ni natta to wa ie, mada samui hi ga tsuzuku.", en: "Even though it's spring, cold days continue." }] }
     ],
     quiz: [
-      { q: "そんなの 無理 ___。", ans: "に決まっている", options: ["に決まっている", "に違いない", "わけだ", "はずだ"] },
-      { q: "嘘 ___。", ans: "に決まっている", options: ["に決まっている", "ものか", "ことか", "ばかりか"] },
-      { q: "怒られる ___。", ans: "に決まっている", options: ["に決まっている", "べきだ", "つもりだ", "ようだ"] },
-      { q: "彼が 勝つ ___。", ans: "に決まっている", options: ["に決まっている", "にすぎない", "にわたって", "に加えて"] },
-      { q: "そんなこと 言ったら 嫌われる ___。", ans: "に決まっている", options: ["に決まっている", "まい", "かねない", "ざるを得ない"] },
-      { q: "美味しい ___。", ans: "に決まっている", options: ["に決まっている", "どころか", "ばかりに", "わりに"] },
-      { q: "失敗する ___。", ans: "に決まっている", options: ["に決まっている", "末に", "あげく", "がてら"] },
-      { q: "反対される ___。", ans: "に決まっている", options: ["に決まっている", "に伴って", "に応じて", "に際して"] },
-      { q: "楽しい ___。", ans: "に決まっている", options: ["に決まっている", "のみならず", "に限り", "さえ"] },
-      { q: "バレる ___。", ans: "に決まっている", options: ["に決まっている", "に沿って", "を通して", "を通じて"] }
+      { q: "インターネットは便利な ___ 、危険も多い。", ans: "反面", options: ["反面", "わりに", "際して", "に伴って"] },
+      { q: "合格した ___ 、まだ喜ぶのは早い。", ans: "とはいえ", options: ["とはいえ", "一方だ", "反面", "のみならず"] },
+      { q: "景気は回復しつつある ___ 、実生活は苦しいままだ。", ans: "一方で", options: ["一方で", "反面", "ながらも", "にすぎない"] },
+      { q: "彼は優しい ___ 、怒ると怖い。", ans: "反面", options: ["反面", "わりに", "ものの", "どころか"] },
+      { q: "プロ ___ 、失敗することもある。", ans: "とはいえ", options: ["とはいえ", "にしても", "ながらも", "以上に"] },
+      { q: "少子化が進む ___ 、高齢者の数は増えている。", ans: "一方で", options: ["一方で", "末に", "あげく", "次第"] },
+      { q: "一人暮らしは自由な ___ 、寂しいこともある。", ans: "反面", options: ["反面", "に限り", "さえ", "こそ"] },
+      { q: "分かっている ___ 、実行するのは難しい。", ans: "とはいえ", options: ["とはいえ", "ものなら", "反省しつつ", "反面"] },
+      { q: "彼は天才と言われる ___ 、人知れず努力している。", ans: "一方で", options: ["一方で", "ばかりに", "ものの", "わりに"] },
+      { q: "解決した ___ 、問題は山積みだ。", ans: "とはいえ", options: ["とはいえ", "としても", "ながらも", "だけに"] }
     ]
   },
   {
     chapter: 80,
     level: "N2",
-    title: "わけだ (no wonder)",
-    desc: "That explains why",
+    title: "Emphasis & Degree",
+    desc: "Not only / Far from / Mere",
     patterns: [
-      { id: "80.1", label: "～わけだ", meaning: "No wonder / That explains / It follows that", explanation: "Used to express a logical conclusion or a natural result of a situation.", examples: [{ jp: "雨が 降っている. 寒いわけだ。", romaji: "Ame ga futte iru. Samui wake da.", en: "It’s raining—that’s why it’s cold (No wonder it's cold)." }] }
+      { id: "80.1", label: "～にすぎない", meaning: "Nothing more than / Merely", explanation: "Used to downplay or emphasize that something is just a small amount/low level.", examples: [{jp: "それは単なる噂にすぎない。", romaji: "Sore wa tannaru uwasa ni suginai.", en: "That is merely a rumor." }] },
+      { id: "80.2", label: "～どころか", meaning: "Far from / On the contrary", explanation: "Emphasizes that the reality is the opposite or much more extreme than expected.", examples: [{jp: "独身どころか、子供が3人もいますよ。", romaji: "獨身どころか、子供が3人もいますよ。", en: "Far from being single, I have three children!" }] },
+      { id: "80.3", label: "～ばかりか～も", meaning: "Not only... but also", explanation: "Emphasizes that something is not limited to one thing, but includes others too.", examples: [{jp: "彼女は綺麗なばかりか、性格もいい。", romaji: "Kanojo wa kirei na bakari ka, seikaku mo ii.", en: "She is not only beautiful but also has a great personality." }] }
     ],
     quiz: [
-      { q: "20年も 日本にいるのか、日本語が 上手な ___。", ans: "わけだ", options: ["わけだ", "はずだ", "ことだ", "ものだ"] },
-      { q: "夜更かししたから、眠い ___。", ans: "わけだ", options: ["わけだ", "どころか", "ばかりに", "わりに"] },
-      { q: "エアコンが ついていない. 暑い ___。", ans: "わけだ", options: ["わけだ", "のみならず", "に加えて", "に際して"] },
-      { q: "5キロも 走ったんだ. 疲れる ___。", ans: "わけだ", options: ["わけだ", "反面", "ものの", "末に"] },
-      { q: "彼が 犯人だった ___。", ans: "わけだ", options: ["わけだ", "にすぎない", "というより", "にしたがって"] },
-      { q: "道理で 暗い ___。電気が 消えている。", ans: "わけだ", options: ["わけだ", "にあたって", "とともに", "さえ"] },
-      { q: "昨日 飲んだから、頭が 痛い ___。", ans: "わけだ", options: ["わけだ", "次第", "末に", "のみならず"] },
-      { q: "毎日 練習しているから、上手になる ___。", ans: "わけだ", options: ["わけだ", "ばかりに", "ことか", "ものか"] },
-      { q: "鍵が 開いている. 誰か いる ___。", ans: "わけだ", options: ["わけだ", "に違いない", "に決まっている", "はずだ"] },
-      { q: "休みなのに 働いている. 忙しい ___。", ans: "わけだ", options: ["わけだ", "ものの", "反面", "に限り"] }
+      { q: "それは単なる言い訳 ___ 。", ans: "にすぎない", options: ["にすぎない", "に違いない", "どころではない", "わけではない"] },
+      { q: "涼しい ___ 、寒いくらいだ。", ans: "どころか", options: ["どころか", "ばかりに", "わりに", "ものの"] },
+      { q: "漢字 ___ 、ひらがなも書けない。", ans: "ばかりか", options: ["ばかりか", "に限らず", "に加えて", "において"] },
+      { q: "私は一介の社員 ___ 。", ans: "にすぎない", options: ["にすぎない", "にしたら", "に先立って", "につき"] },
+      { q: "歩く ___ 、立つことさえできない。", ans: "どころか", options: ["どころか", "ばかりか", "に限り", "どころではない"] },
+      { q: "彼は英語 ___ 、中国語も堪能だ。", ans: "ばかりか", options: ["ばかりか", "というより", "にしたがって", "とともに"] },
+      { q: "合格は夢 ___ 。現実は厳しい。", ans: "にすぎない", options: ["にすぎない", "反面", "に伴って", "に応じて"] },
+      { q: "良くなる ___ 、悪化する一方だ。", ans: "どころか", options: ["どころか", "のみならず", "に沿って", "を除いて"] },
+      { q: "自分 ___ 、家族にも迷惑をかけた。", ans: "ばかりか", options: ["ばかりか", "に限らず", "を通じて", "を通して"] },
+      { q: "これは序の口 ___ 。これからが本番だ。", ans: "にすぎない", options: ["にすぎない", "以上に", "に際して", "からには"] }
     ]
   },
   {
     chapter: 81,
     level: "N2",
-    title: "わけではない (not necessarily)",
-    desc: "Partial negation",
+    title: "Purpose & Effort",
+    desc: "Trying to / Goal / Habit",
     patterns: [
-      { id: "81.1", label: "～わけではない", meaning: "Not necessarily / Doesn't mean that", explanation: "Used to avoid a total generalization or to partially deny something.", examples: [{ jp: "高いからといって、いいわけではない。", romaji: "Takai kara to itte, ii wake de wa nai.", en: "Just because it’s expensive doesn’t mean it’s good." }] }
+      { id: "81.1", label: "～ようにする", meaning: "Make an effort to / Try to", explanation: "Indicates a conscious effort to establish a habit or perform an action.", examples: [{jp: "毎日、野菜を食べるようにしている。", romaji: "Mainichi, yasai o taberu you ni shite iru.", en: "I make an effort to eat vegetables every day." }] },
+      { id: "81.2", label: "～ようになる", meaning: "Come to / Reach the point where", explanation: "Indicates a change in ability or situation over time.", examples: [{jp: "練習して、ピアノが弾けるようになった。", romaji: "Renshuu shite, piano ga hikeru you ni natta.", en: "After practicing, I reached the point where I can play the piano." }] },
+      { id: "81.3", label: "～ことにする / ～ことになる", meaning: "Decide to / It has been decided", explanation: "Koto ni suru is personal decision. Koto ni naru is decision made by others/circumstances.", examples: [{jp: "今日から日記をつけることにした。", romaji: "Kyou kara nikki o tsukeru koto ni shita.", en: "I decided to start keeping a diary from today." }, {jp: "来月、転勤することになった。", romaji: "Raigetsu, tenkin suru koto ni natta.", en: "It has been decided that I will be transferred next month." }] }
     ],
     quiz: [
-      { q: "嫌いな ___ が、今は 食べたくない。", ans: "わけではない", options: ["わけではない", "はずがない", "わけがない", "どころではない"] },
-      { q: "全く できない ___。", ans: "わけではない", options: ["わけではない", "にすぎない", "に違いない", "に決まっている"] },
-      { q: "日本人が みんな 寿司が 好きな ___。", ans: "わけではない", options: ["わけではない", "ばかりか", "のみならず", "に加えて"] },
-      { q: "暇な ___ が、今は 会えない。", ans: "わけではない", options: ["わけではない", "わりに", "に際して", "に伴って"] },
-      { q: "怒っている ___。", ans: "わけではない", options: ["わけではない", "ものの", "反面", "に限り"] },
-      { q: "金持ちが みんな 幸せな ___。", ans: "わけではない", options: ["わけではない", "につれて", "にしたがって", "にすぎない"] },
-      { q: "信じられない ___ が、本当かな。", ans: "わけではない", options: ["わけではない", "末に", "あげく", "次第"] },
-      { q: "行きたくない ___ が、用事が ある。", ans: "わけではない", options: ["わけではない", "として", "にとって", "につき"] },
-      { q: "彼が 悪い ___。", ans: "わけではない", options: ["わけではない", "に沿って", "を通して", "を通じて"] },
-      { q: "いつも 暇な ___。", ans: "わけではない", options: ["わけではない", "さえ", "こそ", "ばかり"] }
+      { q: "健康のために、毎日歩く ___ 。", ans: "ようにしている", options: ["ようにしている", "ことになる", "ことにする", "一方だ"] },
+      { q: "日本語で自分の意見を言える ___ 。", ans: "ようになった", options: ["ようになった", "ようにした", "ことにした", "ばかりだ"] },
+      { q: "タバコを ___ ことにした。", ans: "やめる", options: ["やめる", "やめた", "やめない", "やめて"] },
+      { q: "急な用事で、実家へ ___ ことになった。", ans: "帰る", options: ["帰る", "帰った", "帰りたい", "帰るべき"] },
+      { q: "忘れない ___ 、メモしておきます。", ans: "ように", options: ["ように", "ために", "ことに", "次第"] },
+      { q: "最近、やっと朝5時に起きられる ___ 。", ans: "ようになった", options: ["ようになった", "ようにした", "ことになった", "ばかりだ"] },
+      { q: "自分を信じて ___ ことにした。", ans: "頑張る", options: ["頑張る", "頑張った", "頑張らずに", "頑張るほど"] },
+      { q: "来週から新しいプロジェクトが ___ ことになった。", ans: "始まる", options: ["始まる", "始まった", "始めて", "始まろう"] },
+      { q: "甘いものは食べない ___ している。", ans: "ように", options: ["ように", "ことに", "ために", "次第"] },
+      { q: "引っ越し ___ ことになったので、挨拶に行く。", ans: "する", options: ["する", "した", "したい", "しよう"] }
     ]
   },
   {
     chapter: 82,
     level: "N2",
-    title: "ばかりでなく～も (not only)",
-    desc: "Inclusive expansion",
+    title: "Time & Sequence",
+    desc: "While / As soon as / Period",
     patterns: [
-      { id: "82.1", label: "～ばかりでなく～も", meaning: "Not only ~ but also", explanation: "Used to add more information to a statement, similar to 'dake de naku'.", examples: [{ jp: "日本語ばかりでなく、英語も 話せます。", romaji: "Nihongo bakari de naku, eigo mo hanasemasu.", en: "I can speak not only Japanese but also English." }] }
+      { id: "82.1", label: "～うちに", meaning: "While / Before", explanation: "Doing something before a state changes.", examples: [{jp: "若いうちに、たくさん経験をしたほうがいい。", romaji: "Wakai uchi ni, takusan keiken o shita hou ga ii.", en: "You should gain many experiences while you are young." }] },
+      { id: "82.2", label: "～次第", meaning: "As soon as", explanation: "Doing something immediately after another action is finished (formal).", examples: [{jp: "準備ができ次第、出発します。", romaji: "Junbi ga deki shidai, shuppatsu shimasu.", en: "As soon as preparations are ready, we will depart." }] },
+      { id: "82.3", label: "～にわたって", meaning: "Over a period / Throughout", explanation: "Indicates that something covers a whole span of time or space.", examples: [{jp: "3日間にわたって、祭りが開催された。", romaji: "Mikkakan ni watatte, matsuri ga kaisai sareta.", en: "The festival was held over a period of three days." }] }
     ],
     quiz: [
-      { q: "彼女は 綺麗な ___ 、頭も いい。", ans: "ばかりでなく", options: ["ばかりでなく", "ばかりに", "わりに", "ものの"] },
-      { q: "この店は 安い ___ 、味も いい。", ans: "ばかりでなく", options: ["ばかりでなく", "のみならず", "に加えて", "に際して"] },
-      { q: "彼は 歌 ___ 、ダンスも 上手だ。", ans: "ばかりでなく", options: ["ばかりでなく", "さえ", "こそ", "どころか"] },
-      { q: "肉 ___ 、野菜も 食べなさい。", ans: "ばかりでなく", options: ["ばかりでなく", "ばかりか", "にすぎない", "とともに"] },
-      { q: "学生 ___ 、大人も 楽しめる。", ans: "ばかりでなく", options: ["ばかりでなく", "わりに", "として", "につき"] },
-      { q: "雨 ___ 、風も 強い。", ans: "ばかりでなく", options: ["ばかりでなく", "末に", "あげく", "次第"] },
-      { q: "仕事 ___ 、家事も しています。", ans: "ばかりでなく", options: ["ばかりでなく", "反面", "に伴って", "に応じて"] },
-      { q: "日本 ___ 、アジア中で 有名だ。", ans: "ばかりでなく", options: ["ばかりでなく", "というより", "にしたがって", "のみか"] },
-      { q: "ピアノ ___ 、ギターも 弾ける。", ans: "ばかりでなく", options: ["ばかりでなく", "に限り", "さえ", "こそ"] },
-      { q: "子供 ___ 、お年寄りも 好きだ。", ans: "ばかりでなく", options: ["ばかりでなく", "に沿って", "を通じて", "を通して"] }
+      { q: "忘れない ___ 、メモしましょう。", ans: "うちに", options: ["うちに", "次第", "にわたって", "たびに"] },
+      { q: "駅に到着 ___ 、電話してください。", ans: "し次第", options: ["し次第", "してから", "するうちに", "たびに"] },
+      { q: "会議は5時間 ___ 行われた。", ans: "にわたって", options: ["にわたって", "をきっかけに", "次第", "うちに"] },
+      { q: "暗くならない ___ 、帰りましょう。", ans: "うちに", options: ["うちに", "からには", "限り", "以上に"] },
+      { q: "結果がわかり ___ 、お知らせします。", ans: "次第", options: ["次第", "までに", "ために", "おりに"] },
+      { q: "関東地方全域 ___ 、大雨が降った。", ans: "にわたって", options: ["にわたって", "に限らず", "を通じて", "を通して"] },
+      { q: "アイスが溶けない ___ 、食べてください。", ans: "うちに", options: ["うちに", "ばかりに", "ながらも", "反面"] },
+      { q: "準備が整い ___ 、始めます。", ans: "次第", options: ["次第", "次第では", "末に", "あげく"] },
+      { q: "長年に ___ 研究の結果、ついに成功した。", ans: "わたる", options: ["わたる", "わたった", "わたって", "わたるほど"] },
+      { q: "元気な ___ 、一度日本へ行きたい。", ans: "うちに", options: ["うちに", "からには", "際して", "際"] }
     ]
   },
   {
     chapter: 83,
     level: "N2",
-    title: "に加えて (in addition to)",
-    desc: "Adding more things",
+    title: "Passive, Causative & Formal",
+    desc: "Respect / Responsibility / Suffering",
     patterns: [
-      { id: "83.1", label: "～に加えて", meaning: "In addition to / Along with", explanation: "Used to state that in addition to one thing, something else is also present.", examples: [{ jp: "雨に加えて、風も 強いです。", romaji: "Ame ni kuwaete, kaze mo tsuyoi desu.", en: "In addition to rain, the wind is also strong." }] }
+      { id: "83.1", label: "Advanced Passive", meaning: "Suffering / Public fact", explanation: "Used to show annoyance (suffering passive) or to state public facts in a formal way.", examples: [{jp: "雨に降られて、濡れてしまった。", romaji: "Ame ni furarete, nurete shimatta.", en: "I got rained on and got wet (annoyance)." }, {jp: "この寺は500年前に建てられました。", romaji: "Kono tera wa gohyakunen mae ni tateraremashita.", en: "This temple was built 500 years ago (fact)." }] },
+      { id: "83.2", label: "～させていただく", meaning: "Humble permission", explanation: "Very polite way to say one is doing something with someone's permission.", examples: [{jp: "自己紹介させていただきます。", romaji: "Jikoshoukai sasete itadakimasu.", en: "Allow me to introduce myself." }] },
+      { id: "83.3", label: "～される", meaning: "Formal writing passive", explanation: "Often used in reports or news to state actions without a specific subject.", examples: [{jp: "新しい法案が可決されました。", romaji: "Atarashii houan ga kaketsu saremashita.", en: "The new bill was passed." }] }
     ],
     quiz: [
-      { q: "暑さ ___ 、湿気も すごい。", ans: "に加えて", options: ["に加えて", "に対して", "にとって", "について"] },
-      { q: "地震 ___ 、火事も 起きた。", ans: "に加えて", options: ["に加えて", "に際して", "に応じて", "に伴って"] },
-      { q: "この仕事は 忙しい ___ 、責任も 重い。", ans: "に加えて", options: ["に加えて", "ものの", "反面", "わりに"] },
-      { q: "宿題 ___ 、明日 試験も ある。", ans: "に加えて", options: ["に加えて", "とともに", "にしたがって", "につれて"] },
-      { q: "怪我 ___ 、病気にも なった。", ans: "に加えて", options: ["に加えて", "ばかりに", "のみならず", "に限り"] },
-      { q: "名前 ___ 、住所も 書いてください。", ans: "に加えて", options: ["に加えて", "を", "に", "は"] },
-      { q: "歌の才能 ___ 、ルックスも いい。", ans: "に加えて", options: ["に加えて", "さえ", "こそ", "ばかり"] },
-      { q: "英語の授業 ___ 、日本語の授業も 受けた。", ans: "に加えて", options: ["に加えて", "として", "にとって", "につき"] },
-      { q: "美味しさ ___ 、見た目も 綺麗だ。", ans: "に加えて", options: ["に加えて", "に沿って", "を通じて", "を通して"] },
-      { q: "彼は 優しい ___ 、面白い。", ans: "に加えて", options: ["に加えて", "次第", "末に", "あげく"] }
+      { q: "昨日の夜、隣の赤ちゃんに ___ 、眠れなかった。", ans: "泣かれて", options: ["泣かれて", "泣かせて", "泣いて", "泣きたい"] },
+      { q: "失礼ですが、先に 帰らせて ___ ます。", ans: "いただき", options: ["いただき", "ください", "さしあげ", "やり"] },
+      { q: "この本は、世界中で ___ います。", ans: "読まれて", options: ["読まれて", "読ませて", "読みつつ", "読める"] },
+      { q: "泥棒に 財布を ___ 。", ans: "盗まれた", options: ["盗まれた", "盗ませた", "盗んだ", "盗まれさせた"] },
+      { q: "今日は 私に 払わせて ___ ください。", ans: "ください", options: ["ください", "いただき", "さしあげ", "もらって"] },
+      { q: "会議は 明日 ___ ことになった。", ans: "開かれる", options: ["開かれる", "開かせる", "開く", "開こう"] },
+      { q: "犬に 手を ___ 。", ans: "噛まれた", options: ["噛まれた", "噛ませた", "噛んだ", "噛みつつ"] },
+      { q: "質問 ___ いただきます。", ans: "させて", options: ["させて", "されて", "して", "しようと"] },
+      { q: "その 意見は 多くの人に ___ います。", ans: "支持されて", options: ["支持されて", "支持させて", "支持して", "支持しつつ"] },
+      { q: "父に 日記を ___ 。", ans: "読まれた", options: ["読まれた", "読ませた", "読んだ", "読める"] }
     ]
   },
   {
     chapter: 84,
     level: "N2",
-    title: "つつ (while / although)",
-    desc: "Formal simultaneous / contrast",
+    title: "Appearance & Hearsay",
+    desc: "Seems like / According to / Rumor",
     patterns: [
-      { id: "84.1", label: "～つつ", meaning: "While / Although", explanation: "A formal version of 'nagara' (while) or used to express contrast (although/despite).", examples: [{ jp: "働きつつ 勉強しています。", romaji: "Hataraki tsutsu benkyou shite imasu.", en: "While working, I study." }] }
+      { id: "84.1", label: "～とのことだ", meaning: "I hear that / It is said that", explanation: "Formal way to report information from another source.", examples: [{jp: "明日は雨とのことだ。", romaji: "Ashita wa ame to no koto da.", en: "I hear that it will rain tomorrow." }] },
+      { id: "84.2", label: "～によると / ～によれば", meaning: "According to", explanation: "Indicates the source of information.", examples: [{jp: "天気予報によると、来週は暑くなるそうだ。", romaji: "Tenki yohou ni yoru to, raishuu wa atsuku naru sou da.", en: "According to the weather forecast, it will be hot next week." }] },
+      { id: "84.3", label: "～らしい", meaning: "Rumor / Typicality", explanation: "Indicates a guess based on what was heard or seen, or that something is very 'typical' of its kind.", examples: [{jp: "彼はもう帰ったらしい。", romaji: "Kare wa mou kaetta rashii.", en: "He seems to have already gone home (based on info)." }, {jp: "今日は春らしい天気だ。", romaji: "Kyou wa haru rashii tenki da.", en: "Today is a typically spring-like day." }] }
     ],
     quiz: [
-      { q: "悪いと 知り ___ 、嘘を ついた。", ans: "つつ", options: ["つつ", "ながら", "つつも", "ものの"] },
-      { q: "音楽を 聞き ___ 散歩する。", ans: "つつ", options: ["つつ", "ながら", "つつも", "ために"] },
-      { q: "体に悪いと 思い ___ 、タバコが やめられない。", ans: "つつ", options: ["つつ", "ながら", "つつも", "わりに"] },
-      { q: "景色を 楽しみ ___ 旅を した。", ans: "つつ", options: ["つつ", "ことから", "ことに", "ものなら"] },
-      { q: "将来を 考え ___ 行動すべきだ。", ans: "つつ", options: ["つつ", "に際して", "に伴って", "に応じて"] },
-      { q: "ダイエット中と 言い ___ 、ケーキを 食べた。", ans: "つつ", options: ["つつ", "ばかりに", "さえ", "こそ"] },
-      { q: "反省 ___ 、また 同じことを した。", ans: "しつつ", options: ["しつつ", "して", "すれば", "すればこそ"] },
-      { q: "彼は 苦笑い ___ 話した。", ans: "しつつ", options: ["しつつ", "して", "ながら", "つつも"] },
-      { q: "無理だと 分かり ___ 、挑戦した。", ans: "つつ", options: ["つつ", "のに", "から", "ので"] },
-      { q: "テレビを 見 ___ ご飯を 食べる。", ans: "つつ", options: ["つつ", "ながら", "つつも", "のときに"] }
+      { q: "ニュース ___ 、事故があったそうだ。", ans: "によると", options: ["によると", "を皮切りに", "を通して", "を通じて"] },
+      { q: "田中さんは欠席 ___ 。", ans: "とのことだ", options: ["とのことだ", "ということだ", "わけだ", "はずだ"] },
+      { q: "あそこのレストランは美味しい ___ 。", ans: "らしい", options: ["らしい", "みたい", "よう", "そう"] },
+      { q: "手紙 ___ 、家族はみんな元気だそうだ。", ans: "によれば", options: ["によれば", "に際して", "に応じて", "に伴って"] },
+      { q: "工事は来月終わる ___ 。", ans: "とのことだ", options: ["とのことだ", "ばかりだ", "ところだ", "次第だ"] },
+      { q: "彼はプロの選手 ___ 素晴らしいプレーをした。", ans: "らしい", options: ["らしい", "ような", "みたいな", "そうな"] },
+      { q: "噂 ___ 、二人は結婚するそうだ。", ans: "によると", options: ["によると", "を問わず", "を除いて", "に加えて"] },
+      { q: "明日は台風が来る ___ 。", ans: "とのことだ", options: ["とのことだ", "次第だ", "ばかりだ", "末だ"] },
+      { q: "あの雲の様子は雨が降る ___ だ。", ans: "よう", options: ["よう", "そう", "らしい", "とのこと"] },
+      { q: "予報 ___ 、午後は晴れるらしい。", ans: "によると", options: ["によると", "に亘って", "に即して", "に反して"] }
     ]
   },
   {
     chapter: 85,
     level: "N2",
-    title: "つつある (in process of)",
-    desc: "Ongoing change",
+    title: "Tendency, Habit & Change",
+    desc: "Tend to / Process / While",
     patterns: [
-      { id: "85.1", label: "～つつある", meaning: "In the process of / Gradually changing", explanation: "Indicates that a change is currently in progress (formal/written style).", examples: [{ jp: "物価は 上がりつつあります。", romaji: "Bukka wa agari tsutsu arimasu.", en: "Prices are rising (in the process of rising)." }] }
+      { id: "85.1", label: "～がち", meaning: "Tend to / Often do", explanation: "Indicates a tendency towards a negative state or action.", examples: [{jp: "最近、風邪をひきがちだ。", romaji: "Saikin, kaze o hikigachi da.", en: "I've been tending to catch colds lately." }] },
+      { id: "85.2", label: "～気味", meaning: "Slightly / A bit of", explanation: "Indicates a slight feeling or state (usually negative).", examples: [{jp: "今日は少し疲れ気味だ。", romaji: "Kyou wa sukoshi tsukaregimi da.", en: "I'm feeling a bit tired today." }] },
+      { id: "85.3", label: "～つつある / ～つつ", meaning: "In process of / While", explanation: "Tsutsu aru is ongoing change. Tsutsu is formal 'while'.", examples: [{jp: "景気は回復しつつある。", romaji: "Keiki wa kaifuku shitsutsu aru.", en: "The economy is in the process of recovering." }, {jp: "悪いとは知りつつ、嘘をついた。", romaji: "Warui to wa shiritsutsu, uso o tsuita.", en: "While knowing it was bad, I lied." }] }
     ],
     quiz: [
-      { q: "この島は 沈み ___。", ans: "つつある", options: ["つつある", "ている", "ところだ", "ばかりだ"] },
-      { q: "景気は 回復し ___。", ans: "つつある", options: ["つつある", "つつも", "ながら", "ところだ"] },
-      { q: "桜が 咲き ___。", ans: "つつある", options: ["つつある", "ている", "ところだ", "ばかりだ"] },
-      { q: "環境問題は 悪化し ___。", ans: "つつある", options: ["つつある", "ながら", "ものの", "わりに"] },
-      { q: "事件の真相が 明らかに なり ___。", ans: "つつある", options: ["つつある", "ところだ", "ばかりだ", "まい"] },
-      { q: "子供の数が 減り ___。", ans: "つつある", options: ["つつある", "に伴って", "に応じて", "に際して"] },
-      { q: "開発が 進み ___。", ans: "つつある", options: ["つつある", "としての", "に対する", "についての"] },
-      { q: "彼への 信頼が 失われ ___。", ans: "つつある", options: ["つつある", "ばかりに", "さえ", "こそ"] },
-      { q: "古い建物が 壊され ___。", ans: "つつある", options: ["つつある", "うちに", "まえに", "ばかりに"] },
-      { q: "冬が 近づき ___。", ans: "つつある", options: ["つつある", "に沿って", "を通じて", "を通して"] }
+      { q: "冬は外に出るのが おっくうに なり ___ です。", ans: "がち", options: ["がち", "気味", "かけ", "きり"] },
+      { q: "最近、太り ___ なので、運動を始めた。", ans: "気味", options: ["気味", "がち", "っぽく", "げ"] },
+      { q: "環境破壊は 世界中で 進み ___ 。", ans: "つつある", options: ["つつある", "ながら", "ところだ", "ばかりだ"] },
+      { q: "明日 試験だと 知り ___ 、勉強しなかった。", ans: "つつ", options: ["つつ", "ながら", "わりに", "からには"] },
+      { q: "留守 ___ なので、宅配便が受け取れない。", ans: "がち", options: ["がち", "気味", "きり", "ぬき"] },
+      { q: "緊張のせいか、少し 風邪 ___ です。", ans: "気味", options: ["気味", "がち", "みたい", "そう"] },
+      { q: "医療技術は 日々 進歩し ___ 。", ans: "つつある", options: ["つつある", "ながら", "ている", "ところだ"] },
+      { q: "感謝の気持ちを 持ち ___ 、毎日を過ごす。", ans: "つつ", options: ["つつ", "ながら", "ていて", "から"] },
+      { q: "忙しくて 朝ごはんを 抜き ___ だ。", ans: "がち", options: ["がち", "気味", "っぽい", "げ"] },
+      { q: "新製品の開発が 遅れ ___ だ。", ans: "気味", options: ["気味", "がち", "つつある", "ところだ"] }
     ]
   },
   {
     chapter: 86,
     level: "N2",
-    title: "に伴って (along with / as)",
-    desc: "Simultaneous change",
+    title: "Limits & Unavoidability",
+    desc: "No choice / Impossible / Depending on",
     patterns: [
-      { id: "86.1", label: "～に伴って", meaning: "Along with / As", explanation: "Indicates that as one change occurs, another change happens simultaneously.", examples: [{ jp: "経済の 成長に伴って、生活が 変わりました。", romaji: "Keizai no seichou ni tomonatte, seikatsu ga kawarimashita.", en: "Along with economic growth, lifestyle changed." }] }
+      { id: "86.1", label: "～ざるを得ない", meaning: "Have no choice but to", explanation: "Indicates that one must do something despite not wanting to.", examples: [{jp: "不本意だが、休学せざるを得ない。", romaji: "Fuhoni da ga, kyuugaku sezaru o enai.", en: "Unwillingly, I have no choice but to take a leave of absence from school." }] },
+      { id: "86.2", label: "～わけにはいかない", meaning: "Cannot afford to / Cannot allow oneself to", explanation: "Indicates that due to social or moral reasons, one cannot perform an action.", examples: [{jp: "明日は試験があるから、休むわけにはいかない。", romaji: "Ashita wa shiken ga aru kara, yasumu wake ni wa ikanai.", en: "I have an exam tomorrow, so I can't afford to be absent." }] },
+      { id: "86.3", label: "～かねない", meaning: "Might happen (bad result)", explanation: "Indicates a possibility of a negative outcome.", examples: [{jp: "スピードを出しすぎると、事故を起こしかねない。", romaji: "Supi-do o dashisugiru to, jiko o okoshikanai.", en: "If you speed too much, you might cause an accident." }] }
     ],
     quiz: [
-      { q: "人口の 増加 ___、食糧不足が 深刻に なった。", ans: "に伴って", options: ["に伴って", "に応じて", "に際して", "に先立って"] },
-      { q: "時代の 変化 ___、価値観も 変わる。", ans: "に伴って", options: ["に伴って", "に際して", "として", "につき"] },
-      { q: "開発が 進む ___、自然が 失われていく。", ans: "のに伴って", options: ["のに伴って", "に加えて", "を除いて", "を通して"] },
-      { q: "台風の 接近 ___、風が 強くなった。", ans: "に伴って", options: ["に伴って", "ばかりに", "ものの", "反面"] },
-      { q: "需要の 増加 ___、価格が 上がった。", ans: "に伴って", options: ["に伴って", "にしたがって", "につれて", "とともに"] },
-      { q: "技術の 進歩 ___、生活は 便利になる。", ans: "に伴って", options: ["に伴って", "に限り", "さえ", "こそ"] },
-      { q: "町の 発展 ___、交通量も 増えた。", ans: "に伴って", options: ["に伴って", "のところに", "まえに", "うちに"] },
-      { q: "試験が 近づく ___、緊張が 高まる。", ans: "のに伴って", options: ["のに伴って", "ばかりに", "あげく", "末に"] },
-      { q: "売上の 減少 ___、ボーナスが カットされた。", ans: "に伴って", options: ["に伴って", "に沿って", "を通じて", "を通して"] },
-      { q: "責任が 重くなる ___、ストレスも 増える。", ans: "のに伴って", options: ["のに伴って", "次第", "末に", "あげく"] }
+      { q: "中止 ___ 得ない状況だ。", ans: "せざる", options: ["せざる", "せずには", "なくては", "すれば"] },
+      { q: "大切な会議だから、遅れる ___ 。", ans: "わけにはいかない", options: ["わけにはいかない", "はずがない", "べきではない", "ものだ"] },
+      { q: "そんなことを言ったら、誤解を 招き ___ 。", ans: "かねない", options: ["かねない", "ざるを得ない", "わけがない", "べきだ"] },
+      { q: "命令とあらば、従わ ___ 得ない。", ans: "ざる", options: ["ざる", "ない", "ずに", "なくて"] },
+      { q: "一人で外へ出す ___ 。最近は物騒だ。", ans: "わけにはいかない", options: ["わけにはいかない", "どころではない", "ものか", "まい"] },
+      { q: "無理なダイエットは体を 壊し ___ 。", ans: "かねない", options: ["かねない", "にすぎない", "どころではない", "はずだ"] },
+      { q: "明日は大事な用事があるので、雨が降っても 行か ___ 得ない。", ans: "ざる", options: ["ざる", "なく", "ない", "ずに"] },
+      { q: "親切にされたのだから、お礼を言わない ___ 。", ans: "わけにはいかない", options: ["わけにはいかない", "ことにする", "ことだ", "はずだ"] },
+      { q: "不景気で倒産 ___ 状況だ。", ans: "しかねない", options: ["しかねない", "しつつある", "しながら", "し次第"] },
+      { q: "ルールは守ら ___ 得ない。", ans: "ざる", options: ["ざる", "ずに", "ない", "なく"] }
     ]
   },
   {
     chapter: 87,
     level: "N2",
-    title: "に応じて (according to)",
-    desc: "Proportional response",
+    title: "Formal & Business Grammar",
+    desc: "Regarding / At / Through / As",
     patterns: [
-      { id: "87.1", label: "～に応じて", meaning: "According to / Depending on", explanation: "Used to indicate that something changes or is decided in accordance with another factor.", examples: [{ jp: "能力に応じて 仕事が 与えられます。", romaji: "Nouryoku ni oujite shigoto ga ataeraremasu.", en: "Work is given according to one's ability." }] }
+      { id: "87.1", label: "～に関して / ～に対して", meaning: "Regarding / Towards (Opposition)", explanation: "Ni kanshite is about a topic. Ni taishite is towards a person or in contrast.", examples: [{jp: "その件に関して、ご報告いたします。", romaji: "Sono ken ni kanshite, gohoukoku itashimasu.", en: "I will report regarding that matter." }, {jp: "お客様に対しては、丁寧な言葉を使いなさい。", romaji: "Okyakusama ni taishite wa, teinei na kotoba o tsukainasai.", en: "Use polite language towards customers." }] },
+      { id: "87.2", label: "～において / ～における", meaning: "In / At (Formal location/time)", explanation: "Formal version of 'de' for locations or periods.", examples: [{jp: "現代社会において、インターネットは欠かせない。", romaji: "Gendai shakai ni oite, inta-netto wa kakasenai.", en: "In modern society, the internet is indispensable." }] },
+      { id: "87.3", label: "～を通して / ～を通じて", explanation: "Means or throughout a whole period.", meaning: "Through / Via", examples: [{jp: "ニュースを通して、その事件を知った。", romaji: "Nyu-su o tooshite, sono jiken o shitta.", en: "I learned about that incident through the news." }] }
     ],
     quiz: [
-      { q: "予算 ___、プランを 選びます。", ans: "に応じて", options: ["に応じて", "に伴って", "に際して", "に先立って"] },
-      { q: "天候 ___、行き先を 変更する。", ans: "に応じて", options: ["に応じて", "として", "にとって", "につき"] },
-      { q: "客の 要望 ___、メニューを 増やす。", ans: "に応じて", options: ["に応じて", "に加えて", "を除いて", "を通して"] },
-      { q: "体力 ___、運動を しましょう。", ans: "に応じて", options: ["に応じて", "ばかりに", "ものの", "反面"] },
-      { q: "状況 ___、適切に 判断してください。", ans: "に応じて", options: ["に応じて", "にしたがって", "につれて", "とともに"] },
-      { q: "レベル ___、クラスを 分ける。", ans: "に応じて", options: ["に応じて", "に限り", "さえ", "こそ"] },
-      { q: "年齢 ___、料金が 違います。", ans: "に応じて", options: ["に応じて", "のところに", "まえに", "うちに"] },
-      { q: "出席者の 数 ___、部屋を 決める。", ans: "に応じて", options: ["に応じて", "ばかりに", "あげく", "末に"] },
-      { q: "個人の 好み ___、味付けを 変える。", ans: "に応じて", options: ["に応じて", "に沿って", "を通じて", "を通して"] },
-      { q: "季節の 変化 ___、服を 選ぶ。", ans: "に応じて", options: ["に応じて", "次第", "末に", "あげく"] }
+      { q: "この問題 ___ 、皆さんの意見を聞かせてください。", ans: "に関して", options: ["に関して", "に際して", "に伴って", "に際し"] },
+      { q: "目上の人 ___ 、失礼な態度をとってはいけない。", ans: "に対して", options: ["に対して", "にとって", "について", "として"] },
+      { q: "来週、この会場 ___ 試験が行われます。", ans: "において", options: ["において", "に際して", "にわたって", "に限って"] },
+      { q: "一年 ___ 温暖な気候だ。", ans: "を通じて", options: ["を通じて", "に関わらず", "を問わず", "に限らず"] },
+      { q: "環境問題 ___ 興味があります。", ans: "に関して", options: ["に関して", "に向けて", "に応じて", "に沿って"] },
+      { q: "最近、若者の 読書離れ ___ 懸念されています。", ans: "が", options: ["が", "を", "に", "は"] },
+      { q: "国際会議 ___ 、新しい条約が結ばれた。", ans: "において", options: ["において", "として", "につき", "に限り"] },
+      { q: "ボランティア活動 ___ 、多くのことを学んだ。", ans: "を通して", options: ["を通して", "を皮切りに", "をきっかけに", "を抜いて"] },
+      { q: "彼女 ___ 多くのファンが 手紙を送った。", ans: "に対して", options: ["に対して", "に先立って", "に従って", "に際して"] },
+      { q: "明治時代 ___ 日本は 大きく変わった。", ans: "における", options: ["における", "についての", "としての", "にかけての"] }
     ]
   },
   {
     chapter: 88,
     level: "N2",
-    title: "ものの (although)",
-    desc: "Contrast/Despite fact",
+    title: "Evaluation & Judgement",
+    desc: "Nothing but / Best to / Sentiment",
     patterns: [
-      { id: "88.1", label: "～ものの", meaning: "Although / Even though", explanation: "Used to express a fact that exists, but something contradictory also applies.", examples: [{ jp: "難しいものの、やってみます。", romaji: "Muzukashii mono no, yattemimasu.", en: "Although it's difficult, I'll try." }] }
+      { id: "88.1", label: "～にほかならない", meaning: "Nothing but / Definitely because", explanation: "Emphasizes that there is no other reason or truth.", examples: [{jp: "彼の成功は努力の結果にほかならない。", romaji: "Kare no seichou wa doryoku no kekka ni hokanaranai.", en: "His success is nothing but the result of effort." }] },
+      { id: "88.2", label: "～に越したことはない", meaning: "It's best to / Nothing is better than", explanation: "Indicates a desirable state, even if not absolutely necessary.", examples: [{jp: "準備は早めに越したことはない。", romaji: "Junbi wa hayame ni koshita koto wa nai.", en: "It's best to prepare early." }] },
+      { id: "88.3", label: "～ものだ / ～ものではない", meaning: "Social norm / Emotional truth", explanation: "States things as they should be or naturally are.", examples: [{jp: "お年寄りには親切にするものだ。", romaji: "Otoshiyori ni wa shinsetsu ni suru mono da.", en: "One should be kind to the elderly." }] }
     ],
     quiz: [
-      { q: "買った ___、全然 使っていない。", ans: "ものの", options: ["ものの", "反面", "わりに", "に際して"] },
-      { q: "大学は 卒業した ___、やりたいことが 見つからない。", ans: "ものの", options: ["ものの", "に伴って", "に応じて", "に先立って"] },
-      { q: "謝った ___、許してくれなかった。", ans: "ものの", options: ["ものの", "によって", "として", "にとって"] },
-      { q: "春に なった ___、まだ 寒い。", ans: "ものの", options: ["ものの", "ばかりに", "さえ", "こそ"] },
-      { q: "約束した ___、行けるか わからない。", ans: "ものの", options: ["ものの", "に限り", "ものなら", "どころか"] },
-      { q: "美味しい ___、値段が 高すぎる。", ans: "ものの", options: ["ものの", "反面", "わりに", "ばかりか"] },
-      { q: "分かっている ___、なかなか 実行できない。", ans: "ものの", options: ["ものの", "うちに", "まえに", "ところで"] },
-      { q: "便利な ___、操作が 難しい。", ans: "ものの", options: ["ものの", "あげく", "末に", "次第"] },
-      { q: "合格した ___、希望の 大学ではない。", ans: "ものの", options: ["ものの", "というより", "にしたがって", "とともに"] },
-      { q: "静かな ___、不便な 場所だ。", ans: "ものの", options: ["ものの", "のみならず", "に加えて", "にわたって"] }
+      { q: "私がここまで来られたのは、皆さんの助けがあったから ___ 。", ans: "にほかならない", options: ["にほかならない", "にすぎない", "に違いない", "に決まっている"] },
+      { q: "用心 ___ したことはない。", ans: "に越した", options: ["に越した", "に限り", "さえあれば", "こそ"] },
+      { q: "子供は外で遊ぶ ___ だ。", ans: "もの", options: ["もの", "こと", "はず", "わけ"] },
+      { q: "嘘をつく ___ ではない。", ans: "もの", options: ["もの", "こと", "はず", "わけ"] },
+      { q: "この発明は平和のために利用されるべき ___ だ。", ans: "もの", options: ["もの", "こと", "はず", "わけ"] },
+      { q: "宝くじに当たったのは幸運 ___ 。", ans: "にほかならない", options: ["にほかならない", "わりに", "ものの", "反面"] },
+      { q: "試験は満点 ___ したことはない。", ans: "に越した", options: ["に越した", "のみか", "ばかりか", "にしたら"] },
+      { q: "人の悪口を言う ___ ではない。", ans: "もの", options: ["もの", "うちに", "まえに", "ところで"] },
+      { q: "親孝行は ___ うちにするものだ。", ans: "できる", options: ["できる", "できた", "できそうな", "できない"] },
+      { q: "彼の 行動は 正義感 ___ 。", ans: "にほかならない", options: ["にほかならない", "にふさわしい", "に基づいて", "につき"] }
     ]
   },
   {
     chapter: 89,
     level: "N2",
-    title: "反面 (on other hand)",
-    desc: "Contrasting two sides",
+    title: "Requests & Advice",
+    desc: "Should / Wish / Expectation",
     patterns: [
-      { id: "89.1", label: "～反面", meaning: "On the other hand / But at the same time", explanation: "Used to present two opposite aspects of the same person, thing, or situation.", examples: [{ jp: "便利な反面、危険も あります。", romaji: "Benri na hanmen, kiken mo arimasu.", en: "It’s convenient, but on the other hand, there’s also danger." }] }
+      { id: "89.1", label: "～べきだ / ～べきではない", meaning: "Should / Shouldn't", explanation: "Expresses strong moral or social obligation.", examples: [{jp: "約束は守るべきだ。", romaji: "Yakusoku wa mamoru beki da.", en: "You should keep your promises." }] },
+      { id: "89.2", label: "～ないものか", meaning: "Is there no way to / Wish", explanation: "Expression of a strong wish for something difficult to happen.", examples: [{jp: "何とか解決できないものか。", romaji: "Nantoka kaiketsu dekinai mono ka.", en: "Is there really no way to resolve this somehow?" }] },
+      { id: "89.3", label: "～てほしいものだ", meaning: "Really want someone to", explanation: "Strong desire for someone else to do something.", examples: [{jp: "一刻も早く平和になってほしいものだ。", romaji: "Ikkoku mo hayaku heiwa ni natte hoshii mono da.", en: "I really want it to become peaceful as soon as possible." }] }
     ],
     quiz: [
-      { q: "都会は 刺激が 多い ___、ストレスも 多い。", ans: "反面", options: ["反面", "ものの", "わりに", "に際して"] },
-      { q: "彼は 優しい ___、厳しい ところも ある。", ans: "反面", options: ["反面", "に伴って", "に応じて", "に先立って"] },
-      { q: "一人暮らしは 自由な ___、寂しい。", ans: "反面", options: ["反面", "によって", "として", "にとって"] },
-      { q: "ネットは 便利な ___、トラブルも 起きやすい。", ans: "反面", options: ["反面", "ばかりに", "さえ", "こそ"] },
-      { q: "仕事は 楽しい ___、責任が 重くて 大変だ。", ans: "反面", options: ["反面", "ものなら", "に限り", "どころか"] },
-      { q: "この薬は よく 効く ___、副作用も 強い。", ans: "反面", options: ["反面", "ものの", "ばかりに", "わりに"] },
-      { q: "彼は 多才な ___、飽きっぽい。", ans: "反面", options: ["反面", "うちに", "まえに", "ところで"] },
-      { q: "あの土地は 値段が 安い ___、地盤が 弱い。", ans: "反面", options: ["反面", "あげく", "末に", "次第"] },
-      { q: "彼女は 完璧に見える ___、実は おっちょこちょいだ。", ans: "反面", options: ["反面", "というより", "にしたがって", "とともに"] },
-      { q: "観光客が 増えて 潤う ___、ゴミ問題が 深刻だ。", ans: "反面", options: ["反面", "につき", "に沿って", "を除いて"] }
+      { q: "若いうちにもっと勉強 ___ だった。", ans: "しておくべき", options: ["しておくべき", "しておいた", "しておきたい", "しているはず"] },
+      { q: "なんとかして、彼に会えない ___ 。", ans: "ものか", options: ["ものか", "ことか", "はずか", "わけか"] },
+      { q: "世界が平和になって ___ 。", ans: "ほしいものだ", options: ["ほしいものだ", "ほしいわけだ", "ほしいことだ", "ほしいはずだ"] },
+      { q: "人前でさわぐ ___ ではない。", ans: "べき", options: ["べき", "こと", "もの", "はず"] },
+      { q: "この感動を誰かに伝えられない ___ 。", ans: "ものか", options: ["ものか", "ばかりか", "さえあれば", "ころか"] },
+      { q: "子供たちがのびのびと育って ___ 。", ans: "ほしいものだ", options: ["ほしいものだ", "つもりだ", "ようだ", "そうだ"] },
+      { q: "専門家に相談 ___ だ。", ans: "するべき", options: ["するべき", "しつつ", "した末", "すればこそ"] },
+      { q: "失った時間を取り戻せない ___ 。", ans: "ものか", options: ["ものか", "さえか", "のみか", "よりか"] },
+      { q: "みんなにもっと協力して ___ 。", ans: "ほしいものだ", options: ["ほしいものだ", "に伴って", "に応じて", "に際して"] },
+      { q: "自分を信じて突き進む ___ だ。", ans: "べき", options: ["べき", "こと", "はず", "わけ"] }
     ]
   },
   {
     chapter: 90,
     level: "N2",
-    title: "からには (now that)",
-    desc: "Commitment/Since fact",
+    title: "Fixed N2 Patterns",
+    desc: "Comparison / Limitation / Context",
     patterns: [
-      { id: "90.1", label: "～からには", meaning: "Now that / Since / So long as", explanation: "Indicates a strong resolve or natural consequence because a certain situation exists.", examples: [{ jp: "約束したからには、守ります。", romaji: "Yakusoku shita kara ni wa, mamorimasu.", en: "Now that I promised, I’ll keep it." }] }
+      { id: "90.1", label: "～ことは～が", meaning: "It's true that... but...", explanation: "Used to admit a fact while introducing a contradictory point.", examples: [{jp: "この家は古いことは古いが、とても頑丈だ。", romaji: "Kono ie wa furui koto wa furui ga, totemo ganjou da.", en: "It's true that this house is old, but it's very solid." }] },
+      { id: "90.2", label: "～に比べて", meaning: "Compared to", explanation: "Used to show progress or contrast between two things.", examples: [{jp: "去年は去年に比べて、今年はとても暑い。", romaji: "Kyonen wa kyonen ni kurabete, kotoshi wa totemo atsui.", en: "Compared to last year, this year is very hot." }] },
+      { id: "90.3", label: "～を問わず", meaning: "Regardless of", explanation: "Indicates that something applies irrespective of a certain condition.", examples: [{jp: "年齢を問わず、誰でも参加できます。", romaji: "Nenrei o towazu, daredemo sanka dekimasu.", en: "Anyone can participate, regardless of age." }] }
     ],
     quiz: [
-      { q: "決めた ___、最後まで やります。", ans: "からには", options: ["からには", "以上", "ものの", "に際して"] },
-      { q: "日本に 来た ___、日本語を 完璧に したい。", ans: "からには", options: ["からには", "反面", "わりに", "に伴って"] },
-      { q: "試合に 出る ___、勝ちたい。", ans: "からには", options: ["からには", "によって", "として", "にとって"] },
-      { q: "社長に なった ___、責任を 果たす。", ans: "からには", options: ["からには", "ばかりに", "さえ", "こそ"] },
-      { q: "秘密を 知った ___、誰にも 言わないでください。", ans: "からには", options: ["からには", "ものなら", "に限り", "どころか"] },
-      { q: "やる ___、全力で やれ。", ans: "からには", options: ["からには", "のみならず", "に加えて", "につき"] },
-      { q: "結婚する ___、二人で 協力していく。", ans: "からには", options: ["からには", "うちに", "まえに", "ところで"] },
-      { q: "契約した ___、キャンセルは できない。", ans: "からには", options: ["からには", "あげく", "末に", "次第"] },
-      { q: "留学する ___、しっかり 勉強してきなさい。", ans: "からには", options: ["からには", "というより", "にしたがって", "とともに"] },
-      { q: "引き受けた ___、ちゃんと やれ。", ans: "からには", options: ["からには", "のみか", "ばかりか", "にしたら"] }
+      { q: "読んだ ___ 読んだが、内容は全然覚えていない。", ans: "ことは", options: ["ことは", "のでは", "とは", "にわ"] },
+      { q: "田舎は 都会 ___、空気が 綺麗だ。", ans: "に比べて", options: ["に比べて", "に加えて", "に伴って", "に際して"] },
+      { q: "この仕事は 経験 ___ 、やる気のある人を 募集している。", ans: "を問わず", options: ["を問わず", "に限らず", "にわたって", "に関わらず"] },
+      { q: "美味しい ___ 美味しいが、少し高い。", ans: "ことは", options: ["ことは", "のでは", "からには", "わりに"] },
+      { q: "兄 ___ 、弟は あまり 勉強しない。", ans: "に比べて", options: ["に比べて", "に対して", "に先立って", "に従って"] },
+      { q: "昼夜 ___ 、工事の音が うるさい。", ans: "を問わず", options: ["を問わず", "に限って", "のみならず", "にすぎない"] },
+      { q: "便利な ___ 便利だが、使いにくい。", ans: "ことは", options: ["ことは", "もので", "はずで", "わけで"] },
+      { q: "今年は 去年 ___、雪が 多い。", ans: "に比べ", options: ["に比べ", "に即して", "に反して", "に亘って"] },
+      { q: "国内外 ___ 、多くの 観光客が 訪れる。", ans: "を問わず", options: ["を問わず", "を通じ", "を機に", "を皮切りに"] },
+      { q: "高い ___ 高いが、質は 非常に 良い。", ans: "ことは", options: ["ことは", "ので", "から", "のに"] }
     ]
   },
   {
@@ -2153,526 +2245,254 @@ export const GRAMMAR_DATA = [
   {
     chapter: 101,
     level: "N1",
-    title: "に至るまで (up to / even)",
-    desc: "Extreme range",
+    title: "Strong Judgement & Assertion",
+    desc: "Undeniable / Nothing but / Not an exaggeration",
     patterns: [
-      { id: "101.1", label: "～に至るまで", meaning: "Up to / Even / As far as", explanation: "Used to emphasize an unexpectedly wide range or extent, often from one extreme to another.", examples: [{ jp: "子どもから 大人に至るまで 人気があります。", romaji: "Kodomo kara otona ni itaru made ninki ga arimasu.", en: "From children up to adults, it’s popular." }] }
+      { id: "101.1", label: "～に相違ない", meaning: "Undeniably / Certainly", explanation: "Formal way to express strong certainty based on objective evidence.", examples: [{jp: "彼が犯人であることに相違ない。", romaji: "Kare ga hannin de aru koto ni soui nai.", en: "There is no doubt that he is the culprit." }] },
+      { id: "101.2", label: "～にほかならない", meaning: "Nothing but / Precisely because", explanation: "Used to emphasize that there is no other possibility or reason.", examples: [{jp: "合格したのは努力の結果にほかならない。", romaji: "Goukaku shita no wa doryoku no kekka ni hokanaranai.", en: "Passing was nothing but the result of effort." }] },
+      { id: "101.3", label: "～と言っても過言ではない", meaning: "It is not an exaggeration to say", explanation: "Used to emphasize reaching a high level or an extreme state.", examples: [{jp: "彼は現代の英雄だと言っても過言ではない。", romaji: "Kare wa gendai no eiyuu da to itte mo kagon de wa nai.", en: "It is not an exaggeration to say he is a modern hero." }] }
     ],
     quiz: [
-      { q: "この 雑誌は ファッションから 政治 ___ 幅広く 扱っている。", ans: "に至るまで", options: ["に至るまで", "に際して", "に応じて", "に伴って"] },
-      { q: "北海道から 沖縄 ___、全国に 支店が ある。", ans: "に至るまで", options: ["に至るまで", "として", "にとって", "につき"] },
-      { q: "服装の 乱れから 挨拶の 欠如 ___、厳しく 指導された。", ans: "に至るまで", options: ["に至るまで", "に加えて", "を除いて", "を通して"] },
-      { q: "料理の 材料から 味付け ___、すべてに こだわっている。", ans: "に至るまで", options: ["に至るまで", "ばかりに", "ものの", "反面"] },
-      { q: "一日の 流れから 将来の 夢 ___、彼と 語り合った。", ans: "に至るまで", options: ["に至るまで", "にしたがって", "につれて", "とともに"] },
-      { q: "文房具から 家具 ___、何でも 揃う。", ans: "に至るまで", options: ["に至るまで", "に限り", "さえ", "こそ"] },
-      { q: "身近な ニュースから 世界の 情勢 ___、興味が ある。", ans: "に至るまで", options: ["に至るまで", "のところに", "まえに", "うちに"] },
-      { q: "試験の 準備から 当日の 流れ ___、確認した。", ans: "に至るまで", options: ["に至るまで", "ばかりに", "あげく", "末に"] },
-      { q: "足の 先から 頭の てっぺん ___、泥だらけだ。", ans: "に至るまで", options: ["に至るまで", "に沿って", "を通じて", "を通して"] },
-      { q: "基本から 応用 ___、しっかり 勉強する。", ans: "に至るまで", options: ["に至るまで", "次第", "末に", "あげく"] }
+      { q: "証拠がある以上、彼が犯人であることに ___ 。", ans: "相違ない", options: ["相違ない", "にすぎない", "どころではない", "ものだ"] },
+      { q: "成功は彼の才能の ___ 。", ans: "ほかならない", options: ["ほかならない", "にすぎない", "はずがない", "わけがない"] },
+      { q: "これは世紀の発見 ___ 。", ans: "と言っても過言ではない", options: ["と言っても過言ではない", "に相違ない", "にほかならない", "次第だ"] },
+      { q: "事実であることに ___ 。", ans: "相違ない", options: ["相違ない", "にすぎない", "に沿って", "を除いて"] },
+      { q: "この結果は我々の協力の ___ 。", ans: "賜物にほかならない", options: ["賜物にほかならない", "賜物にすぎない", "賜物と言っても何だ", "賜物だろうか"] },
+      { q: "彼は世界一の天才 ___ 。", ans: "と言っても過言ではない", options: ["と言っても過言ではない", "に相違ない", "にほかならない", "にすぎない"] },
+      { q: "犯人はこの中にいることに ___ 。", ans: "相違ない", options: ["相違ない", "にすぎない", "に限る", "に決まる"] },
+      { q: "教育とは未来への投資 ___ 。", ans: "にほかならない", options: ["にほかならない", "にすぎない", "からこそ", "次第で"] },
+      { q: "日本一の山 ___ 。", ans: "と言っても過言ではない", options: ["と言っても過言ではない", "に相違ない", "にほかならない", "ために"] },
+      { q: "真義はここにあることに ___ 。", ans: "相違ない", options: ["相違ない", "にすぎない", "に沿って", "のもとに"] }
     ]
   },
   {
     chapter: 102,
     level: "N1",
-    title: "を皮切りに (starting with)",
-    desc: "Sequential trigger",
+    title: "Logic & Reasoning",
+    desc: "Up to / Based on / Background",
     patterns: [
-      { id: "102.1", label: "～を皮切りに", meaning: "Starting with / Beginning with", explanation: "Indicates that one event triggers a series of similar events or a whole development.", examples: [{ jp: "東京を皮切りに、全国で 公演します。", romaji: "Toukyou o kawakiri ni, zenkoku de kouen shimasu.", en: "Starting with Tokyo, performances will be held nationwide." }] }
+      { id: "102.1", label: "～に至るまで", meaning: "Up to / Even / Including", explanation: "Emphasizes an extreme range or unexpected depth of scope.", examples: [{jp: "趣味から仕事に至るまで、全力で取り組む。", romaji: "Shumi kara shigoto ni itaru made, zenryoku de torikumu.", en: "I put my all into everything, from hobbies to work." }] },
+      { id: "102.2", label: "～を踏まえて", meaning: "Based on / Considering", explanation: "Used when something is done or decided as a consequence of specific background facts.", examples: [{jp: "前回の反省を踏まえて、新しい計画を立てる。", romaji: "Zenkai no hansei o fumaete, atarashii keikaku o tateru.", en: "Based on previous reflections, we will make a new plan." }] },
+      { id: "102.3", label: "～を背景に", meaning: "Against the backdrop of", explanation: "Indicates the underlying cause or situation behind an event.", examples: [{jp: "景気回復を背景に、株価が上昇した。", romaji: "Keiki kaifuku o haikei ni, kabuka ga joushou shita.", en: "Against the backdrop of economic recovery, stock prices rose." }] }
     ],
     quiz: [
-      { q: "今回の ヒット曲 ___、彼は 次々と 新曲を 発表した。", ans: "を皮切りに", options: ["を皮切りに", "に際して", "に応じて", "に伴って"] },
-      { q: "この 大会 ___、シーズンが 本格的に 始まる。", ans: "を皮切りに", options: ["を皮切りに", "として", "にとって", "につき"] },
-      { q: "彼の 発言 ___、会議は 紛糾した。", ans: "を皮切りに", options: ["を皮切りに", "に加えて", "を除いて", "を通して"] },
-      { q: "この 事件 ___、事態は 悪化した。", ans: "を皮切りに", options: ["を皮切りに", "ばかりに", "ものの", "反面"] },
-      { q: "第一話 ___、その ドラマは 大人気に なった。", ans: "を皮切りに", options: ["を皮切りに", "にしたがって", "につれて", "とともに"] },
-      { q: "大阪 公演 ___、全国ツアーに 出発する。", ans: "を皮切りに", options: ["を皮切りに", "に限り", "さえ", "こそ"] },
-      { q: "最初の 成功 ___、彼は ビジネスを 拡大した。", ans: "を皮切りに", options: ["を皮切りに", "のところに", "まえに", "うちに"] },
-      { q: "一人の 欠席 ___、次々と 風邪で 休む人が 出た。", ans: "を皮切りに", options: ["を皮切りに", "ばかりに", "あげく", "末に"] },
-      { q: "その 改正 ___、多くの 法律が 見直された。", ans: "を皮切りに", options: ["を皮切りに", "に沿って", "を通じて", "を通して"] },
-      { q: "彼の 帰国 ___、プロジェクトは 急展開を 見せた。", ans: "を皮切りに", options: ["を皮切りに", "次第", "末に", "あげく"] }
+      { q: "細部に ___ 、チェックが必要です。", ans: "至るまで", options: ["至るまで", "に際して", "に伴って", "に際し"] },
+      { q: "アンケート結果を ___ 、改善策を考える。", ans: "踏まえて", options: ["踏まえて", "に沿って", "に即して", "に向けて"] },
+      { q: "世界的な不況を ___ 、輸出が減少した。", ans: "背景に", options: ["背景に", "皮切りに", "をきっかけに", "にわたって"] },
+      { q: "赤ん坊からお年寄りに ___ 、みんなが楽しんでいる。", ans: "至るまで", options: ["至るまで", "限りで", "のみで", "だけで"] },
+      { q: "事実を ___ 判断すべきだ。", ans: "踏まえて", options: ["踏まえて", "において", "としての", "についての"] },
+      { q: "支持率の上昇を ___ 、新政策を打ち出した。", ans: "背景に", options: ["背景に", "のもとに", "のかわりに", "に反して"] },
+      { q: "隅々に ___ 掃除した。", ans: "至るまで", options: ["至るまで", "にわたって", "を通して", "を通じて"] },
+      { q: "自分の経験を ___ 話した。", ans: "踏まえて", options: ["踏まえて", "に従って", "に即して", "に反して"] },
+      { q: "人口増加を ___ 、住宅不足が深刻化した。", ans: "背景に", options: ["背景に", "を皮切りに", "に亘って", "に際して"] },
+      { q: "朝から晩に ___ 働き詰めた。", ans: "至るまで", options: ["至るまで", "にわたって", "を通して", "を通じて"] }
     ]
   },
   {
     chapter: 103,
     level: "N1",
-    title: "をもって (with / at time of)",
-    desc: "Formal limit / Means",
+    title: "Conditions & Hypotheses",
+    desc: "Depending on / Requirement / Even if",
     patterns: [
-      { id: "103.1", label: "～をもって", meaning: "With / By means of / At the time of", explanation: "A formal expression used to indicate a means, a reason, or a specific point in time when something ends or changes.", examples: [{ jp: "本日をもって 閉店いたします。", romaji: "Honjitsu o motte heiten itashimasu.", en: "We will close as of today." }] }
+      { id: "103.1", label: "～いかんでは", meaning: "Depending on / According to", explanation: "Indicates that the outcome depends entirely on a particular condition or situation.", examples: [{jp: "理由いかんでは、入学を認めないこともある。", romaji: "Riyuu ikan de wa, nyuugaku o mitomenai koto mo aru.", en: "Depending on the reason, admission may not be granted." }] },
+      { id: "103.2", label: "～なしには", meaning: "Without / Cannot do without", explanation: "Used to emphasize a mandatory requirement for a result.", examples: [{jp: "皆さんの協力なしには、成功はあり得ない。", romaji: "Minasan no kyouryoku nashi ni wa, seikou wa ari-enai.", en: "Success is impossible without everyone's cooperation." }] },
+      { id: "103.3", label: "～としたところで", meaning: "Even if / Even assuming", explanation: "Formal hypothesis meaning that even in an extreme or favorable case, the result is still the same/negative.", examples: [{jp: "彼としたところで、どうしようもないだろう。", romaji: "Kare to shita tokoro de, dou shiyou mo nai darou.", en: "Even for him, there's probably nothing that can be done." }] }
     ],
     quiz: [
-      { q: "以上 ___ 、本日の 会議を 終了します。", ans: "をもって", options: ["をもって", "に際して", "に応じて", "に伴って"] },
-      { q: "誠実な 対応 ___、信頼を 回復したい。", ans: "をもって", options: ["をもって", "として", "にとって", "につき"] },
-      { q: "3月31日 ___、退職いたします。", ans: "をもって", options: ["をもって", "に加えて", "を除いて", "を通して"] },
-      { q: "この 決定 ___ 、すべての 交渉は 打ち切られた。", ans: "をもって", options: ["をもって", "ばかりに", "ものの", "反面"] },
-      { q: "実力 ___ 、優勝を 勝ち取った。", ans: "をもって", options: ["をもって", "にしたがって", "につれて", "とともに"] },
-      { q: "結果 ___ 、判断してください。", ans: "をもって", options: ["をもって", "に限り", "さえ", "こそ"] },
-      { q: "言葉 ___ 、感謝の 気持ちを 伝えたい。", ans: "をもって", options: ["をもって", "のところに", "まえに", "うちに"] },
-      { q: "今 回の 発表 ___、活動を 休止する。", ans: "をもって", options: ["をもって", "ばかりに", "あげく", "末に"] },
-      { q: "熱意 ___ 、説得した。", ans: "をもって", options: ["をもって", "に沿って", "を通じて", "を通して"] },
-      { q: "これ ___ 、私の 挨拶に 代えさせていただきます。", ans: "をもって", options: ["をもって", "次第", "末に", "あげく"] }
+      { q: "試験の結果 ___ 、進級できないかもしれない。", ans: "いかんでは", options: ["いかんでは", "に際して", "を通じて", "を通して"] },
+      { q: "努力 ___ 、合格はあり得ない。", ans: "なしには", options: ["なしには", "に限らず", "において", "として"] },
+      { q: "どんなに急いだ ___ 、間に合わない。", ans: "としたところで", options: ["としたところで", "に限り", "さえあれば", "こそ"] },
+      { q: "天候 ___ 、中止になることもある。", ans: "いかんでは", options: ["いかんでは", "ばかりに", "ものの", "わりに"] },
+      { q: "犠牲 ___ 勝利など意味がない。", ans: "なしには", options: ["なしには", "に限り", "さえあれば", "こそ"] },
+      { q: "たとえ金持ち ___ 、幸せになれるとは限らない。", ans: "としたところで", options: ["としたところで", "次第で", "末に", "あげく"] },
+      { q: "話し合い ___ 、方針を変える余地がある。", ans: "いかんでは", options: ["いかんでは", "として", "にとって", "につき"] },
+      { q: "勇気 ___ 、この壁は越えられない。", ans: "なしには", options: ["なしには", "に沿って", "を通じて", "を通して"] },
+      { q: "社長 ___ 、この問題は解決できないだろう。", ans: "としたところで", options: ["としたところで", "からには", "以上に", "に反して"] },
+      { q: "今後の推移 ___ 、対応策を練る必要がある。", ans: "いかんでは", options: ["いかんでは", "次第で", "末に", "あげく"] }
     ]
   },
   {
     chapter: 104,
     level: "N1",
-    title: "いかんでは (depending on)",
-    desc: "Conditional variance",
+    title: "Contrast & Exception",
+    desc: "Despite / Unique to / Excluding",
     patterns: [
-      { id: "104.1", label: "～いかんでは / いかんによっては", meaning: "Depending on", explanation: "Indicates that the outcome of something depends entirely on a particular factor.", examples: [{ jp: "天候いかんでは、中止に なります。", romaji: "Tenkou ikan de wa, chuushi ni narimasu.", en: "Depending on the weather, it may be canceled." }] }
+      { id: "104.1", label: "～にもかかわらず", meaning: "Despite / Although", explanation: "Stronger and more formal than 'noni'. Used when the result is unexpected given the situation.", examples: [{jp: "悪天候にもかかわらず、多くの人が集まった。", romaji: "Akutenkou ni mo kakawarazu, ooku no hito ga atsumatta.", en: "Despite the bad weather, many people gathered." }] },
+      { id: "104.2", label: "～ならでは", meaning: "Unique to / Special to", explanation: "Emphasizes that something is a special quality only possible for a specific entity.", examples: [{jp: "京都ならではの風情がある。", romaji: "Kyoto naradeha no fuzei ga aru.", en: "There is a charm unique to Kyoto." }] },
+      { id: "104.3", label: "～を除いて / ～を別にして", meaning: "Excluding / Except for", explanation: "Used to specify exceptions in a formal context.", examples: [{jp: "日曜日を除いて、毎日営業しています。", romaji: "Nichiyoubi o nozoite, mainichi eigyou shite imasu.", en: "We are open every day except Sunday." }] }
     ],
     quiz: [
-      { q: "試験の 結果 ___、奨学金が もらえないことも ある。", ans: "いかんでは", options: ["いかんでは", "に際して", "に応じて", "に伴って"] },
-      { q: "話し合い ___ 、解決策も 変わるだろう。", ans: "いかんでは", options: ["いかんでは", "として", "にとって", "につき"] },
-      { q: "その 時の 気分 ___、返事が 違うかもしれない。", ans: "いかんでは", options: ["いかんでは", "に加えて", "を除いて", "を通して"] },
-      { q: "今後の 推移 ___、方針を 見直す 可能性が ある。", ans: "いかんでは", options: ["いかんでは", "ばかりに", "ものの", "反面"] },
-      { q: "やり方 ___ 、成功するかもしれない。", ans: "いかんでは", options: ["いかんでは", "にしたがって", "につれて", "とともに"] },
-      { q: "条件 ___ 、引き受ける つもりだ。", ans: "いかんでは", options: ["いかんでは", "に限り", "さえ", "こそ"] },
-      { q: "あなたの 答え ___、私の 態度を 決める。", ans: "いかんでは", options: ["いかんでは", "のところに", "まえに", "うちに"] },
-      { q: "理由 ___ 、許されないことも ある。", ans: "いかんでは", options: ["いかんでは", "ばかりに", "あげく", "末に"] },
-      { q: "状況 ___ 、予定が 変更に なる。", ans: "いかんでは", options: ["いかんでは", "に沿って", "を通じて", "を通して"] },
-      { q: "交渉 ___ 、価格が 下がるかもしれない。", ans: "いかんでは", options: ["いかんでは", "次第", "末に", "あげく"] }
+      { q: "忙しい ___ 、手伝ってくれた。", ans: "にもかかわらず", options: ["にもかかわらず", "に際して", "に応じて", "に伴って"] },
+      { q: "プロ ___ 素晴らしい技術だ。", ans: "ならではの", options: ["ならではの", "のような", "みたいな", "としての"] },
+      { q: "一部の例外 ___ 、概ね賛成だ。", ans: "を除いて", options: ["を除いて", "を問わず", "に限らず", "としての"] },
+      { q: "足が不自由である ___ 、彼は山に登った。", ans: "にもかかわらず", options: ["にもかかわらず", "ばかりに", "ものの", "わりに"] },
+      { q: "日本 ___ 繊細な美しさがある。", ans: "ならではの", options: ["ならではの", "さえあれば", "こそ", "ばかりか"] },
+      { q: "名前 ___ 、詳細は不明だ。", ans: "を別にして", options: ["を別にして", "をきっかけに", "を皮切りに", "を抜いて"] },
+      { q: "深夜 ___ 、電話が鳴り止まない。", ans: "にもかかわらず", options: ["にもかかわらず", "として", "にとって", "につき"] },
+      { q: "手作り ___ 味わいがある。", ans: "ならではの", options: ["ならではの", "に沿って", "を通じて", "を通して"] },
+      { q: "専門的な知識 ___ 、一般的な常識は必要だ。", ans: "は別にして", options: ["は別にして", "はさておき", "はともかく", "は抜きにして"] },
+      { q: "努力した ___ 、結果が出なかった。", ans: "にもかかわらず", options: ["にもかかわらず", "次第で", "末に", "あげく"] }
     ]
   },
   {
     chapter: 105,
     level: "N1",
-    title: "に足る (worthy)",
-    desc: "Value assessment",
+    title: "Degree, Extremes & Emphasis",
+    desc: "Extremely / Height of / Deep emotion",
     patterns: [
-      { id: "105.1", label: "～に足る / に足りない", meaning: "Worthy of / Not worthy of", explanation: "Describes whether something has sufficient value or quality to deserve a certain action or feeling.", examples: [{ jp: "信頼するに足る 人です。", romaji: "Shinrai suru ni taru hito desu.", en: "He is worthy of trust." }] }
+      { id: "105.1", label: "～極まりない", meaning: "Extremely / Infinitely", explanation: "Used to emphasize an extreme state, often negative (rude, dangerous, etc.).", examples: [{jp: "彼の態度は失礼極まりない。", romaji: "Kare no taido wa shitsurei kiwamarinai.", en: "His attitude is extremely rude." }] },
+      { id: "105.2", label: "～の極み", meaning: "The height of / The utmost", explanation: "Expresses that something has reached the absolute peak of a state (luxury, glory, etc.).", examples: [{jp: "豪華客船の旅は贅沢の極みだ。", romaji: "Gouka kyakusen no tabi wa zeitaku no kiwami da.", en: "A cruise on a luxury liner is the height of extravagance." }] },
+      { id: "105.3", label: "～の至り", meaning: "Utmost / Deepest (emotion)", explanation: "Formal expression of extreme gratitude, happiness, or shame.", examples: [{jp: "皆様にお会いできて、感激の至りです。", romaji: "Minasan ni oaidekite, kangeki no itari desu.", en: "I am deeply moved to be able to meet everyone." }] }
     ],
     quiz: [
-      { q: "それは 注目 ___ 値打ちが ある。", ans: "に足る", options: ["に足る", "に際して", "に応じて", "に伴って"] },
-      { q: "取る ___ 話ではない。", ans: "に足りない", options: ["に足りない", "として", "にとって", "につき"] },
-      { q: "恐れる ___ ことは ない。", ans: "に足りない", options: ["に足りない", "に加えて", "を除いて", "を通して"] },
-      { q: "尊敬 ___ 人物に なりたい。", ans: "に足る", options: ["に足る", "ばかりに", "ものの", "反面"] },
-      { q: "信用 ___ 根拠が 必要だ。", ans: "に足る", options: ["に足る", "にしたがって", "につれて", "とともに"] },
-      { q: "この 事実は 驚く ___ ものだ。", ans: "に足る", options: ["に足る", "に限り", "さえ", "こそ"] },
-      { q: "心配する ___ ことは ない。", ans: "に足りない", options: ["に足りない", "のところに", "まえに", "うちに"] },
-      { q: "満足 ___ 結果が 得られた。", ans: "に足る", options: ["に足る", "ばかりに", "あげく", "末に"] },
-      { q: "言う ___ ことではない。", ans: "に足りない", options: ["に足りない", "に沿って", "を通じて", "を通して"] },
-      { q: "称賛 ___ 素晴らしい 演技だった。", ans: "に足る", options: ["に足る", "次第", "末に", "あげく"] }
+      { q: "そんな発言をするなんて、無責任 ___ 。", ans: "極まりない", options: ["極まりない", "にすぎない", "どころではない", "ものだ"] },
+      { q: "この景色は美しさの ___ だ。", ans: "極み", options: ["極み", "至り", "極まりない", "に限る"] },
+      { q: "お褒めの言葉をいただき、光栄の ___ です。", ans: "至り", options: ["至り", "極み", "極まりない", "ばかり"] },
+      { q: "危険 ___ 行為だ。", ans: "極まりない", options: ["極まりない", "に即して", "に沿って", "を除いて"] },
+      { q: "プロ選手として、優勝は感激の ___ だ。", ans: "至り", options: ["至り", "極み", "ところ", "次第"] },
+      { q: "絶望の ___ に突き落とされた。", ans: "極み", options: ["極み", "至り", "限り", "のみ"] },
+      { q: "不愉快 ___ 。", ans: "極まりない", options: ["極まりない", "に限る", "に決まる", "に相違ない"] },
+      { q: "若気の ___ で失敗してしまった。", ans: "至り", options: ["至り", "極み", "せいで", "ために"] },
+      { q: "贅沢の ___ を尽くしたパーティー。", ans: "極み", options: ["極み", "至り", "からに", "ほどに"] },
+      { q: "退屈 ___ 映画だった。", ans: "極まりない", options: ["極まりない", "に即して", "のもとに", "のかわりに"] }
     ]
   },
   {
     chapter: 106,
     level: "N1",
-    title: "を禁じ得ない (cannot help but)",
-    desc: "Unstoppable emotion",
+    title: "Time, Process & Transition",
+    desc: "After passing / Reach / Turning point",
     patterns: [
-      { id: "106.1", label: "～を禁じ得ない", meaning: "Cannot help but / Cannot suppress", explanation: "Used to express that an emotion is too strong to hold back (formal).", examples: [{ jp: "涙を 禁じ得ません。", romaji: "Namida o kinjienai.", en: "I can’t help holding back tears." }] }
+      { id: "106.1", label: "～を経て", meaning: "After / Via / Through", explanation: "Indicates moving to a next stage after passing through a certain process or location.", examples: [{jp: "紆余曲折を経て、ようやく解決した。", romaji: "Uyo-kyokusetsu o hete, youyaku kaiketsu shita.", en: "After many twists and turns, it was finally resolved." }] },
+      { id: "106.2", label: "～に至る", meaning: "Reach / Arrive at", explanation: "Indicates the final result or destination of a process or struggle.", examples: [{jp: "議論を重ね、合意に至った。", romaji: "Giron o kasane, goui ni itatta.", en: "After repeated discussions, we reached an agreement." }] },
+      { id: "106.3", label: "～を境に", meaning: "After / Since (turning point)", explanation: "Indicates a major change that occurred after a specific event.", examples: [{jp: "結婚を境に、生活習慣が変わった。", romaji: "Kekkon o sakai ni, seikatsu shuukan ga kawatta.", en: "Since getting married, my lifestyle habits have changed." }] }
     ],
     quiz: [
-      { q: "彼の 不運な 身の上に 同情 ___。", ans: "を禁じ得ない", options: ["を禁じ得ない", "に際して", "に応じて", "に伴って"] },
-      { q: "その ニュースを聞いて、驚き ___。", ans: "を禁じ得ない", options: ["を禁じ得ない", "として", "にとって", "につき"] },
-      { q: "彼の 理不尽な 態度に 憤り ___。", ans: "を禁じ得ない", options: ["を禁じ得ない", "に加えて", "を除いて", "を通して"] },
-      { q: "その 映画の 結末に 感動 ___。", ans: "を禁じ得ない", options: ["を禁じ得ない", "ばかりに", "ものの", "反面"] },
-      { q: "彼の 才能に 嫉妬 ___。", ans: "を禁じ得ない", options: ["を禁じ得ない", "にしたがって", "につれて", "とともに"] },
-      { q: "事件の 残酷さに 戦慄 ___。", ans: "を禁じ得ない", options: ["を禁じ得ない", "に限り", "さえ", "こそ"] },
-      { q: "彼の 冗談に 笑い ___。", ans: "を禁じ得ない", options: ["を禁じ得ない", "のところに", "まえに", "うちに"] },
-      { q: "その 景色の 美しさに 感嘆 ___。", ans: "を禁じ得ない", options: ["を禁じ得ない", "ばかりに", "あげく", "末に"] },
-      { q: "彼の 軽率な 発言に 疑問 ___。", ans: "を禁じ得ない", options: ["を禁じ得ない", "に沿って", "を通じて", "を通して"] },
-      { q: "その 決定に 困惑 ___。", ans: "を禁じ得ない", options: ["を禁じ得ない", "次第", "末に", "あげく"] }
+      { q: "20年の歳月を ___ 、二人は再会した。", ans: "を経て", options: ["を経て", "を皮切りに", "を背景に", "を機に"] },
+      { q: "その事件を ___ 、彼は姿を消した。", ans: "境に", options: ["境に", "至る", "経て", "通じて"] },
+      { q: "最終的な決断に ___ までに時間がかかった。", ans: "至る", options: ["至る", "及ぶ", "過ぎる", "経る"] },
+      { q: "研修を ___ 正社員になった。", ans: "を経て", options: ["を経て", "を問わず", "を除いて", "を抜きにして"] },
+      { q: "あの日を ___ 生活が一変した。", ans: "境に", options: ["境に", "限りで", "のみで", "だけで"] },
+      { q: "目的地に ___ 道のりは遠い。", ans: "至る", options: ["至る", "のもとに", "に反して", "に逆らって"] },
+      { q: "多くの困難を ___ プロジェクトは成功した。", ans: "を経て", options: ["を経て", "に亘って", "を通して", "を通じて"] },
+      { q: "手術を ___ 健康を取り戻した。", ans: "境に", options: ["境に", "次第で", "末に", "あげく"] },
+      { q: "死に ___ 病ではない。", ans: "至る", options: ["至る", "及ぶ", "当たる", "向かう"] },
+      { q: "世界中を ___ 日本に戻った。", ans: "を経て", options: ["を経て", "に際して", "に向けて", "に従って"] }
     ]
   },
   {
     chapter: 107,
     level: "N1",
-    title: "ずにはおかない (will definitely)",
-    desc: "Inevitable effect",
+    title: "Limitation & Inevitability",
+    desc: "Forced to / No choice but / Negative will",
     patterns: [
-      { id: "107.1", label: "～ずにはおかない", meaning: "Will definitely / Must / Won't leave without", explanation: "Indicates that something will certainly have an effect or cause a change.", examples: [{ jp: "この映画は 人を 感動させずにはおかない。", romaji: "Kono eiga wa hito o kandou sasezu ni wa okanai.", en: "This movie will definitely move people." }] }
+      { id: "107.1", label: "～を余儀なくされる", meaning: "Be forced to / Compelled to", explanation: "Formal expression showing that external factors forced a certain action.", examples: [{jp: "大雪のため、中止を余儀なくされた。", romaji: "Ooyuki no tame, chuushi o yogi naku sareta.", en: "Due to heavy snow, they were forced to cancel." }] },
+      { id: "107.2", label: "～ざるを得ない", meaning: "No choice but to", explanation: "Indicates a logical or situational necessity despite personal feelings.", examples: [{jp: "他に方法がなく、諦めざるを得ない。", romaji: "Hoka ni houhou ga naku, akiramezaru o enai.", en: "With no other choice, I have to give up." }] },
+      { id: "107.3", label: "～まい", meaning: "Strong negative will / Will not", explanation: "A formal literary way to express 'will not' or 'probably not'.", examples: [{jp: "あんな店、二度と行くまい。", romaji: "Anna mise, nido to ikumai.", en: "I will never go to a shop like that again." }] }
     ],
     quiz: [
-      { q: "彼の 言葉は 聞く人を 納得 ___。", ans: "させずにはおかない", options: ["させずにはおかない", "に際して", "に応じて", "に伴って"] },
-      { q: "その 真相は 世間を 驚か ___。", ans: "せずにはおかない", options: ["せずにはおかない", "として", "にとって", "につき"] },
-      { q: "彼女の 歌声は 聴衆を 魅了 ___。", ans: "せずにはおかない", options: ["せずにはおかない", "に加えて", "を除いて", "を通して"] },
-      { q: "彼の 発言は 政治を 動か ___。", ans: "さずにはおかない", options: ["さずにはおかない", "ばかりに", "ものの", "反面"] },
-      { q: "その 景色は 見る人を 圧倒 ___。", ans: "せずにはおかない", options: ["せずにはおかない", "にしたがって", "につれて", "とともに"] },
-      { q: "この 事件は 犯人を 罰 ___。", ans: "せずにはおかない", options: ["せずにはおかない", "に限り", "さえ", "こそ"] },
-      { q: "彼の 態度は 誰かを 怒ら ___。", ans: "せずにはおかない", options: ["せずにはおかない", "のところに", "まえに", "うちに"] },
-      { q: "この 制度は 社会を 変え ___。", ans: "ずにはおかない", options: ["ずにはおかない", "ばかりに", "あげく", "末に"] },
-      { q: "その 知らせは 彼女を 悲しま ___。", ans: "せずにはおかない", options: ["せずにはおかない", "に沿って", "を通じて", "を通して"] },
-      { q: "彼の 努力は 成功を 呼び寄せ ___。", ans: "ずにはおかない", options: ["ずにはおかない", "次第", "末に", "あげく"] }
+      { q: "資金不足で、計画の変更を ___ 。", ans: "余儀なくされた", options: ["余儀なくされた", "に際した", "を通じた", "に即した"] },
+      { q: "事実である以上、認め ___ 。", ans: "ざるを得ない", options: ["ざるを得ない", "に限らない", "ざるをえない", "に限る"] },
+      { q: "もう嘘はつく ___ と心に決めた。", ans: "まい", options: ["まい", "だろう", "はずだ", "わけだ"] },
+      { q: "病状が悪化し、入院を ___ 。", ans: "余儀なくされた", options: ["余儀なくされた", "ばかりに", "ものの", "わりに"] },
+      { q: "規則なので、従わ ___ 。", ans: "ざるを得ない", options: ["ざるを得ない", "に限り", "さえあれば", "こそ"] },
+      { q: "彼は自分の非を認め ___ だろう。", ans: "まい", options: ["まい", "だろう", "そうにない", "がたい"] },
+      { q: "不祥事の発覚により、社長は辞職を ___ 。", ans: "余儀なくされた", options: ["余儀なくされた", "として", "にとって", "につき"] },
+      { q: "反対は多いが、決行 ___ 。", ans: "せざるを得ない", options: ["せざるを得ない", "し得ない", "するわけにはいかない", "すればいい"] },
+      { q: "今更後悔し ___ 。", ans: "たところで", options: ["まい", "たところで", "以上に", "に反して"] },
+      { q: "故障により、リタイアを ___ 。", ans: "余儀なくされた", options: ["余儀なくされた", "次第で", "末に", "あげく"] }
     ]
   },
   {
     chapter: 108,
     level: "N1",
-    title: "まみれ (covered with)",
-    desc: "Negative coating",
+    title: "Evaluation & Criticism",
+    desc: "Despite / More than / Cannot bear",
     patterns: [
-      { id: "108.1", label: "～まみれ", meaning: "Covered with / Smeared with", explanation: "Used to describe something completely covered in an unpleasant or negative substance (mud, blood, debt, etc.).", examples: [{ jp: "泥まみれに なりました。", romaji: "Doro mamire ni narimashita.", en: "I became covered in mud." }] }
+      { id: "108.1", label: "～をものともせず", meaning: "In spite of / Braving", explanation: "Used to praise someone for overcoming a major obstacle (danger, disability, etc.).", examples: [{jp: "強風をものともせず、試合を続けた。", romaji: "Kyoufu o mono tomo sezu, shiai o tsuzuketa.", en: "They continued the game, braving the strong winds." }] },
+      { id: "108.2", label: "～にもまして", meaning: "Even more than", explanation: "Used for comparison, emphasizing that the current case is even more extreme than the previous one.", examples: [{jp: "今年は例年にもまして暑い。", romaji: "Kotoshi wa reinen ni mo mashite atsui.", en: "This year is even hotter than usual." }] },
+      { id: "108.3", label: "～にたえない", meaning: "Cannot bear / Unbearable", explanation: "Indicates that something is too terrible to look at/hear, or that an emotion (gratitude, regret) is overwhelming.", examples: [{jp: "そのニュースは聞くにたえない惨状だった。", romaji: "Sono nyuusu wa kiku ni taenai sanjou datta.", en: "The news described a scene too painful to hear." }] }
     ],
     quiz: [
-      { q: "工事現場の 人たちは 汗 ___ で 働いている。", ans: "まみれ", options: ["まみれ", "に際して", "に応じて", "に伴って"] },
-      { q: "借金 ___ の 生活を 送っている。", ans: "まみれ", options: ["まみれ", "として", "にとって", "につき"] },
-      { q: "彼は 返り血 ___ で 立っていた。", ans: "まみれ", options: ["まみれ", "に加えて", "を除いて", "を通して"] },
-      { q: "埃 ___ の 本を 取り出した。", ans: "まみれ", options: ["まみれ", "ばかりに", "ものの", "反面"] },
-      { q: "嘘 ___ の 話に 飽き飽きした。", ans: "まみれ", options: ["まみれ", "にしたがって", "につれて", "とともに"] },
-      { q: "油 ___ の 手で 握手した。", ans: "まみれ", options: ["まみれ", "に限り", "さえ", "こそ"] },
-      { q: "血筋 ___ の 争いは 避けたい。", ans: "まみれ", options: ["まみれ", "のところに", "まえに", "うちに"] },
-      { q: "間違い ___ の レポートを 提出した。", ans: "まみれ", options: ["まみれ", "ばかりに", "あげく", "末に"] },
-      { q: "男は 泥 ___ になって 逃げた。", ans: "まみれ", options: ["まみれ", "に沿って", "を通じて", "を通して"] },
-      { q: "過去の 栄光 ___ の 自慢話。", ans: "まみれ", options: ["まみれ", "次第", "末に", "あげく"] }
+      { q: "周囲の反対を ___ 、彼は計画を実行した。", ans: "ものともせず", options: ["ものともせず", "に際して", "に応じて", "に伴って"] },
+      { q: "以前 ___ 美しくなった。", ans: "にもまして", options: ["にもまして", "にすぎない", "どころか", "ばかりか"] },
+      { q: "惨憺たる状況で、見る ___ 。", ans: "にたえない", options: ["にたえない", "を問わず", "に至るまで", "としての"] },
+      { q: "大怪我を ___ 、彼は走り抜いた。", ans: "ものともせず", options: ["ものともせず", "ばかりに", "ものの", "わりに"] },
+      { q: "合格できたのは、何 ___ 喜びだ。", ans: "にもまして", options: ["にもまして", "さえあれば", "こそ", "ばかりか"] },
+      { q: "感謝 ___ です。", ans: "の至り", options: ["にたえません", "の極み", "の至り", "に足ります"] },
+      { q: "吹雪を ___ 頂上を目指す。", ans: "ものともせず", options: ["ものともせず", "として", "にとって", "につき"] },
+      { q: "最近は夏 ___ 冬も暑い。", ans: "にもまして", options: ["にもまして", "よりは", "というか", "に反して"] },
+      { q: "下品な冗談で、聞く ___ 。", ans: "にたえない", options: ["にたえない", "はさておき", "はともかく", "は抜きにして"] },
+      { q: "困難を ___ 成功を掴んだ。", ans: "ものともせず", options: ["ものともせず", "次第で", "末に", "あげく"] }
     ]
   },
   {
     chapter: 109,
     level: "N1",
-    title: "を顧みず (without regard for)",
-    desc: "Bold disregard",
+    title: "Source, Perspective & Scope",
+    desc: "Based on / Light of / In line with",
     patterns: [
-      { id: "109.1", label: "～を顧みず", meaning: "Without regard for / Disregarding", explanation: "Indicates performing an action regardless of danger, risk, or negative reactions.", examples: [{ jp: "危険を 顧みず 助けました。", romaji: "Kiken o kaerimizu tasukemashita.", en: "He helped without regard for danger." }] }
+      { id: "109.1", label: "～に基づいて", meaning: "Based on / On the basis of", explanation: "Indicates that something is used as a foundation or source (data, principles, etc.).", examples: [{jp: "客観的な事実に基づいて判断する。", romaji: "Kyakkan-teki na jijitsu ni motozuite handan suru.", en: "Judge based on objective facts." }] },
+      { id: "109.2", label: "～に照らして", meaning: "In light of / Comparing with", explanation: "Used when making a judgement by comparing it with a standard, law, or past experience.", examples: [{jp: "法に照らして、適切に処置する。", romaji: "Hou ni terashite, tekisetsu ni shochi suru.", en: "Deal with it appropriately in light of the law." }] },
+      { id: "109.3", label: "～に即して", meaning: "In line with / According to", explanation: "Indicates doing something exactly according to the facts, reality, or regulations.", examples: [{jp: "現実に即して考えよう。", romaji: "Genjitsu ni sokushite kangaeyou.", en: "Let's think in line with reality." }] }
     ],
     quiz: [
-      { q: "周囲の 反対 ___ 、彼は 自分の 道を 進んだ。", ans: "を顧みず", options: ["を顧みず", "に際して", "に応じて", "に伴って"] },
-      { q: "家族の 心配 ___、彼は 冒険に 出た。", ans: "を顧みず", options: ["を顧みず", "として", "にとって", "につき"] },
-      { q: "彼は 自分の 健康 ___ 働き続けた。", ans: "を顧みず", options: ["を顧みず", "に加えて", "を除いて", "を通して"] },
-      { q: "世間の 批判 ___、彼女は 真実を 語った。", ans: "を顧みず", options: ["を顧みず", "ばかりに", "ものの", "反面"] },
-      { q: "過去の 失敗 ___ 、再挑戦した。", ans: "を顧みず", options: ["を顧みず", "にしたがって", "につれて", "とともに"] },
-      { q: "損害 ___ 、工事を 強行した。", ans: "を顧みず", options: ["を顧みず", "に限り", "さえ", "こそ"] },
-      { q: "命 ___ 、戦場へ 向かった。", ans: "を顧みず", options: ["を顧みず", "のところに", "まえに", "うちに"] },
-      { q: "私財 ___ 、慈善活動に 励んだ。", ans: "を顧みず", options: ["を顧みず", "ばかりに", "あげく", "末に"] },
-      { q: "困難 ___ 、目標を 達成した。", ans: "を顧みず", options: ["を顧みず", "に沿って", "を通じて", "を通して"] },
-      { q: "危険 ___ 、救助に 向かった。", ans: "を顧みず", options: ["を顧みず", "次第", "末に", "あげく"] }
+      { q: "科学的な根拠に ___ 推論する。", ans: "基づいて", options: ["基づいて", "に際して", "に応じて", "に伴って"] },
+      { q: "自分の良心に ___ 決めた。", ans: "照らして", options: ["照らして", "踏まえて", "に従って", "に際し"] },
+      { q: "マニュアルに ___ 作業を進める。", ans: "即して", options: ["即して", "際して", "に亘って", "に向けて"] },
+      { q: "調査結果に ___ レポートを書く。", ans: "基づいて", options: ["基づいて", "に限り", "のみで", "だけで"] },
+      { q: "常識に ___ 判断すべきだ。", ans: "照らして", options: ["照らして", "において", "としての", "についての"] },
+      { q: "時代の変化に ___ 教育方針を変える。", ans: "即して", options: ["即して", "のもとに", "のかわりに", "に反して"] },
+      { q: "過去の事例に ___ 今回の件を考える。", ans: "照らして", options: ["照らして", "に亘って", "を通して", "を通じて"] },
+      { q: "事実に ___ 報告してください。", ans: "基づいて", options: ["基づいて", "次第で", "末に", "あげく"] },
+      { q: "法規に ___ 審査を行う。", ans: "即して", options: ["即して", "及ぶ", "当たる", "向かう"] },
+      { q: "データに ___ 分析を行う。", ans: "基づいて", options: ["基づいて", "に際して", "に向けて", "に従って"] }
     ]
   },
   {
     chapter: 110,
     level: "N1",
-    title: "をよそに (ignoring)",
-    desc: "Unconcerned action",
+    title: "Formal Action & Written Expression",
+    desc: "On occasion / By / According to rules",
     patterns: [
-      { id: "110.1", label: "～をよそに", meaning: "Ignoring / Despite / Without concern for", explanation: "Used when someone does something while completely ignoring someone else's opinion, feelings, or situation.", examples: [{ jp: "親の 心配をよそに 遊んでいます。", romaji: "Oya no shinpai o yoso ni asonde imasu.", en: "I’m playing, ignoring my parents’ worries." }] }
+      { id: "110.1", label: "～に際して / ～にあたって", meaning: "On the occasion of / Upon", explanation: "Formal expression used for important life events or official starts of projects.", examples: [{jp: "新社屋完成に際して、式典が行われた。", romaji: "Shin-shoku kansei ni saishite, shikiten ga okonawareta.", en: "A ceremony was held upon the completion of the new office building." }] },
+      { id: "110.2", label: "～則って", meaning: "In accordance with", explanation: "Indicates following a set of traditional rules, laws, or established standards.", examples: [{jp: "古くからの慣習に則って、儀式を行う。", romaji: "Furuku kara no kanshuu ni nottotte, gishiki o okonau.", en: "Perform the ritual in accordance with ancient customs." }] },
+      { id: "110.3", label: "～を機に", meaning: "Taking the opportunity / Since", explanation: "Indicates that an event served as a perfect trigger for a change or new action.", examples: [{jp: "定年を機に、海外移住を決めた。", romaji: "Teinen o ki ni, kaigai ijuu o kimeta.", en: "Taking the opportunity of retirement, I decided to move abroad." }] }
     ],
     quiz: [
-      { q: "周囲の 反対 ___、二人は 結婚した。", ans: "をよそに", options: ["をよそに", "に際して", "に応じて", "に伴って"] },
-      { q: "彼女の 苦労 ___、彼は ギャンブルに 溺れている。", ans: "をよそに", options: ["をよそに", "として", "にとって", "につき"] },
-      { q: "世間の 喧騒 ___ 、彼は 田舎で 静かに 暮らしている。", ans: "をよそに", options: ["をよそに", "に加えて", "を除いて", "を通して"] },
-      { q: "不況 ___、その 店は 繁盛している。", ans: "をよそに", options: ["をよそに", "ばかりに", "ものの", "反面"] },
-      { q: "住民の 不安 ___、開発は どんどん 進んでいる。", ans: "をよそに", options: ["をよそに", "にしたがって", "につれて", "とともに"] },
-      { q: "病状の 悪化 ___、彼は 仕事を 辞めない。", ans: "をよそに", options: ["をよそに", "に限り", "さえ", "こそ"] },
-      { q: "みんなが 忙しく 働いている ___、彼は 昼寝を している。", ans: "のをよそに", options: ["のをよそに", "のところに", "まえに", "うちに"] },
-      { q: "期待 ___、結果は 散々なものだった。", ans: "をよそに", options: ["をよそに", "ばかりに", "あげく", "末に"] },
-      { q: "厳しい 校則 ___、生徒たちは 自由に 過ごしている。", ans: "をよそに", options: ["をよそに", "に沿って", "を通じて", "を通して"] },
-      { q: "親の 期待 ___、彼は 芸術家に なった。", ans: "をよそに", options: ["をよそに", "次第", "末に", "あげく"] }
+      { q: "留学に ___ 、色々な準備をした。", ans: "際して", options: ["際して", "皮切りに", "背景に", "渡って"] },
+      { q: "公教育の基準に ___ 運営する。", ans: "則って", options: ["則って", "照らして", "基づいて", "沿って"] },
+      { q: "結婚を ___ 煙草を止めた。", ans: "機に", options: ["機に", "を皮切りに", "を背景に", "を機に"] },
+      { q: "開会に ___ 二言ご挨拶申し上げます。", ans: "あたって", options: ["あたって", "に問わず", "を除いて", "を抜きにして"] },
+      { q: "伝統に ___ 祭りを守る。", ans: "則って", options: ["則って", "限りで", "のみで", "だけで"] },
+      { q: "この事件を ___ セキュリティを強化した。", ans: "機に", options: ["機に", "に即して", "に反して", "に逆らって"] },
+      { q: "新年を迎えるに ___ 抱負を語る。", ans: "あたって", options: ["あたって", "に亘って", "を通して", "を通じて"] },
+      { q: "国際法に ___ 処置する。", ans: "則って", options: ["則って", "次第で", "末に", "あげく"] },
+      { q: "昇進を ___ 引っ越しをした。", ans: "機に", options: ["機に", "及ぶ", "当たる", "向かう"] },
+      { q: "帰国に ___ お世話になった方々に挨拶した。", ans: "際して", options: ["際して", "皮切りに", "背景に", "渡って"] }
     ]
   },
   {
     chapter: 111,
     level: "N1",
-    title: "に耐えない (cannot bear)",
-    desc: "Intolerable state",
+    title: "Fixed N1 Grammar Patterns (EXAM GOLD)",
+    desc: "Without doing / In order to / As if",
     patterns: [
-      { id: "111.1", label: "～に耐えない", meaning: "Cannot bear / Unbearable / Not worth (negative)", explanation: "Indicates that something is too painful, disgusting, or terrible to look at or listen to. Also means 'extremely' with emotions like gratitude.", examples: [{ jp: "見るに耐えない 光景です。", romaji: "Miru ni taenai koukei desu.", en: "It’s a sight too painful to watch." }] }
+      { id: "111.1", label: "～ことなく", meaning: "Without doing", explanation: "Formal version of 'naide', showing an action continues without something else happening.", examples: [{jp: "一度も立ち止まることなく、走り続けた。", romaji: "Ichido mo tachidomaru koto naku, hashiri-tsuzuketa.", en: "He kept running without stopping even once." }] },
+      { id: "111.2", label: "～べく", meaning: "In order to / Intending to", explanation: "Formal expression showing a clear purpose or intention, used as a literary equivalent to 'tame ni'.", examples: [{jp: "プロを目指すべく、毎日練習に励んでいる。", romaji: "Puro o mezasubeku, mainichi renshuu ni hagende iru.", en: "I am working hard at practice every day in order to become a pro." }] },
+      { id: "111.3", label: "～んばかりに", meaning: "As if / Just about to", explanation: "Expresses a vivid state where something is almost happening, though it hasn't yet.", examples: [{jp: "彼女は泣き出さんばかりに、目を潤ませていた。", romaji: "Kanojo wa naki-dasan bakari ni, me o urumase teita.", en: "Her eyes were watering, as if she was just about to start crying." }] }
     ],
     quiz: [
-      { q: "彼の 演奏は 聞く ___ ものだった。", ans: "に耐えない", options: ["に耐えない", "に際して", "に応じて", "に伴って"] },
-      { q: "その ニュースは 正視 ___ 惨状を 伝えていた。", ans: "に耐えない", options: ["に耐えない", "として", "にとって", "につき"] },
-      { q: "彼の 態度は 噴飯 ___。", ans: "に耐えない", options: ["に耐えない", "に加えて", "を除いて", "を通して"] },
-      { q: "多くの 方々の 援助を いただき、感謝 ___。", ans: "に耐えません", options: ["に耐えません", "ばかりに", "ものの", "反面"] },
-      { q: "その 映画は 残酷すぎて 見る ___。", ans: "に耐えない", options: ["に耐えない", "にしたがって", "につれて", "とともに"] },
-      { q: "彼の 冗談は 聞く ___ 下品な ものだ。", ans: "に耐えない", options: ["に耐えない", "に限り", "さえ", "こそ"] },
-      { q: "失敗の 事実に 後悔 ___。", ans: "に耐えない", options: ["に耐えない", "のところに", "まえに", "うちに"] },
-      { q: "彼の 行為は 非難 ___ ものだ。", ans: "に耐えない", options: ["に耐えない", "ばかりに", "あげく", "末に"] },
-      { q: "その 結末は 涙 ___ ものだった。", ans: "に耐えない", options: ["に耐えない", "に沿って", "を通じて", "を通して"] },
-      { q: "皆様の ご厚意、感謝 ___。", ans: "に耐えません", options: ["に耐えません", "次第", "末に", "あげく"] }
+      { q: "彼は迷う ___ その道を選んだ。", ans: "ことなく", options: ["ことなく", "ものの", "からには", "わりに"] },
+      { q: "真相を究明す ___ 調査を続行した。", ans: "べく", options: ["べく", "に際して", "に応じて", "に伴って"] },
+      { q: "溢れ出さ ___ バケツが一杯だ。", ans: "んばかりに", options: ["んばかりに", "として", "にとって", "につき"] },
+      { q: "一度も諦める ___ 最後までやり遂げた。", ans: "ことなく", options: ["ことなく", "ばかりに", "ものの", "わりに"] },
+      { q: "平和を実現す ___ 尽力する。", ans: "べく", options: ["べく", "に限り", "さえあれば", "こそ"] },
+      { q: "今にも降り出さ ___ 空模様だ。", ans: "んばかりに", options: ["んばかりに", "次第で", "末に", "あげく"] },
+      { q: "誰にも知られる ___ 旅立った。", ans: "ことなく", options: ["ことなく", "として", "にとって", "につき"] },
+      { q: "目標を達成す ___ 努力を重ねる。", ans: "べく", options: ["べく", "し得ない", "するわけにはいかない", "すればいい"] },
+      { q: "爆発せ ___ 膨らんでいる。", ans: "んばかりに", options: ["んばかりに", "たところで", "以上に", "に反して"] },
+      { q: "休む ___ 働き続けた。", ans: "ことなく", options: ["ことなく", "次第で", "末に", "あげく"] }
     ]
   },
-  {
-    chapter: 112,
-    level: "N1",
-    title: "に即して (in line with)",
-    desc: "Fact-based action",
-    patterns: [
-      { id: "112.1", label: "～に即して", meaning: "In line with / According to / Based on", explanation: "Indicates doing something exactly according to the facts, reality, or regulations.", examples: [{ jp: "現実に 即して 考えましょう。", romaji: "Genjitsu ni sokushite kangaemashou.", en: "Let's think in line with reality." }] }
-    ],
-    quiz: [
-      { q: "事実 ___ 、正確に 報告してください。", ans: "に即して", options: ["に即して", "に際して", "に応じて", "に伴って"] },
-      { q: "法規 ___、適切に 処理する。", ans: "に即して", options: ["に即して", "として", "にとって", "につき"] },
-      { q: "個人の 能力 ___ 、仕事を 割り当てる。", ans: "に即して", options: ["に即して", "に加えて", "を除いて", "を通して"] },
-      { q: "時代の 変化 ___ 、教育カリキュラムを 見直す。", ans: "に即して", options: ["に即して", "ばかりに", "ものの", "反面"] },
-      { q: "マニュアル ___ 、操作を 進めてください。", ans: "に即して", options: ["に即して", "にしたがって", "につれて", "とともに"] },
-      { q: "現場の 状況 ___、柔軟に 対応する。", ans: "に即して", options: ["に即して", "に限り", "さえ", "こそ"] },
-      { q: "自分の 経験 ___ 、具体的な アドバイスを する。", ans: "に即して", options: ["に即して", "のところに", "まえに", "うちに"] },
-      { q: "相手の レベル ___ 、教え方を 変える。", ans: "に即して", options: ["に即して", "ばかりに", "あげく", "末に"] },
-      { q: "計画 ___ 、着実に プロジェクトを 進める。", ans: "に即して", options: ["に即して", "に沿って", "を通じて", "を通して"] },
-      { q: "ルール ___ 、公正に 審査する。", ans: "に即して", options: ["に即して", "次第", "末に", "あげく"] }
-    ]
-  },
-  {
-    chapter: 113,
-    level: "N1",
-    title: "を余儀なくされる (be forced to)",
-    desc: "Inevitable compulsion",
-    patterns: [
-      { id: "113.1", label: "～を余儀なくされる", meaning: "Be forced to / Be compelled to", explanation: "Indicates that one has no choice but to do something due to external circumstances.", examples: [{ jp: "中止を 余儀なくされました。", romaji: "Chuushi o yogi naku saremashita.", en: "We were forced to cancel." }] }
-    ],
-    quiz: [
-      { q: "故障のため、帰宅 ___。", ans: "を余儀なくされた", options: ["を余儀なくされた", "に際して", "に応じて", "に伴って"] },
-      { q: "資金不足で、計画の 変更 ___。", ans: "を余儀なくされた", options: ["を余儀なくされた", "として", "にとって", "につき"] },
-      { q: "怪我により、引退 ___。", ans: "を余儀なくされた", options: ["を余儀なくされた", "に加えて", "を除いて", "を通して"] },
-      { q: "大雪の影響で、電車の 中での 待機 ___。", ans: "を余儀なくされた", options: ["を余儀なくされた", "ばかりに", "ものの", "反面"] },
-      { q: "赤字続きで、店の 閉鎖 ___。", ans: "を余儀なくされた", options: ["を余儀なくされた", "にしたがって", "につれて", "とともに"] },
-      { q: "不祥事の発覚により、社長は 辞任 ___。", ans: "を余儀なくされた", options: ["を余儀なくされた", "に限り", "さえ", "こそ"] },
-      { q: "激しい 雨で、キャンプの中止 ___。", ans: "を余儀なくされた", options: ["を余儀なくされた", "のところに", "まえに", "うちに"] },
-      { q: "病状が悪化し、長期の 入院 ___。", ans: "を余儀なくされた", options: ["を余儀なくされた", "ばかりに", "あげく", "末に"] },
-      { q: "激動の 社会情勢の中で、方針の 転換 ___。", ans: "を余儀なくされた", options: ["を余儀なくされた", "に沿って", "を通じて", "を通して"] },
-      { q: "契約違反により、損害賠償 ___。", ans: "を余儀なくされた", options: ["を余儀なくされた", "次第", "末に", "あげく"] }
-    ]
-  },
-  {
-    chapter: 114,
-    level: "N1",
-    title: "いかに～ても (no matter how)",
-    desc: "Unrelenting condition",
-    patterns: [
-      { id: "114.1", label: "いかに～ても", meaning: "No matter how / Even if", explanation: "Used to emphasize that the result doesn't change regardless of the degree or amount of something.", examples: [{ jp: "いかに 忙しくても 行きます。", romaji: "Ikani isogashikutemo ikimasu.", en: "No matter how busy, I’ll go." }] }
-    ],
-    quiz: [
-      { q: "___ 困難でも、最後まで 諦めない。", ans: "いかに", options: ["いかに", "もし", "たとえ", "かなり"] },
-      { q: "___ 謝られても、許すことは できない。", ans: "いかに", options: ["いかに", "あまり", "特に", "かなり"] },
-      { q: "___ 努力しても、報われないことが ある。", ans: "いかに", options: ["いかに", "どうして", "なぜなら", "だから"] },
-      { q: "___ 高価な ものでも、心が こもっていなければ 意味がない。", ans: "いかに", options: ["いかに", "そんなに", "あんなに", "こんなに"] },
-      { q: "___ 隠そうとしても、いつかは バレる。", ans: "いかに", options: ["いかに", "ただ", "もし", "たとえ"] },
-      { q: "___ 時代が 変わっても、大切な ものは 変わらない。", ans: "いかに", options: ["いかに", "特に", "かなり", "のみ"] },
-      { q: "___ 才能が あっても、努力を 怠れば 成功しない。", ans: "いかに", options: ["いかに", "ただ", "もし", "たとえ"] },
-      { q: "___ 離れていても、心は つながっている。", ans: "いかに", options: ["いかに", "あまり", "特に", "かなり"] },
-      { q: "___ 苦しくても、笑顔を 忘れない。", ans: "いかに", options: ["いかに", "どうして", "なぜなら", "だから"] },
-      { q: "___ 権力が あっても、死を 避けることは できない。", ans: "いかに", options: ["いかに", "そんなに", "あんなに", "こんなに"] }
-    ]
-  },
-  {
-    chapter: 115,
-    level: "N1",
-    title: "にかかわらず (regardless)",
-    desc: "Universal application",
-    patterns: [
-      { id: "115.1", label: "～にかかわらず", meaning: "Regardless of / Irrespective of", explanation: "Indicates that something remains the same regardless of the factor mentioned.", examples: [{ jp: "経験の 有無にかかわらず 応募できます。", romaji: "Keiken no umu ni kakawarazu oubo dekimasu.", en: "You can apply regardless of experience." }] }
-    ],
-    quiz: [
-      { q: "国籍 ___、誰でも 参加できる。", ans: "にかかわらず", options: ["にかかわらず", "に際して", "に応じて", "に伴って"] },
-      { q: "天候 ___、試合は 行われます。", ans: "にかかわらず", options: ["にかかわらず", "として", "にとって", "につき"] },
-      { q: "理由の 如何 ___、遅刻は 認められない。", ans: "にかかわらず", options: ["にかかわらず", "に加えて", "を除いて", "を通して"] },
-      { q: "年齢 ___ 、同じ 料金です。", ans: "にかかわらず", options: ["にかかわらず", "ばかりに", "ものの", "反面"] },
-      { q: "やる、やらない ___、一度 相談してほしい。", ans: "にかかわらず", options: ["にかかわらず", "にしたがって", "につれて", "とともに"] },
-      { q: "好き嫌い ___ 、全部 食べなさい。", ans: "にかかわらず", options: ["にかかわらず", "に限り", "さえ", "こそ"] },
-      { q: "昼夜 ___ 、工事は 続いている。", ans: "にかかわらず", options: ["にかかわらず", "のところに", "まえに", "うちに"] },
-      { q: "金額の 多寡 ___、誠意を 示したい。", ans: "にかかわらず", options: ["にかかわらず", "ばかりに", "あげく", "末に"] },
-      { q: "成否 ___ 、全力を 尽くすことが 大切だ。", ans: "にかかわらず", options: ["にかかわらず", "に沿って", "を通じて", "を通して"] },
-      { q: "職種 ___ 、コミュニケーション能力は 必要だ。", ans: "にかかわらず", options: ["にかかわらず", "次第", "末に", "あげく"] }
-    ]
-  },
-  {
-    chapter: 116,
-    level: "N1",
-    title: "を踏まえて (based on)",
-    desc: "Considerate foundation",
-    patterns: [
-      { id: "116.1", label: "～を踏まえて", meaning: "Based on / Taking into account", explanation: "Used when making a decision or taking action after considering specific facts or opinions.", examples: [{ jp: "意見を 踏まえて 決めます。", romaji: "Iken o fumaete kimemasu.", en: "We’ll decide based on opinions." }] }
-    ],
-    quiz: [
-      { q: "今回の 失敗 ___ 、次回の 計画を 立てる。", ans: "を踏まえて", options: ["を踏まえて", "に際して", "に応じて", "に伴って"] },
-      { q: "アンケート 結果 ___、サービスを 改善する。", ans: "を踏まえて", options: ["を踏まえて", "として", "にとって", "につき"] },
-      { q: "現実 ___ 、可能な 目標を 設定しよう。", ans: "を踏まえて", options: ["を踏まえて", "に加えて", "を除いて", "を通して"] },
-      { q: "前回の 反省 ___ 、新しい ルールを 作った。", ans: "を踏まえて", options: ["を踏まえて", "ばかりに", "ものの", "反面"] },
-      { q: "周囲の 状況 ___ 、慎重に 行動すべきだ。", ans: "を踏まえて", options: ["を踏まえて", "にしたがって", "につれて", "とともに"] },
-      { q: "客の 要望 ___ 、メニューを 変更した。", ans: "を踏まえて", options: ["を踏まえて", "に限り", "さえ", "こそ"] },
-      { q: "過去の 経緯 ___ 、今回の 件を 判断する。", ans: "を踏まえて", options: ["を踏まえて", "のところに", "まえに", "うちに"] },
-      { q: "試験の 傾向 ___ 、対策を 練る。", ans: "を踏まえて", options: ["を踏まえて", "ばかりに", "あげく", "末に"] },
-      { q: "専門家の 指摘 ___ 、論文を 修正した。", ans: "を踏まえて", options: ["を踏まえて", "に沿って", "を通じて", "を通して"] },
-      { q: "彼の 能力 ___ 、役職を 決める。", ans: "を踏まえて", options: ["を踏まえて", "次第", "末に", "あげく"] }
-    ]
-  },
-  {
-    chapter: 117,
-    level: "N1",
-    title: "を経て (after passing through)",
-    desc: "Procedural arrival",
-    patterns: [
-      { id: "117.1", label: "～を経て", meaning: "After passing through / Via / After a period of", explanation: "Indicates moving to a next stage after passing through a certain place, time, or process.", examples: [{ jp: "会議を 経て 結論に 至りました。", romaji: "Kaigi o hete ketsuron ni itarimashita.", en: "After meetings, we reached a conclusion." }] }
-    ],
-    quiz: [
-      { q: "長い 沈黙 ___ 、彼は やっと 口を 開いた。", ans: "を経て", options: ["を経て", "に際して", "に応じて", "に伴って"] },
-      { q: "アメリカ ___ 、日本に 戻った。", ans: "を経て", options: ["を経て", "として", "にとって", "につき"] },
-      { q: "紆余曲折 ___、ようやく 合意に 達した。", ans: "を経て", options: ["を経て", "に加えて", "を除いて", "を通して"] },
-      { q: "訓練 ___ 、彼は 立派な パイロットに なった。", ans: "を経て", options: ["を経て", "ばかりに", "ものの", "反面"] },
-      { q: "数々の 困難 ___ 、プロジェクトは 成功した。", ans: "を経て", options: ["を経て", "にしたがって", "につれて", "とともに"] },
-      { q: "10年の 歳月 ___ 、二人は 再会した。", ans: "を経て", options: ["を経て", "に限り", "さえ", "こそ"] },
-      { q: "厳しい 審査 ___ 、採用が 決まった。", ans: "を経て", options: ["を経て", "のところに", "まえに", "うちに"] },
-      { q: "実地 研修 ___ 、配属先が 決まる。", ans: "を経て", options: ["を経て", "ばかりに", "あげく", "末に"] },
-      { q: "話し合い ___ 、新しい 方針が 決まった。", ans: "を経て", options: ["を経て", "に沿って", "を通じて", "を通して"] },
-      { q: "数か所の 港 ___ 、船は 目的地に 到着した。", ans: "を経て", options: ["を経て", "次第", "末に", "あげく"] }
-    ]
-  },
-  {
-    chapter: 118,
-    level: "N1",
-    title: "にひきかえ (in contrast to)",
-    desc: "Stark comparison",
-    patterns: [
-      { id: "118.1", label: "～にひきかえ", meaning: "In contrast to / Unlikely / Whereas", explanation: "Used to strongly compare two things, emphasizing how different they are.", examples: [{ jp: "昨日と ひきかえ、今日は 暑いです。", romaji: "Kinou to hikikae, kyou wa atsui desu.", en: "In contrast to yesterday, today is hot." }] }
-    ],
-    quiz: [
-      { q: "兄が 社交的な ___ 、弟は 内気だ。", ans: "のにひきかえ", options: ["のにひきかえ", "に際して", "に応じて", "に伴って"] },
-      { q: "去年の 豊作 ___ 、今年は 凶作だ。", ans: "にひきかえ", options: ["にひきかえ", "として", "にとって", "につき"] },
-      { q: "最新型の 便利さ ___ 、旧型は 不便で 仕方ない。", ans: "にひきかえ", options: ["にひきかえ", "に加えて", "を除いて", "を通して"] },
-      { q: "彼女の 勤勉さ ___ 、彼は 怠けて ばかりだ。", ans: "にひきかえ", options: ["にひきかえ", "ばかりに", "ものの", "反面"] },
-      { q: "都会の 喧騒 ___ 、田舎は 静かで いい。", ans: "にひきかえ", options: ["にひきかえ", "にしたがって", "につれて", "とともに"] },
-      { q: "昨日の 晴天 ___ 、今日は 土砂降りだ。", ans: "にひきかえ", options: ["にひきかえ", "に限り", "さえ", "こそ"] },
-      { q: "一回目の 成功 ___ 、二回目は 散々だった。", ans: "にひきかえ", options: ["にひきかえ", "のところに", "まえに", "うちに"] },
-      { q: "彼の 寛大さ ___ 、彼女は 執念深い。", ans: "にひきかえ", options: ["にひきかえ", "ばかりに", "あげく", "末に"] },
-      { q: "昔の 活気 ___ 、今の 商店街は 寂しい。", ans: "にひきかえ", options: ["にひきかえ", "に沿って", "を通じて", "を通して"] },
-      { q: "彼の 成功 ___ 、私の 人生は 冴えない。", ans: "にひきかえ", options: ["にひきかえ", "次第", "末に", "あげく"] }
-    ]
-  },
-  {
-    chapter: 119,
-    level: "N1",
-    title: "をものともせず (in spite of)",
-    desc: "Fearless defiance",
-    patterns: [
-      { id: "119.1", label: "～をものともせず", meaning: "In spite of / In defiance of / Braving", explanation: "Indicates doing something bravely while ignoring a major obstacle or danger.", examples: [{ jp: "雨を ものともせず 走りました。", romaji: "Ame o mono tomo sezu hashirimashita.", en: "He ran in spite of the rain." }] }
-    ],
-    quiz: [
-      { q: "周囲の 低評価 ___ 、彼は 努力を 続けた。", ans: "をものともせず", options: ["をものともせず", "に際して", "に応じて", "に伴って"] },
-      { q: "大怪我 ___ 、彼は 試合に 出場した。", ans: "をものともせず", options: ["をものともせず", "として", "にとって", "につき"] },
-      { q: "吹雪 ___ 、登山隊は 山頂を 目指した。", ans: "をものともせず", options: ["をものともせず", "に加えて", "を除いて", "を通して"] },
-      { q: "激しい 批判 ___ 、彼は 自分の 信念を 貫いた。", ans: "をものともせず", options: ["をものともせず", "ばかりに", "ものの", "反面"] },
-      { q: "肉体的な 衰え ___ 、彼は 現役で あり続けた。", ans: "をものともせず", options: ["をものともせず", "にしたがって", "につれて", "とともに"] },
-      { q: "逆風 ___ 、会社を 急成長させた。", ans: "をものともせず", options: ["をものともせず", "に限り", "さえ", "こそ"] },
-      { q: "家族の 反対 ___ 、彼女は 海外へ 飛び出した。", ans: "をものともせず", options: ["をものともせず", "のところに", "まえに", "うちに"] },
-      { q: "度重なる 失敗 ___ 、彼は 挑戦を 辞めなかった。", ans: "をものともせず", options: ["をものともせず", "ばかりに", "あげく", "末に"] },
-      { q: "激動の 時代 ___ 、彼は 自分の 生き方を 通した。", ans: "をものともせず", options: ["をものともせず", "に沿って", "を通じて", "を通して"] },
-      { q: "多額の 借金 ___ 、彼は 事業を 成功させた。", ans: "をものともせず", options: ["をものともせず", "次第", "末に", "あげく"] }
-    ]
-  },
-  {
-    chapter: 120,
-    level: "N1",
-    title: "かたがた (for two purposes)",
-    desc: "Dual-intent actions",
-    patterns: [
-      { id: "120.1", label: "～かたがた", meaning: "For two purposes / At the same time", explanation: "Used to indicate that an action is done for two different reasons (formal).", examples: [{ jp: "ご挨拶かたがた 伺いました。", romaji: "Go-aisatsu katagata ukagaimashita.", en: "I visited both to greet and for another purpose." }] }
-    ],
-    quiz: [
-      { q: "お礼 ___、近況を 報告した。", ans: "かたがた", options: ["かたがた", "に際して", "に応じて", "に伴って"] },
-      { q: "散歩 ___、買い物に 行く。", ans: "かたがた", options: ["かたがた", "として", "にとって", "につき"] },
-      { q: "お見舞い ___、本を 届けた。", ans: "かたがた", options: ["かたがた", "に加えて", "を除いて", "を通して"] },
-      { q: "報告 ___、夕食を 共に した。", ans: "かたがた", options: ["かたがた", "ばかりに", "ものの", "反面"] },
-      { q: "観光 ___ 、友人を 訪ねる。", ans: "かたがた", options: ["かたがた", "にしたがって", "につれて", "とともに"] },
-      { q: "お詫び ___、お菓子を 持って行った。", ans: "かたがた", options: ["かたがた", "に限り", "さえ", "こそ"] },
-      { q: "運動 ___、駅まで 歩く。", ans: "かたがた", options: ["かたがた", "のところに", "まえに", "うちに"] },
-      { q: "調査 ___ 、地方を 巡る。", ans: "かたがた", options: ["かたがた", "ばかりに", "あげく", "末に"] },
-      { q: "新年の 挨拶 ___、集まった。", ans: "かたがた", options: ["かたがた", "に沿って", "を通じて", "を通して"] },
-      { q: "視察 ___ 、工場を 訪問した。", ans: "かたがた", options: ["かたがた", "次第", "末に", "あげく"] }
-    ]
-  },
-  {
-    chapter: 121,
-    level: "N1",
-    title: "に堪える (worthy / bearable)",
-    desc: "Sufficient quality",
-    patterns: [
-      { id: "121.1", label: "～に堪える", meaning: "Worthy of / Bearable", explanation: "Indicates that something has enough value or strength to be worth a certain action (often appreciation or critical review).", examples: [{ jp: "見るに 堪える 作品です。", romaji: "Miru ni taeru sakuhin desu.", en: "It’s a work worth seeing." }] }
-    ],
-    quiz: [
-      { q: "その 論文は 批判 ___ ものだ。", ans: "に堪える", options: ["に堪える", "に際して", "に応じて", "に伴って"] },
-      { q: "大人の 鑑賞 ___ アニメーションだ。", ans: "に堪える", options: ["に堪える", "として", "にとって", "につき"] },
-      { q: "数回の 使用 ___ 丈夫な 袋。", ans: "に堪える", options: ["に堪える", "に加えて", "を除いて", "を通して"] },
-      { q: "この ビルは 震度7の 地震 ___。", ans: "に堪える", options: ["に堪える", "ばかりに", "ものの", "反面"] },
-      { q: "彼の 音楽は 何度 聞いても 鑑賞 ___。", ans: "に堪える", options: ["に堪える", "にしたがって", "につれて", "とともに"] },
-      { q: "過酷な 環境 ___ 体力を つける。", ans: "に堪える", options: ["に堪える", "に限り", "さえ", "こそ"] },
-      { q: "その 絵画は 長年の 保存 ___。", ans: "に堪える", options: ["に堪える", "のところに", "まえに", "うちに"] },
-      { q: "専門家の 評価 ___ 研究内容だ。", ans: "に堪える", options: ["に堪える", "ばかりに", "あげく", "末に"] },
-      { q: "この 橋は 激流 ___ 設計に なっている。", ans: "に堪える", options: ["に堪える", "に沿って", "を通じて", "を通して"] },
-      { q: "読む ___ 価値の ある 本だ。", ans: "に堪える", options: ["に堪える", "次第", "末に", "あげく"] }
-    ]
-  },
-  {
-    chapter: 122,
-    level: "N1",
-    title: "を境に (turning point)",
-    desc: "Pivotal change",
-    patterns: [
-      { id: "122.1", label: "～を境に", meaning: "After / Since / Using X as a boundary", explanation: "Indicates that a major change occurred after a specific event or point in time.", examples: [{ jp: "結婚を 境に 生活が 変わりました。", romaji: "Kekkon o sakai ni seikatsu ga kawarimashita.", en: "After marriage, life changed." }] }
-    ],
-    quiz: [
-      { q: "あの日 ___、彼は 変わってしまった。", ans: "を境に", options: ["を境に", "に際して", "に応じて", "に伴って"] },
-      { q: "還暦 ___ 、新しい 趣味を 始めた。", ans: "を境に", options: ["を境に", "として", "にとって", "につき"] },
-      { q: "卒業 ___ 、連絡が 途絶えた。", ans: "を境に", options: ["を境に", "に加えて", "を除いて", "を通して"] },
-      { q: "病気 ___、健康に 気をつけるように なった。", ans: "を境に", options: ["を境に", "ばかりに", "ものの", "反面"] },
-      { q: "不祥事 ___ 、会社の 評判は 落ちた。", ans: "を境に", options: ["を境に", "にしたがって", "につれて", "とともに"] },
-      { q: "ある 事件 ___ 、二人の 仲は 悪化した。", ans: "を境に", options: ["を境に", "に限り", "さえ", "こそ"] },
-      { q: "40歳 ___ 、体力の 衰えを 感じる。", ans: "を境に", options: ["を境に", "のところに", "まえに", "うちに"] },
-      { q: "その 発言 ___ 、議論は 別の 方向へ 進んだ。", ans: "を境に", options: ["を境に", "ばかりに", "あげく", "末に"] },
-      { q: "引越し ___ 、性格が 明るくなった。", ans: "を境に", options: ["を境に", "に沿って", "を通じて", "を通して"] },
-      { q: "2000年 ___ 、IT化が 急速に 進んだ。", ans: "を境に", options: ["を境に", "次第", "末に", "あげく"] }
-    ]
-  },
-  {
-    chapter: 123,
-    level: "N1",
-    title: "ならでは (unique to)",
-    desc: "Exclusive quality",
-    patterns: [
-      { id: "123.1", label: "～ならでは", meaning: "Unique to / Only possible with", explanation: "Used to emphasize that a certain positive quality or result is only possible because of a specific person, place, or thing.", examples: [{ jp: "日本ならではの 文化です。", romaji: "Nihon naradeha no bunka desu.", en: "It’s a culture unique to Japan." }] }
-    ],
-    quiz: [
-      { q: "プロ ___ の 技術に 感服した。", ans: "ならでは", options: ["ならでは", "に際して", "に応じて", "に伴って"] },
-      { q: "地元 ___ の 美味しい 料理を 食べた。", ans: "ならでは", options: ["ならでは", "として", "にとって", "につき"] },
-      { q: "彼 ___ の 素晴らしい 発想だ。", ans: "ならでは", options: ["ならでは", "に加えて", "を除いて", "を通して"] },
-      { q: "老舗 ___ の 伝統の 味。", ans: "ならでは", options: ["ならでは", "ばかりに", "ものの", "反面"] },
-      { q: "女性 ___ の 細やかな 気遣い。", ans: "ならでは", options: ["ならでは", "にしたがって", "につれて", "とともに"] },
-      { q: "夏 ___ の 楽しみを 満喫する。", ans: "ならでは", options: ["ならでは", "に限り", "さえ", "こそ"] },
-      { q: "この 店 ___ の 特製 ソース。", ans: "ならでは", options: ["ならでは", "のところに", "まえに", "うちに"] },
-      { q: "雪国 ___ の 美しい 風景。", ans: "ならでは", options: ["ならでは", "ばかりに", "あげく", "末に"] },
-      { q: "一流 ホテル ___ の サービス。", ans: "ならでは", options: ["ならでは", "に沿って", "を通じて", "を通して"] },
-      { q: "若者 ___ の 自由な 発想。", ans: "ならでは", options: ["ならでは", "次第", "末に", "あげく"] }
-    ]
-  },
-  {
-    chapter: 124,
-    level: "N1",
-    title: "にして (only then / at age)",
-    desc: "Precise timing",
-    patterns: [
-      { id: "124.1", label: "～にして", meaning: "Only then / Even at / At the age of", explanation: "Indicates a surprising timing or a specific condition that brings about a result.", examples: [{ jp: "40歳にして やっと 成功した。", romaji: "Yonjuussai ni shite yatto seikou shita.", en: "Only at 40 did he finally succeed." }] }
-    ],
-    quiz: [
-      { q: "一度の 練習 ___ 、完璧に 覚えた。", ans: "にして", options: ["にして", "に際して", "に応じて", "に伴って"] },
-      { q: "この 年齢 ___ 、初めて 海外へ 行った。", ans: "にして", options: ["にして", "として", "にとって", "につき"] },
-      { q: "三度目の 正直 ___ 、合格した。", ans: "にして", options: ["にして", "に加えて", "を除いて", "を通して"] },
-      { q: "彼は 大富豪 ___ 、質素な 生活を 送っている。", ans: "にして", options: ["にして", "ばかりに", "ものの", "反面"] },
-      { q: "天才 ピアニスト ___、努力家でも ある。", ans: "にして", options: ["にして", "にしたがって", "につれて", "とともに"] },
-      { q: "死後 100年 ___ 、彼の 才能が 認められた。", ans: "にして", options: ["にして", "に限り", "さえ", "こそ"] },
-      { q: "わずか 5歳 ___ 、漢字を すべて 読める。", ans: "にして", options: ["にして", "のところに", "まえに", "うちに"] },
-      { q: "プロ ___ 間違えることもある。", ans: "にして", options: ["にして", "ばかりに", "あげく", "末に"] },
-      { q: "一瞬 ___ 景色が 変わった。", ans: "にして", options: ["にして", "に沿って", "を通じて", "を通して"] },
-      { q: "不運な 死 ___ 彼は 満足していただろう。", ans: "にして", options: ["にして", "次第", "末に", "あげく"] }
-    ]
-  },
-  {
-    chapter: 125,
-    level: "N1",
-    title: "とあって (because of)",
-    desc: "Exceptional cause",
-    patterns: [
-      { id: "125.1", label: "～とあって", meaning: "Because / Due to (special situation)", explanation: "Indicates that because of a certain special or unusual situation, a natural result follows.", examples: [{ jp: "休日とあって、道が 混んでいます。", romaji: "Kyuujitsu to atte, michi ga konde imasu.", en: "Because it’s a holiday, the roads are crowded." }] }
-    ],
-    quiz: [
-      { q: "有名人の 来店 ___、店は 大騒ぎに なった。", ans: "とあって", options: ["とあって", "に際して", "に応じて", "に伴って"] },
-      { q: "久しぶりの 晴天 ___ 、公園は 人で いっぱいだ。", ans: "とあって", options: ["とあって", "として", "にとって", "につき"] },
-      { q: "人気歌手の コンサート ___、チケットは 即 完売した。", ans: "とあって", options: ["とあって", "に加えて", "を除いて", "を通して"] },
-      { q: "初雪 ___ 、子どもたちは 喜んで 庭へ 駆け出した。", ans: "とあって", options: ["とあって", "ばかりに", "ものの", "反面"] },
-      { q: "最後の 試合 ___ 、応援にも 熱が 入る。", ans: "とあって", options: ["とあって", "にしたがって", "につれて", "とともに"] },
-      { q: "無料 ___ 、大勢の 人が 詰めかけた。", ans: "とあって", options: ["とあって", "に限り", "さえ", "こそ"] },
-      { q: "急な 呼び出し ___ 、彼は 慌てて 出かけて行った。", ans: "とあって", options: ["とあって", "のところに", "まえに", "うちに"] },
-      { q: "歴史的な 会見 ___、世界中が 注目している。", ans: "とあって", options: ["とあって", "ばかりに", "あげく", "末に"] },
-      { q: "新製品の 発売日 ___ 、店の 前には 行列が できた。", ans: "とあって", options: ["とあって", "に沿って", "を通じて", "を通して"] },
-      { q: "夏休み 最初の日 ___ 、海は 賑わっている。", ans: "とあって", options: ["とあって", "次第", "末に", "あげく"] }
-    ]
-  }
 ];

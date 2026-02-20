@@ -1,5 +1,5 @@
 export const PARTICLE_DATA = [
-  // --- N5 PARTICLES ---
+  // --- N5 PARTICLES (The Essential 20) ---
   {
     id: "wa",
     level: "N5",
@@ -55,9 +55,9 @@ export const PARTICLE_DATA = [
     id: "ni",
     level: "N5",
     label: "に (ni)",
-    title: "Time / Destination / Purpose",
+    title: "Time / Destination",
     hinglish: "Target / Fixed Time",
-    explanation: "Indicates a specific point in time, a destination, or the purpose of an action.",
+    explanation: "Indicates a specific point in time or a destination.",
     usage: "Time + に | Destination + に + Iku/Kuru",
     examples: [
       { jp: "7時 に 起きます。", en: "Wake up at 7.", romaji: "Shichiji ni okimasu." },
@@ -140,13 +140,13 @@ export const PARTICLE_DATA = [
     id: "to",
     level: "N5",
     label: "と (to)",
-    title: "With / And / Quote",
+    title: "With / And",
     hinglish: "Saath (With) / Aur (And)",
-    explanation: "Used to list items exhaustively, indicate a partner for an action, or mark a quotation.",
-    usage: "A と B | Partner と Action | Quote + と",
+    explanation: "Used to list items exhaustively or indicate a partner for an action.",
+    usage: "A と B | Partner と Action",
     examples: [
       { jp: "友だち と 行きます。", en: "Go with a friend.", romaji: "Tomodachi to ikimasu." },
-      { jp: "「行きます」と 言いました。", en: "Said 'I will go'.", romaji: "'Ikimasu' to iimashita." }
+      { jp: "パン と たまご を 食べます。", en: "Eat bread and eggs.", romaji: "Pan to tamago o tabemasu." }
     ],
     quiz: [
       { q: "だれ ___ 行きますか。", ans: "と", options: ["に", "と", "を", "で"] },
@@ -168,6 +168,171 @@ export const PARTICLE_DATA = [
     quiz: [
       { q: "これ は 本 です ___。", ans: "か", options: ["か", "わ", "よ", "ね"] },
       { q: "今日 か 明日 ___ 行きます。", ans: "に", options: ["に", "を", "は", "の"] }
+    ]
+  },
+  {
+    id: "kara",
+    level: "N5",
+    label: "から (kara)",
+    title: "From / Since",
+    hinglish: "Se (From)",
+    explanation: "Indicates a starting point in time or space.",
+    usage: "Start + から",
+    examples: [
+      { jp: "インド から 来ました。", en: "I came from India.", romaji: "Indo kara kimashita." },
+      { jp: "9時 から です。", en: "From 9 o'clock.", romaji: "Kuji kara desu." }
+    ],
+    quiz: [
+      { q: "どこ ___ きましたか。", ans: "から", options: ["から", "まで", "に", "へ"] },
+      { q: "学校は 何時 ___ ですか。", ans: "から", options: ["から", "まで", "を", "に"] }
+    ]
+  },
+  {
+    id: "made",
+    level: "N5",
+    label: "まで (made)",
+    title: "Until / Up to",
+    hinglish: "Tak (Until)",
+    explanation: "Indicates an ending point in time or space.",
+    usage: "End + まで",
+    examples: [
+      { jp: "5時 まで 働きます。", en: "I work until 5.", romaji: "Goji made hatarakimasu." },
+      { jp: "駅 まで あります。", en: "It's up to the station.", romaji: "Eki made arimasu." }
+    ],
+    quiz: [
+      { q: "何時 ___ ですか。", ans: "まで", options: ["まで", "から", "に", "へ"] },
+      { q: "ここ ___ 来てください。", ans: "まで", options: ["まで", "へ", "に", "を"] }
+    ]
+  },
+  {
+    id: "dake",
+    level: "N5",
+    label: "だけ (dake)",
+    title: "Only / Just",
+    hinglish: "Sirf (Only)",
+    explanation: "Indicates a limit or extent. Used when something is 'only' that much.",
+    usage: "Noun + だけ",
+    examples: [
+      { jp: "5分 だけ まってください。", en: "Please wait only 5 minutes.", romaji: "Gofun dake matte kudasai." },
+      { jp: "これ だけ です。", en: "This is all (only this).", romaji: "Kore dake desu." }
+    ],
+    quiz: [
+      { q: "一人 ___ 来ました。", ans: "だけ", options: ["だけ", "しか", "も", "は"] },
+      { q: "一つ ___ 食べました。", ans: "だけ", options: ["だけ", "も", "を", "に"] }
+    ]
+  },
+  {
+    id: "shika",
+    level: "N5",
+    label: "しか (shika)",
+    title: "Only (Negative)",
+    hinglish: "Bas sirf (Aur kuch nahi)",
+    explanation: "Means 'only', but MUST be used with a negative verb. Implies insufficiency.",
+    usage: "Noun + しか + Negative Verb",
+    examples: [
+      { jp: "100円 しか ありません。", en: "I only have 100 yen.", romaji: "Hyakuen shika arimasen." },
+      { jp: "ひらがな しか かけません。", en: "I can only write Hiragana.", romaji: "Hiragana shika kakemasen." }
+    ],
+    quiz: [
+      { q: "これ ___ ありません。", ans: "しか", options: ["しか", "だけ", "も", "は"] },
+      { q: "お茶しか ___ ません。", ans: "飲み", options: ["飲み", "飲む", "飲ん", "飲め"] }
+    ]
+  },
+  {
+    id: "ne",
+    level: "N5",
+    label: "ね (ne)",
+    title: "Confirmation",
+    hinglish: "Hai na? (Confirmation)",
+    explanation: "Used at the end of a sentence to seek agreement or confirm something.",
+    usage: "Sentence + ね",
+    examples: [
+      { jp: "いい天気 です ね。", en: "It's nice weather, isn't it?", romaji: "Ii tenki desu ne." },
+      { jp: "おいしい です ね。", en: "It's delicious, right?", romaji: "Oishii desu ne." }
+    ],
+    quiz: [
+      { q: "きれい です ___。", ans: "ね", options: ["ね", "よ", "わ", "か"] },
+      { q: "そう です ___。", ans: "ね", options: ["ね", "よ", "か", "わ"] }
+    ]
+  },
+  {
+    id: "yo",
+    level: "N5",
+    label: "よ (yo)",
+    title: "Emphasis",
+    hinglish: "Bhai! (Informing)",
+    explanation: "Used at the end of a sentence to emphasize a point or share new info.",
+    usage: "Sentence + よ",
+    examples: [
+      { jp: "おいしい です よ。", en: "It's delicious! (I'm telling you)", romaji: "Oishii desu yo." },
+      { jp: "あそこに あります よ。", en: "It's over there! (Informing you)", romaji: "Asoko ni arimasu yo." }
+    ],
+    quiz: [
+      { q: "あした、休みです ___。", ans: "よ", options: ["よ", "ね", "わ", "か"] },
+      { q: "これ、いいですよ。- あ、そう ___。", ans: "ですか", options: ["ですか", "です", "ですよ", "ですわ"] }
+    ]
+  },
+  {
+    id: "ni-purpose",
+    level: "N5",
+    label: "に (ni - target)",
+    title: "Purpose",
+    hinglish: "Ke liye (Target action)",
+    explanation: "Used with movement verbs (iku/kuru) to show the purpose of going/coming.",
+    usage: "Verb (Masu-stem) + に + 行きます",
+    examples: [
+      { jp: "食べ に 行きます。", en: "Go to eat.", romaji: "Tabe ni ikimasu." },
+      { jp: "買い に 行きます。", en: "Go to buy.", romaji: "Kai ni ikimasu." }
+    ],
+    quiz: [
+      { q: "スーパーへ 買い ___ 行きます。", ans: "に", options: ["に", "を", "へ", "で"] },
+      { q: "日本へ 勉強 ___ 来ました。", ans: "に", options: ["に", "へ", "を", "が"] }
+    ]
+  },
+  {
+    id: "ya",
+    level: "N5",
+    label: "や (ya)",
+    title: "Listing (Etc.)",
+    hinglish: "Jaise ki... aur... (Non-exhaustive)",
+    explanation: "Used like 'to' (and), but implies there are other items in the list.",
+    usage: "Noun 1 や Noun 2",
+    examples: [
+      { jp: "パン や たまご を 買いました。", en: "I bought things like bread and eggs.", romaji: "Pan ya tamago o kaimashita." }
+    ],
+    quiz: [
+      { q: "本 ___ ノートが あります。", ans: "や", options: ["や", "と", "が", "を"] },
+      { q: "りんご ___ みかんを 食べます。", ans: "や", options: ["や", "を", "に", "は"] }
+    ]
+  },
+  {
+    id: "nado",
+    level: "N5",
+    label: "など (nado)",
+    title: "Etc.",
+    hinglish: "Waghera (Etc.)",
+    explanation: "Often used with 'ya' to mean 'and so on' or 'etc'.",
+    usage: "Noun や Noun + など",
+    examples: [
+      { jp: "パン や たまご など を 買いました。", en: "I bought bread, eggs, etc.", romaji: "Pan ya tamago nado o kaimashita." }
+    ],
+    quiz: [
+      { q: "りんごや みかん ___ を 食べます。", ans: "など", options: ["など", "ばかり", "だけ", "しか"] }
+    ]
+  },
+  {
+    id: "goro",
+    level: "N5",
+    label: "ごろ (goro)",
+    title: "About (Time)",
+    hinglish: "Aas-paas (About)",
+    explanation: "Indicates 'about' or 'approximately' for clock time.",
+    usage: "Time + ごろ",
+    examples: [
+      { jp: "3時 ごろ 会いましょう。", en: "Let's meet around 3 o'clock.", romaji: "Sanji goro aimashou." }
+    ],
+    quiz: [
+      { q: "8時 ___ 寝ます。", ans: "ごろ", options: ["ごろ", "くらい", "まで", "から"] }
     ]
   },
 
@@ -204,23 +369,6 @@ export const PARTICLE_DATA = [
     quiz: [
       { q: "アニメ ___ 見ています。", ans: "ばかり", options: ["ばかり", "だけ", "しか", "も"] },
       { q: "日本に来た ___ です。", ans: "ばかり", options: ["ばかり", "たら", "から", "ので"] }
-    ]
-  },
-  {
-    id: "dake",
-    level: "N4",
-    label: "だけ (dake)",
-    title: "Only (Positive)",
-    hinglish: "Sirf (Only)",
-    explanation: "Indicates a limit or extent, meaning 'only' in a positive context.",
-    usage: "Noun + だけ",
-    examples: [
-      { jp: "これ だけ です。", en: "This is all (only this).", romaji: "Kore dake desu." },
-      { jp: "1分 だけ 待ってください。", en: "Please wait only one minute.", romaji: "Ippun dake matte kudasai." }
-    ],
-    quiz: [
-      { q: "名前 ___ 書いてください。", ans: "だけ", options: ["だけ", "しか", "も", "は"] },
-      { q: "一つ ___ 食べました。", ans: "だけ", options: ["だけ", "も", "を", "に"] }
     ]
   },
   {
@@ -272,23 +420,6 @@ export const PARTICLE_DATA = [
     quiz: [
       { q: "昨日 ___ 寒くないです。", ans: "ほど", options: ["ほど", "くらい", "より", "から"] },
       { q: "寝られない ___ 痛いです。", ans: "ほど", options: ["ほど", "くらい", "まで", "から"] }
-    ]
-  },
-  {
-    id: "shika",
-    level: "N4",
-    label: "しか (shika)",
-    title: "Only (Negative context)",
-    hinglish: "Sirf (Only - and nothing else)",
-    explanation: "Used with a negative verb to mean 'only'. It implies that the amount is insufficient.",
-    usage: "Noun + しか + Negative Verb",
-    examples: [
-      { jp: "100円 しか ありません。", en: "I only have 100 yen.", romaji: "Hyakuen shika arimasen." },
-      { jp: "ひらがな しか 書けません。", en: "I can only write Hiragana.", romaji: "Hiragana shika kakemasen." }
-    ],
-    quiz: [
-      { q: "これ ___ ありません。", ans: "しか", options: ["しか", "だけ", "も", "は"] },
-      { q: "お茶しか ___ ません。", ans: "飲み", options: ["飲み", "飲む", "飲ん", "飲め"] }
     ]
   },
   {
@@ -412,66 +543,8 @@ export const PARTICLE_DATA = [
       { q: "プロ ___ 責任がある。", ans: "として", options: ["として", "によって", "にわたって", "に際して"] }
     ]
   },
-  {
-    id: "nado",
-    level: "N3",
-    label: "など (nado)",
-    title: "Etc. / And so on",
-    hinglish: "Wagairah (Etc. / Aur bhi)",
-    explanation: "Used to list examples among many possibilities.",
-    usage: "Noun + など",
-    examples: [
-      { jp: "本や ノートなど を 買いました。", en: "I bought books, notebooks, etc.", romaji: "Hon ya nooto nado o kaimashita." }
-    ],
-    quiz: [
-      { q: "りんごや バナナ ___ を 食べます。", ans: "など", options: ["など", "ばかり", "だけ", "しか"] }
-    ]
-  },
-  {
-    id: "ni-tsuite",
-    level: "N3",
-    label: "について (ni tsuite)",
-    title: "About / Regarding",
-    hinglish: "Ke baare me (About)",
-    explanation: "Used to introduce a topic or subject.",
-    usage: "Noun + について",
-    examples: [
-      { jp: "日本文化 について 勉強しています。", en: "I’m studying about Japanese culture.", romaji: "Nihon bunka ni tsuite benkyou shite imasu." }
-    ],
-    quiz: [
-      { q: "将来の夢 ___ 話してください。", ans: "について", options: ["について", "にとって", "によって", "に際して"] }
-    ]
-  },
-  {
-    id: "ni-yotte",
-    level: "N3",
-    label: "によって (ni yotte)",
-    title: "Depending on / By",
-    hinglish: "Ke anusar (Depending on) / Ke dwara (By)",
-    explanation: "Indicates variation based on something, or the means/creator of something.",
-    usage: "Noun + によって",
-    examples: [
-      { jp: "人 によって 考え方が 違います。", en: "Thinking differs depending on the person.", romaji: "Hito ni yotte kangaekata ga chigaimasu." }
-    ],
-    quiz: [
-      { q: "国 ___ 習慣が 違います。", ans: "によって", options: ["によって", "にとって", "について", "に対して"] }
-    ]
-  },
-  {
-    id: "uchi-ni",
-    level: "N3",
-    label: "うちに (uchi ni)",
-    title: "While / Before a change",
-    hinglish: "Jab tak / Uske pehle",
-    explanation: "Doing something while a certain state lasts.",
-    usage: "Verb-Plain / Adjective / Noun + の + うちに",
-    examples: [
-      { jp: "明るい うちに 帰りましょう。", en: "Let's go home while it's still light out.", romaji: "Akarui uchi ni kaerimashou." }
-    ],
-    quiz: [
-      { q: "忘れない ___ メモしてください。", ans: "うちに", options: ["うちに", "までに", "まえに", "ときに"] }
-    ]
-  },
+
+  // --- N2 PARTICLES ---
   {
     id: "ni-saishite",
     level: "N2",
@@ -502,22 +575,8 @@ export const PARTICLE_DATA = [
       { q: "会議は 5時間 ___ 行われた。", ans: "にわたって", options: ["にわたって", "に際して", "に応じて", "に伴って"] }
     ]
   },
-  {
-    id: "o-tsuujite",
-    level: "N2",
-    label: "を通じて / を通して (o tsuujite/tooshite)",
-    title: "Through / Via",
-    hinglish: "Ke zariye (Through)",
-    explanation: "Indicates the means or the whole period during which something happens.",
-    usage: "Noun + を通じて / を通して",
-    examples: [
-      { jp: "ニュース を通じて 知りました。", en: "I learned it through the news.", romaji: "Nyuusu o tsuujite shirimashita." },
-      { jp: "1年 を通して 暑いです。", en: "It's hot throughout the year.", romaji: "Ichinen o tooshite atsui desu." }
-    ],
-    quiz: [
-      { q: "インターネット ___ 買い物を する。", ans: "を通じて", options: ["を通じて", "として", "にとって", "につき"] }
-    ]
-  },
+
+  // --- N1 PARTICLES ---
   {
     id: "o-motte",
     level: "N1",
@@ -531,21 +590,6 @@ export const PARTICLE_DATA = [
     ],
     quiz: [
       { q: "これ ___ 失礼いたします。", ans: "をもって", options: ["をもって", "として", "にとって", "につき"] }
-    ]
-  },
-  {
-    id: "naradeha",
-    level: "N1",
-    label: "ならでは (naradeha)",
-    title: "Unique to",
-    hinglish: "Jo sirf wahan mile (Unique)",
-    explanation: "Emphasizes that a quality is exclusive to a specific entity.",
-    usage: "Noun + ならでは",
-    examples: [
-      { jp: "京都 ならではの 景色ですね。", en: "It's a view unique to Kyoto.", romaji: "Kyouto naradeha no keshiki desu ne." }
-    ],
-    quiz: [
-      { q: "プロ ___ の 素晴らしい 技だ。", ans: "ならでは", options: ["ならでは", "において", "にとって", "につき"] }
     ]
   }
 ];

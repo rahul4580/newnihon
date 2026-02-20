@@ -19,37 +19,56 @@ export const translations = {
       levels: ["N5", "N4", "N3", "N2", "N1"]
     },
     about: {
-      title: "Who I Am",
-      subtitle: "Building the future, one line of code at a time.",
-      hero_badge: "18-Year-Old Dev",
+      title: "Our Vision",
+      subtitle: "Bridging distance and language to bring you the heart of Japan.",
+      hero_badge: "Culture & Connection",
       intro: {
-        title: "The Self-Taught Developer",
-        text: "I'm an 18-year-old full-stack developer driven by a single mission: to solve real-world problems through elegant code. I don't just build websites; I craft digital experiences that matter."
+        title: "More Than a Language",
+        text: "Nihongo Master isn't just about grammar and kanji. It's about the soul of Japan—its traditions, its futuristic cities, and the quiet moments in between. Our mission is to provide an immersive path to fluency and cultural understanding."
       },
-      story: {
-        title: "The Origin Story",
-        text: "My journey wasn't traditional. Fuelled by curiosity and an obsession with 'One Piece' (shonen spirit!), I taught myself the MERN stack from the ground up. Like Luffy setting sail, I dove into React, databases, and algorithms with zero hesitation.",
-        will_of_d: {
-          title: "The Will of D.",
-          quote: '"Inherited Will, The Destiny of Age, and The Dreams of Its People. These are things that will not be stopped."'
+      culture: {
+        title: "Deep Cultural Roots",
+        subtitle: "From ancient temples to neon-lit streets, Japan is a land of beautiful contrasts.",
+        festivals: {
+          title: "Matsuri Spirit",
+          text: "Experience the pulse of Japan through its seasons of celebration. From the massive Gion Matsuri in Kyoto to local summer fireworks (Hanabi), festivals are where community and history collide."
+        },
+        tradition: {
+          title: "Timeless Zen",
+          text: "The philosophy of Zen, the ceremony of tea, and the meticulous care in every craft. We explore the traditions that have shaped the Japanese mindset for centuries."
+        },
+        modern: {
+          title: "Modern Marvels",
+          text: "Tokyo's high-speed heartbeat, revolutionary tech, and the vibrant world of pop culture. Discover how Japan leads the world into the future while staying rooted in its past."
         }
       },
-      language: {
-        title: "Global Mindset",
-        level: "JLPT N5",
-        text: "Learning Japanese to connect with the tech culture in Tokyo. Aiming for fluency to work across borders."
+      vision: {
+        title: "The Path Ahead",
+        text: "We are building the ultimate resource for Japanese learners worldwide. A place where language meets life."
       },
-      goals: {
-        title: "The Vision",
-        text: "My goal is simple yet ambitious: To land a full-stack role where I can push boundaries—whether that's here in India or the tech hubs of Japan."
+      ecosystem: {
+        title: "Platform Ecosystem",
+        subtitle: "Explore our interconnected tools designed for holistic mastery.",
+        languages: {
+          title: "Language Hub",
+          desc: "Master Grammar, Kanji, and Vocabulary with N5-N1 roadmaps."
+        },
+        workspace: {
+          title: "Study Workspace",
+          desc: "A Notion-inspired environment to track your progress and notes."
+        },
+        connectivity: {
+          title: "Video Exchange",
+          desc: "Connect with native speakers and peers in real-time."
+        }
       },
-      skills_title: "Arsenal & Achievements",
+      skills_title: "Core Pillars",
       skills_list: [
-        { name: "MERN Stack Master", desc: "React, Node, Express, MongoDB" },
-        { name: "Data Wizardry", desc: "Python, Pandas, SQL Optimization" },
-        { name: "Continuous Learning", desc: "Daily coding routine & System Design" }
+        { name: "Immersive Learning", desc: "Contextual exercises that mirror real-life situations." },
+        { name: "Cultural Depth", desc: "Deep dives into festivals, etiquette, and history." },
+        { name: "Community First", desc: "Connecting learners with the target culture directly." }
       ],
-      cta: "Let's Build Something"
+      cta: "Join the Journey"
     },
     skills: {
       title: "NIHONGO MATRIX",
@@ -292,6 +311,19 @@ export const translations = {
         title: "Future Goals",
         text: "Looking ahead, I want to merge my technical skills with my creative interests to build something unique."
       },
+      culture: {
+        title: "Japanese Culture",
+        subtitle: "Festivals, Traditions & Seasons",
+        desc: "Explore the vibrant Matsuri, serene temples, and seasonal beauty of Japan."
+      },
+      articles: {
+        title: "Articles",
+        desc: "Insights on Japanese culture, language, and technology."
+      },
+      books: {
+        title: "Library",
+        desc: "Recommended books for your Japanese journey."
+      },
       cta: "Let's Chat"
     },
     more_languages: {
@@ -362,37 +394,56 @@ export const translations = {
       levels: ["N5", "N4", "N3", "N2", "N1"]
     },
     about: {
-      title: "私は誰か",
-      subtitle: "未来を築く。一度に一行のコードで。",
-      hero_badge: "18歳の開発者",
+      title: "私たちのビジョン",
+      subtitle: "距離と言語を超えて、日本の心をあなたに届けます。",
+      hero_badge: "文化とつながり",
       intro: {
-        title: "独学の開発者",
-        text: "私は18歳のフルスタック開発者で、エレガントなコードを通じて現実世界の問題を解決するという一つの使命を持っています。単にウェブサイトを作るだけでなく、意味のあるデジタル体験を作り出します。"
+        title: "言語以上のもの",
+        text: "Nihongo Masterは、単なる文法や漢字の学習ではありません。伝統、未来的な都市、そしてその間にある静かな瞬間といった、日本の魂そのものを伝えます。私たちの使命は、流暢さと文化的な理解への没入型の道を提供することです。"
       },
-      story: {
-        title: "原点",
-        text: "私の旅は伝統的なものではありませんでした。好奇心と「ワンピース」への執着（少年精神！）に支えられ、MERNスタックを基礎から独学で学びました。ルフィが出航するように、私はためらうことなくReact、データベース、アルゴリズムに飛び込みました。",
-        will_of_d: {
-          title: "Dの意志",
-          quote: "「受け継がれる意志、時代のうねり、人の夢。これらは止めることのできないものだ」"
+      culture: {
+        title: "深い文化的ルーツ",
+        subtitle: "古代の寺院からネオンが輝く街路まで、日本は美しいコントラストの国です。",
+        festivals: {
+          title: "祭りの精神",
+          text: "お祝いの季節を通じて日本の鼓動を感じてください。京都の壮大な祇園祭から地元の夏の花火（花火）まで、祭りはコミュニティと歴史が衝突する場所です。"
+        },
+        tradition: {
+          title: "時を超えた禅",
+          text: "禅の哲学、茶の湯、そしてあらゆる技術に注がれる細心の注意。何世紀にもわたって日本人の考え方を形作ってきた伝統を探求します。"
+        },
+        modern: {
+          title: "現代の驚異",
+          text: "東京の高速な鼓動、革命的なテクノロジー、そして活気あるポップカルチャーの世界。日本が過去に根ざしながら、いかに世界を未来へと導いているかを発見してください。"
         }
       },
-      language: {
-        title: "グローバルマインドセット",
-        level: "JLPT N5",
-        text: "東京のテックカルチャーとつながるために日本語を学んでいます。国境を越えて働くために流暢さを目指しています。"
+      vision: {
+        title: "進むべき道",
+        text: "私たちは、世界中の日本語学習者のための究極のリソースを構築しています。言語と生活が出会う場所です。"
       },
-      goals: {
-        title: "ビジョン",
-        text: "私の目標はシンプルですが野心的です。ここインドでも日本のテックハブでも、境界を押し広げることができるフルスタックの役割を得ることです。"
+      ecosystem: {
+        title: "プラットフォーム・エコシステム",
+        subtitle: "総合的な習得のために設計された、相互に接続されたツールを探索してください。",
+        languages: {
+          title: "言語ハブ",
+          desc: "N5-N1のロードマップで文法、漢字、語彙をマスターします。"
+        },
+        workspace: {
+          title: "学習ワークスペース",
+          desc: "進捗状況やノートを管理するためのNotion風の環境。"
+        },
+        connectivity: {
+          title: "ビデオ交流",
+          desc: "ネイティブスピーカーや仲間とリアルタイムでつながります。"
+        }
       },
-      skills_title: "スキルと実績",
+      skills_title: "中核となる柱",
       skills_list: [
-        { name: "MERNスタックマスター", desc: "React, Node, Express, MongoDB" },
-        { name: "データの魔法", desc: "Python, Pandas, SQL最適化" },
-        { name: "継続的な学習", desc: "毎日のコーディングルーチンとシステム設計" }
+        { name: "没入型学習", desc: "実生活の状況を反映した文脈別の演習。" },
+        { name: "文化的深み", desc: "祭り、エチケット、歴史への深い探求。" },
+        { name: "コミュニティ第一", desc: "学習者をターゲット文化に直接つなげます。" }
       ],
-      cta: "一緒に何か作りましょう"
+      cta: "旅に参加する"
     },
     skills: {
       title: "日本語マトリックス",
@@ -565,6 +616,19 @@ export const translations = {
       future: {
         title: "将来の目標",
         text: "将来的には、技術的なスキルと創造的な興味を融合させて、ユニークなものを作りたいと考えています。"
+      },
+      culture: {
+        title: "日本文化",
+        subtitle: "祭り、伝統、そして季節",
+        desc: "日本の活気ある祭り、静かな寺院、そして季節の美しさを探求してください。"
+      },
+      articles: {
+        title: "記事",
+        desc: "日本文化、言語、技術に関する洞察。"
+      },
+      books: {
+        title: "ライブラリ",
+        desc: "あなたの日本語学習の旅におすすめの本。"
       },
       cta: "チャットしましょう"
     },

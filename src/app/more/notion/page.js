@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect, useMemo, useRef, useState, useCallback } from 'react';
-import { useUser, SignIn, UserButton } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
 import {
   CheckSquare,
@@ -16,16 +15,35 @@ import {
   X,
   Menu,
   Flag,
+  ListFilter,
+  PanelLeftClose,
+  PanelLeftOpen,
+  MoreHorizontal,
   Bell,
   RefreshCw,
+  Flame,
+  Zap,
+  Trophy,
+  Archive,
+  Copy,
+  Dumbbell,
+  Book,
+  Coffee,
+  Heart,
+  Brain,
+  MoreVertical,
+  Trash2,
+  ChevronRight,
+  ChevronDown
 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const TASK_PRIORITIES = ['High', 'Medium', 'Low'];
 const TASK_RECURRENCE = ['none', 'daily', 'weekly', 'monthly'];
 const DEFAULT_CATEGORIES = [
-  { id: 'work', name: 'Work', color: '#3b82f6' },
-  { id: 'study', name: 'Study', color: '#f59e0b' },
-  { id: 'personal', name: 'Personal', color: '#10b981' },
+  { id: 'work', name: 'Work', color: '#000000' },
+  { id: 'study', name: 'Study', color: '#f97316' },
+  { id: 'personal', name: 'Personal', color: '#404040' },
 ];
 
 const toInputDateTime = (iso) => {
@@ -126,6 +144,28 @@ const getYearData = (tasks) => {
 
 const uid = () => `${Date.now()}_${Math.random().toString(16).slice(2)}`;
 
+const HABIT_TEMPLATES = [
+  { name: 'Study Japanese', icon: Book, color: '#f97316', goal: 1, category: 'Study', description: 'Daily language practice' },
+  { name: 'Workout', icon: Dumbbell, color: '#ef4444', goal: 1, category: 'Health', description: 'Physical exercise' },
+  { name: 'Meditation', icon: Brain, color: '#8b5cf6', goal: 1, category: 'Mindset', description: 'Mental focus' },
+  { name: 'Read', icon: Book, color: '#3b82f6', goal: 1, category: 'Personal', description: 'Read 20 pages' },
+  { name: 'Hydrate', icon: Coffee, color: '#06b6d4', goal: 8, category: 'Health', description: 'Drink 8 glasses of water' },
+];
+
+const makeHabit = (patch = {}) => ({
+  id: uid(),
+  name: '',
+  description: '',
+  icon: Zap,
+  color: '#f97316',
+  category: 'Routine',
+  goal: 1,
+  completedDays: [], // Array of ISO strings (YYYY-MM-DD)
+  archived: false,
+  createdAt: Date.now(),
+  ...patch,
+});
+
 const makeTask = (patch = {}) => ({
   id: uid(),
   title: '',
@@ -145,17 +185,31 @@ const makeTask = (patch = {}) => ({
 });
 
 export default function NotionPage() {
+  const [userProfile, setUserProfile] = useState(null);
+  
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const saved = localStorage.getItem('japandev:guestProfile');
+    const profile = saved ? JSON.parse(saved) : {
+      id: `guest_${Math.random().toString(36).substr(2, 9)}`,
+      name: 'Guest User'
+    };
+    setUserProfile(profile);
+  }, []);
+
   const router = useRouter();
-  const { user, isLoaded, isSignedIn } = useUser();
   const [tasks, setTasks] = useState([]);
   const [categories, setCategories] = useState(DEFAULT_CATEGORIES);
   const [activeFilter, setActiveFilter] = useState('all');
   const [search, setSearch] = useState('');
   const [isDark, setIsDark] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [habits, setHabits] = useState([]);
+  const [showHabitTemplates, setShowHabitTemplates] = useState(false);
+  const [activeTab, setActiveTab] = useState('tasks'); // 'tasks' or 'habits'
   const [dialogOpen, setDialogOpen] = useState(false);
   const [guideOpen, setGuideOpen] = useState(false);
-  const [templatesOpen, setTemplatesOpen] = useState(false);
+  const [searchExpanded, setSearchExpanded] = useState(false);
   const [fitnessOpen, setFitnessOpen] = useState(false);
   const [imagesOpen, setImagesOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
@@ -164,11 +218,13 @@ export default function NotionPage() {
   const [showContributions, setShowContributions] = useState(false);
   const newCatRef = useRef(null);
   const [heatmapRange, setHeatmapRange] = useState(365);
-  const [heatmapPalette, setHeatmapPalette] = useState('green');
-  const [uiStyle, setUiStyle] = useState('monochrome');
+  const [heatmapPalette, setHeatmapPalette] = useState('orange');
+  const [uiStyle, setUiStyle] = useState('minimal_orange');
   const [uiLanguage, setUiLanguage] = useState('en');
   const [zenMode, setZenMode] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [moreMenuOpen, setMoreMenuOpen] = useState(false);
+  const [guidesOpen, setGuidesOpen] = useState(false);
 
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
 
@@ -176,7 +232,7 @@ export default function NotionPage() {
     clean: { container: '', card: '' },
     minimal: { container: 'bg-white dark:bg-black', card: 'border-none shadow-none' },
     vibrant: { container: 'bg-gradient-to-b from-fuchsia-100 to-indigo-100 dark:from-black dark:to-black', card: 'border-fuchsia-300' },
-    glass: { container: '', card: 'bg-white/60 dark:bg-white/10 backdrop-blur-md' },
+    glass: { container: 'bg-white/60 dark:bg-white/10 backdrop-blur-md', card: 'bg-white/60 dark:bg-white/10 backdrop-blur-md' },
     neo: { container: '', card: 'shadow-[8px_8px_16px_#d1d5db,-8px_-8px_16px_#ffffff] dark:shadow-none' },
     usa: { container: 'bg-gradient-to-b from-red-50 to-blue-50 dark:from-black dark:to-black', card: 'border-blue-400' },
     uk: { container: 'bg-gradient-to-b from-slate-100 to-red-50 dark:from-black dark:to-black', card: 'border-red-400' },
@@ -186,6 +242,7 @@ export default function NotionPage() {
     contrast: { container: 'bg-white text-black dark:bg-black dark:text-white', card: 'border-black dark:border-white' },
     google: { container: 'bg-slate-50 dark:bg-zinc-950', card: 'bg-white dark:bg-zinc-900 border border-black/5 dark:border-white/10 shadow-sm hover:shadow-md transition-shadow', font: 'font-sans' },
     monochrome: { container: 'bg-white text-black dark:bg-black dark:text-white', card: 'bg-white dark:bg-black border border-black/10 dark:border-white/10 hover:bg-black/5 dark:hover:bg-white/5', font: 'font-sans' },
+    minimal_orange: { container: 'bg-white text-black dark:bg-[#0a0a0a] dark:text-white', card: 'bg-white dark:bg-[#0a0a0a] border border-black/5 dark:border-white/5 hover:border-orange-500/20 transition-all duration-300', font: 'font-sans' },
   }), []);
 
   useEffect(() => {
@@ -532,13 +589,9 @@ export default function NotionPage() {
   }, []);
 
   useEffect(() => {
-    if (!isLoaded || !user || !isSignedIn) {
-      setTasks([]);
-      setCategories(DEFAULT_CATEGORIES);
-      return;
-    }
+    if (!userProfile) return;
     if (typeof window === 'undefined') return;
-    const key = `taskui:${user.id}`;
+    const key = `taskui:${userProfile.id}`;
     try {
       const raw = window.localStorage.getItem(key);
       const parsed = raw ? JSON.parse(raw) : { tasks: [], categories: DEFAULT_CATEGORIES };
@@ -548,17 +601,17 @@ export default function NotionPage() {
       setTasks([]);
       setCategories(DEFAULT_CATEGORIES);
     }
-  }, [isLoaded, isSignedIn, user]);
+  }, [userProfile]);
 
   useEffect(() => {
-    if (!isLoaded || !user || !isSignedIn) return;
+    if (!userProfile) return;
     if (typeof window === 'undefined') return;
-    const key = `taskui:${user.id}`;
+    const key = `taskui:${userProfile.id}`;
     window.localStorage.setItem(
       key,
       JSON.stringify({ tasks, categories })
     );
-  }, [tasks, categories, isLoaded, isSignedIn, user]);
+  }, [tasks, categories, userProfile]);
 
   useEffect(() => {
     if (typeof window === 'undefined' || !('Notification' in window)) return;
@@ -689,6 +742,7 @@ export default function NotionPage() {
   }, [tasks, contributionData, calculateCurrentStreak]);
 
   const paletteMap = {
+    orange: ['#fff7ed', '#ffedd5', '#fed7aa', '#fdba74', '#f97316'],
     green: ['#e8f6e9', '#c8eacb', '#97d8a4', '#5cc47a', '#24a148'],
     blue: ['#e6f0ff', '#c7ddff', '#9fc1ff', '#6fa3ff', '#2d7dff'],
     purple: ['#f1e6ff', '#e0c7ff', '#c69fff', '#a66fff', '#7a2dff'],
@@ -861,27 +915,7 @@ export default function NotionPage() {
     document.documentElement.classList.toggle('dark', next);
   };
 
-  if (!isLoaded) {
-    return (
-      <div className="min-h-screen bg-white text-black dark:bg-black dark:text-white flex items-center justify-center">
-        <div className="animate-pulse">Loading Workspace...</div>
-      </div>
-    );
-  }
-
-  if (!isSignedIn) {
-    return (
-      <div className="min-h-screen bg-white text-black dark:bg-black dark:text-white flex items-center justify-center p-6">
-        <div className="w-full max-w-md">
-          <div className="text-center mb-6">
-            <h1 className="text-2xl font-black">Sign in to your workspace</h1>
-            <p className="text-black/60 dark:text-white/60 text-sm mt-2">Your data stays local on this device.</p>
-          </div>
-          <SignIn routing="hash" />
-        </div>
-      </div>
-    );
-  }
+  // CLERK AUTH CHECK REMOVED
 
   return (
     <div className={`flex min-h-screen text-black dark:text-white ${styleMap[uiStyle]?.container || 'bg-white dark:bg-black'} ${styleMap[uiStyle]?.font || ''}`}>
@@ -907,18 +941,54 @@ export default function NotionPage() {
         </div>
       )}
 
-      {((!isMobile && !sidebarCollapsed && !zenMode) || sidebarOpen) && (
-        <>
-          {isMobile && (
-            <div className="fixed inset-0 z-40 bg-black/40" onClick={() => setSidebarOpen(false)} />
-          )}
-          <aside className={`${isMobile ? 'fixed left-0 top-0 z-50 h-full' : ''} w-72 h-screen flex flex-col border-r border-black/10 dark:border-white/10 bg-white dark:bg-black`}>
-            <div className="p-4 flex items-center gap-2.5 border-b border-black/10 dark:border-white/10">
-              <div className="h-8 w-8 rounded-lg bg-black text-white dark:bg-white dark:text-black flex items-center justify-center">
-                <CheckSquare className="h-4 w-4" />
+      {sidebarCollapsed && !zenMode && !isMobile && (
+        <motion.button
+          initial={{ opacity: 0, x: -10 }}
+          animate={{ opacity: 1, x: 0 }}
+          whileHover={{ scale: 1.1, backgroundColor: 'rgba(0,0,0,0.05)' }}
+          whileTap={{ scale: 0.9 }}
+          onClick={() => setSidebarCollapsed(false)}
+          className="fixed left-4 top-4 z-50 h-9 w-9 rounded-lg border border-black/10 dark:border-white/10 bg-white/80 dark:bg-black/80 backdrop-blur flex items-center justify-center shadow-sm"
+          aria-label="Show sidebar"
+        >
+          <PanelLeftOpen className="h-4 w-4" />
+        </motion.button>
+      )}
+
+      <AnimatePresence>
+        {((!isMobile && !sidebarCollapsed && !zenMode) || sidebarOpen) && (
+          <>
+            {isMobile && (
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 z-40 bg-black/40" 
+                onClick={() => setSidebarOpen(false)} 
+              />
+            )}
+            <motion.aside 
+              initial={isMobile ? { x: -300 } : { width: 0, opacity: 0 }}
+              animate={isMobile ? { x: 0 } : { width: 288, opacity: 1 }}
+              exit={isMobile ? { x: -300 } : { width: 0, opacity: 0 }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              className={`${isMobile ? 'fixed left-0 top-0 z-50 h-full' : ''} w-72 h-screen flex flex-col border-r border-black/10 dark:border-white/10 bg-white dark:bg-black overflow-hidden shadow-2xl shadow-black/5`}
+            >
+              <div className="p-4 flex items-center justify-between border-b border-black/10 dark:border-white/10">
+                <div className="flex items-center gap-2.5">
+                  <div className="h-8 w-8 rounded-lg bg-black text-white dark:bg-white dark:text-black flex items-center justify-center">
+                    <CheckSquare className="h-4 w-4" />
+                  </div>
+                  <span className="text-lg font-black tracking-tight">NihonTask</span>
+                </div>
+                <button 
+                  onClick={() => isMobile ? setSidebarOpen(false) : setSidebarCollapsed(true)}
+                  className="p-1.5 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 text-black/40 dark:text-white/40 transition-colors"
+                  aria-label="Hide sidebar"
+                >
+                  <PanelLeftClose className="h-4 w-4" />
+                </button>
               </div>
-              <span className="text-lg font-black tracking-tight">NihonTask</span>
-            </div>
 
             <div className="flex-1 px-3 py-4 overflow-y-auto">
               <div className="space-y-1">
@@ -929,8 +999,10 @@ export default function NotionPage() {
                   { id: 'completed', label: 'Completed', icon: CheckCircle2, count: taskCounts.completed },
                   { id: 'contributions', label: 'Contributions', icon: CheckSquare, count: overallStats.activeDays },
                 ].map((item) => (
-                  <button
+                  <motion.button
                     key={item.id}
+                    whileHover={!(item.id === 'contributions' ? showContributions : activeFilter === item.id) ? { x: 4, backgroundColor: "rgba(0,0,0,0.05)" } : { x: 4 }}
+                    whileTap={{ scale: 0.98 }}
                     onClick={() => { 
                       if (item.id === 'contributions') {
                         setShowContributions(!showContributions);
@@ -939,20 +1011,26 @@ export default function NotionPage() {
                       }
                       if (isMobile) setSidebarOpen(false); 
                     }}
-                    className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold transition-colors ${
-                      (item.id === 'contributions' ? showContributions : activeFilter === item.id) ? 'bg-black text-white dark:bg-white dark:text-black' : 'hover:bg-black/5 dark:hover:bg-white/5'
+                    className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold transition-all ${
+                      (item.id === 'contributions' ? showContributions : activeFilter === item.id) 
+                        ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/20' 
+                        : 'text-black/80 dark:text-white/70 hover:text-black dark:hover:text-white'
                     }`}
                   >
-                    <item.icon className="h-4 w-4 shrink-0" />
+                    <item.icon className={`h-4 w-4 shrink-0 transition-colors ${(item.id === 'contributions' ? showContributions : activeFilter === item.id) ? 'text-white' : 'text-orange-500/60 dark:text-orange-400/50'}`} />
                     <span className="flex-1 text-left">{item.label}</span>
                     {item.count > 0 && (
-                      <span className="text-[10px] px-2 py-0.5 rounded-full border border-black/10 dark:border-white/10">
-                        {item.count}
-                      </span>
-                    )}
-                  </button>
-                ))}
-              </div>
+                      <span className={`text-[10px] px-2 py-0.5 rounded-full border transition-colors ${
+                        (item.id === 'contributions' ? showContributions : activeFilter === item.id) 
+                          ? 'border-white/40 text-white' 
+                          : 'border-orange-500/10 dark:border-orange-400/10 text-orange-500/70 dark:text-orange-400/60 bg-orange-500/5'
+                      }`}>
+                          {item.count}
+                        </span>
+                      )}
+                    </motion.button>
+                  ))}
+                </div>
 
               <div className="mt-6">
                 <div className="flex items-center justify-between px-3 mb-2">
@@ -997,12 +1075,14 @@ export default function NotionPage() {
                     <button
                       key={cat.id}
                       onClick={() => { setActiveFilter(cat.id); if (isMobile) setSidebarOpen(false); }}
-                      className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors ${
-                        activeFilter === cat.id ? 'bg-black text-white dark:bg-white dark:text-black font-semibold' : 'hover:bg-black/5 dark:hover:bg-white/5'
+                      className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all ${
+                        activeFilter === cat.id 
+                          ? 'bg-orange-500 text-white font-semibold shadow-lg shadow-orange-500/20' 
+                          : 'text-black/80 dark:text-white/70 hover:bg-black/5 dark:hover:bg-white/5 hover:text-black dark:hover:text-white'
                       }`}
                     >
                       <div
-                        className="h-3 w-3 rounded-full shrink-0"
+                        className={`h-2.5 w-2.5 rounded-full shrink-0 border transition-colors ${activeFilter === cat.id ? 'border-white' : 'border-black/5 dark:border-white/5'}`}
                         style={{ backgroundColor: uiStyle === 'monochrome' ? (isDark ? '#ffffff' : '#000000') : cat.color }}
                       />
                       <span className="flex-1 text-left truncate">{cat.name}</span>
@@ -1015,22 +1095,60 @@ export default function NotionPage() {
               </div>
             </div>
 
-            <div className="p-3 border-t border-black/10 dark:border-white/10 space-y-2">
-              <button
-                onClick={toggleTheme}
-                className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
-              >
-                {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-                <span>{isDark ? 'Light Mode' : 'Dark Mode'}</span>
-              </button>
-              <div className="flex items-center justify-between px-3 py-1">
-                <div className="text-xs text-black/50 dark:text-white/50 truncate">{user?.emailAddresses?.[0]?.emailAddress || 'Signed in'}</div>
-                <UserButton />
+            <div className="p-3 border-t border-black/10 dark:border-white/10 space-y-3">
+              <div className="flex p-1 bg-black/5 dark:bg-white/5 rounded-xl relative">
+                <button
+                  onClick={() => isDark && toggleTheme()}
+                  className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-xs font-bold transition-all relative z-10 ${!isDark ? 'text-white' : 'text-black/40 dark:text-white/40'}`}
+                >
+                  <Sun className="h-3.5 w-3.5" />
+                  <span>Light</span>
+                  {!isDark && (
+                    <motion.div
+                      layoutId="activeTheme"
+                      className="absolute inset-0 bg-orange-500 rounded-lg -z-10 shadow-sm"
+                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                    />
+                  )}
+                </button>
+                <button
+                  onClick={() => !isDark && toggleTheme()}
+                  className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-xs font-bold transition-all relative z-10 ${isDark ? 'text-white' : 'text-black/40 dark:text-white/40'}`}
+                >
+                  <Moon className="h-3.5 w-3.5" />
+                  <span>Dark</span>
+                  {isDark && (
+                    <motion.div
+                      layoutId="activeTheme"
+                      className="absolute inset-0 bg-orange-500 rounded-lg -z-10 shadow-sm"
+                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                    />
+                  )}
+                </button>
+              </div>
+
+              <div className="flex items-center justify-between px-2 py-1 bg-white/50 dark:bg-white/5 rounded-xl border border-black/5 dark:border-white/5">
+                <div className="flex items-center gap-2 max-w-[140px]">
+                  <div className="h-7 w-7 rounded-full bg-orange-500 flex items-center justify-center text-white text-[10px] font-black">
+                    {userProfile?.name?.charAt(0) || 'G'}
+                  </div>
+                  <div className="flex flex-col min-w-0">
+                    <span className="text-[10px] font-black uppercase tracking-widest opacity-30 leading-none mb-1">Account</span>
+                    <span className="text-[11px] font-bold text-black/60 dark:text-white/60 truncate leading-none">
+                      {userProfile?.name || 'Guest User'}
+                    </span>
+                  </div>
+                </div>
+                <div className="flex flex-col items-end">
+                   <span className="text-[10px] font-black uppercase tracking-widest text-orange-500 leading-none mb-1">Rank</span>
+                   <span className="text-[11px] font-bold leading-none">S-Class</span>
+                </div>
               </div>
             </div>
-          </aside>
-        </>
-      )}
+            </motion.aside>
+          </>
+        )}
+      </AnimatePresence>
 
       <main className={`flex-1 flex flex-col overflow-hidden ${isMobile ? 'pt-14' : ''} ${styleMap[uiStyle]?.font || ''}`}>
         <a href="#content" className="sr-only">Skip to content</a>
@@ -1039,11 +1157,11 @@ export default function NotionPage() {
             <button
               type="button"
               onClick={() => router.back()}
-              className="h-9 w-9 rounded-lg border border-black/10 dark:border-white/10 flex items-center justify-center hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
+              className="h-9 w-9 rounded-lg border border-black/5 dark:border-white/5 flex items-center justify-center hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
               aria-label="Back"
               title="Back"
             >
-              <span className="text-sm font-black">←</span>
+              <span className="text-sm font-black text-orange-500">←</span>
             </button>
             <div>
               <h1 className="text-2xl font-black tracking-tight">
@@ -1058,95 +1176,126 @@ export default function NotionPage() {
               </p>
             </div>
           </div>
-          {!zenMode && (<div className="flex items-center gap-2">
-            <div className="relative">
-              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-black/40 dark:text-white/40" />
+          {!zenMode && (<div className="flex items-center gap-2 relative">
+            <motion.div 
+              initial={false}
+              animate={{ width: searchExpanded ? 240 : 36 }}
+              className="relative h-9 rounded-lg border border-black/10 dark:border-white/10 bg-white dark:bg-black overflow-hidden flex items-center"
+            >
+              <button 
+                onClick={() => setSearchExpanded(!searchExpanded)}
+                className="absolute left-0 top-0 h-9 w-9 flex items-center justify-center text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white transition-colors"
+              >
+                <Search className="h-4 w-4" />
+              </button>
               <input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search tasks..."
-                className="pl-9 h-9 w-56 rounded-xl border border-black/10 dark:border-white/10 bg-white dark:bg-black text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-                aria-label="Search tasks"
+                className={`w-full pl-9 pr-3 h-full bg-transparent text-sm focus:outline-none transition-opacity ${searchExpanded ? 'opacity-100' : 'opacity-0'}`}
+                onBlur={() => !search && setSearchExpanded(false)}
               />
-            </div>
-            <button onClick={() => setGuideOpen(true)} className="h-9 px-3 rounded-lg border border-black/10 dark:border-white/10 text-sm font-semibold">Features Guide</button>
-            <button onClick={() => setFitnessOpen(true)} className="h-9 px-3 rounded-lg border border-black/10 dark:border-white/10 text-sm font-semibold">Fitness Guide</button>
-            <button onClick={() => setImagesOpen(true)} className="h-9 px-3 rounded-lg border border-black/10 dark:border-white/10 text-sm font-semibold">Images</button>
-            <select value={uiStyle} onChange={(e) => setUiStyle(e.target.value)} className="h-9 px-3 rounded-lg border border-black/10 dark:border-white/10 bg-white dark:bg-black text-sm" aria-label="UI Style">
-              <option value="clean">Clean</option>
-              <option value="minimal">Minimal</option>
-              <option value="vibrant">Vibrant</option>
-              <option value="glass">Glass</option>
-              <option value="neo">Neumorphism</option>
-              <option value="usa">USA</option>
-              <option value="uk">UK</option>
-              <option value="nihon">Japan</option>
-              <option value="darkpro">Dark Pro</option>
-              <option value="pastel">Pastel</option>
-              <option value="contrast">High Contrast</option>
-              <option value="google">Google</option>
-            </select>
-            <select value={uiLanguage} onChange={(e) => setUiLanguage(e.target.value)} className="h-9 px-3 rounded-lg border border-black/10 dark:border-white/10 bg-white dark:bg-black text-sm" aria-label="Language">
-              <option value="en">English</option>
-              <option value="jp">日本語</option>
-            </select>
-            <button
-              onClick={() => setSidebarCollapsed((v) => !v)}
-              className="h-9 px-3 rounded-lg border border-black/10 dark:border-white/10 text-sm"
-              aria-pressed={sidebarCollapsed}
-              aria-label={sidebarCollapsed ? 'Show sidebar' : 'Hide sidebar'}
+            </motion.div>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setMoreMenuOpen(!moreMenuOpen)}
+              className="h-9 w-9 rounded-lg border border-black/10 dark:border-white/10 flex items-center justify-center hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
+              aria-label="More options"
             >
-              {sidebarCollapsed ? 'Show Sidebar' : 'Hide Sidebar'}
-            </button>
+              <MoreHorizontal className="h-4 w-4" />
+            </motion.button>
+
+            <AnimatePresence>
+              {moreMenuOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                  className="absolute right-6 top-16 w-64 rounded-2xl border border-black/10 dark:border-white/10 bg-white dark:bg-[#0a0a0a] shadow-2xl z-50 overflow-hidden"
+                >
+                  <div className="p-2 space-y-1">
+                    <div className="px-3 py-2 text-[10px] font-black uppercase tracking-widest text-black/40 dark:text-white/40">Tools & Views</div>
+                    <button onClick={() => { setGuideOpen(true); setMoreMenuOpen(false); }} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm hover:bg-black/5 dark:hover:bg-white/5 transition-colors">Features Guide</button>
+                    <button onClick={() => { setFitnessOpen(true); setMoreMenuOpen(false); }} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm hover:bg-black/5 dark:hover:bg-white/5 transition-colors">Fitness Guide</button>
+                    <button onClick={() => { setImagesOpen(true); setMoreMenuOpen(false); }} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm hover:bg-black/5 dark:hover:bg-white/5 transition-colors">Images</button>
+                    <div className="h-px bg-black/5 dark:bg-white/5 my-1" />
+                    <div className="px-3 py-2 text-[10px] font-black uppercase tracking-widest text-black/40 dark:text-white/40">Appearance</div>
+                    <div className="px-3 py-1 flex items-center justify-between">
+                      <span className="text-xs">Style</span>
+                      <select value={uiStyle} onChange={(e) => setUiStyle(e.target.value)} className="h-7 px-2 border-none bg-transparent text-xs font-bold focus:ring-0 cursor-pointer">
+                        <option value="clean">Clean</option>
+                        <option value="minimal">Minimal</option>
+                        <option value="minimal_orange">Orange</option>
+                      </select>
+                    </div>
+                    <div className="px-3 py-1 flex items-center justify-between">
+                      <span className="text-xs">Language</span>
+                      <select value={uiLanguage} onChange={(e) => setUiLanguage(e.target.value)} className="h-7 px-2 border-none bg-transparent text-xs font-bold focus:ring-0 cursor-pointer">
+                        <option value="en">English</option>
+                        <option value="jp">日本語</option>
+                      </select>
+                    </div>
+                    <div className="h-px bg-black/5 dark:bg-white/5 my-1" />
+                    <div className="px-3 py-2 text-[10px] font-black uppercase tracking-widest text-black/40 dark:text-white/40">Add via Templates</div>
+                    <div className="grid grid-cols-2 gap-1 px-2">
+                      {taskTemplates.map((tpl, i) => (
+                        <button
+                          key={i}
+                          onClick={() => {
+                            setMoreMenuOpen(false);
+                            setEditingId(null);
+                            setDraft(makeTask(tpl.patch));
+                            setDialogOpen(true);
+                          }}
+                          className="text-[10px] text-left px-2 py-1.5 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors border border-black/5 dark:border-white/5"
+                        >
+                          {tpl.label}
+                        </button>
+                      ))}
+                    </div>
+                    <div className="h-px bg-black/5 dark:bg-white/5 my-1" />
+                    <button onClick={() => setSidebarCollapsed(!sidebarCollapsed)} className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
+                      <span>Sidebar</span>
+                      <span className="text-[10px] font-bold">{sidebarCollapsed ? 'Show' : 'Hide'}</span>
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            <div className="h-9 w-px bg-black/5 dark:bg-white/5 mx-1" />
+
             <button
               onClick={() => setZenMode(true)}
-              className="h-9 px-3 rounded-lg bg-black text-white dark:bg-white dark:text-black text-sm font-semibold"
+              className="h-9 px-3 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 text-sm font-semibold transition-colors"
               aria-label="Enter Zen Mode"
             >
-              Zen Mode
+              Zen
             </button>
-            <div className="relative">
-              <button
-                onClick={() => setTemplatesOpen((v) => !v)}
-                className="h-9 px-3 rounded-lg border border-black/10 dark:border-white/10 text-sm font-semibold"
-              >
-                Templates
-              </button>
-              {templatesOpen && (
-                <div className="absolute right-0 mt-2 w-64 rounded-xl border border-black/10 dark:border-white/10 bg-white dark:bg-black shadow-lg z-50">
-                  <div className="p-2 text-xs font-semibold text-black/60 dark:text-white/60">Quick Add Habit</div>
-                  <div className="p-2 space-y-1">
-                    {taskTemplates.map((tpl, i) => (
-                      <button
-                        key={i}
-                        onClick={() => {
-                          setTemplatesOpen(false);
-                          setEditingId(null);
-                          setDraft(makeTask(tpl.patch));
-                          setDialogOpen(true);
-                        }}
-                        className="w-full text-left px-3 py-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 text-sm"
-                      >
-                        {tpl.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-            <button
+
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.95 }}
               onClick={openNewTask}
-              className="h-9 px-3 rounded-lg bg-black text-white dark:bg-white dark:text-black text-sm font-semibold inline-flex items-center gap-1.5"
+              className="h-9 px-5 rounded-xl bg-black text-white dark:bg-white dark:text-black text-sm font-black uppercase tracking-widest shadow-lg shadow-black/10 dark:shadow-white/5"
             >
-              <Plus className="h-4 w-4" />
               Add Task
-            </button>
+            </motion.button>
           </div>)}
         </header>
 
         <div id="content" className="flex-1 overflow-y-auto px-6 py-6 max-w-5xl mx-auto w-full">
-          {showContributions ? (
-            <div className="space-y-6">
+          <AnimatePresence mode="wait">
+            {showContributions ? (
+              <motion.div
+                key="contributions"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3 }}
+                className="space-y-6"
+              >
               <div className="bg-white dark:bg-black border border-black/10 dark:border-white/10 rounded-2xl p-6">
                 <div className="flex items-center justify-between mb-6">
                   <h2 className="text-xl font-black">Contribution Activity</h2>
@@ -1271,53 +1420,87 @@ export default function NotionPage() {
                   </div>
                 </div>
               </div>
-            </div>
-          ) : filteredTasks.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-24">
-              <div className="relative mb-6">
-                <div className="absolute inset-0 rounded-full opacity-10" style={{ boxShadow: '0 0 0 60px currentColor' }} />
-                <div className="absolute inset-0 rounded-full opacity-10" style={{ boxShadow: '0 0 0 30px currentColor' }} />
-                <div className="h-16 w-16 rounded-full flex items-center justify-center border border-black/20 dark:border-white/20 text-black/50 dark:text-white/50">
-                  <Inbox className="h-7 w-7" />
+            </motion.div>
+            ) : filteredTasks.length === 0 ? (
+              <motion.div
+                key="empty"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="flex flex-col items-center justify-center py-24"
+              >
+                <motion.div 
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ delay: 0.1, type: "spring", stiffness: 100 }}
+                  className="relative mb-10"
+                >
+                <div className="h-24 w-24 rounded-full flex items-center justify-center border-4 border-black/5 dark:border-white/5 text-black/20 dark:text-white/20">
+                  <Inbox className="h-10 w-10" />
                 </div>
-              </div>
-              <p className="text-xl font-black tracking-tight">No tasks yet</p>
-              <p className="text-sm mt-1 text-black/60 dark:text_white/60">Focus your mind. Start by organizing your day.</p>
-              <p className="text-xs mt-0.5 text-black/40 dark:text_white/40">{uiLanguage === 'jp' ? '集中して、始めましょう。' : '集中して、始めましょう。'}</p>
-              <button onClick={openNewTask} className="mt-5 h-9 px-4 rounded-xl bg-black text-white dark:bg_white dark:text-black text-sm font-semibold inline-flex items-center gap-1.5">
-                <Plus className="h-4 w-4" />
-                Create your first task
-              </button>
-              <div className="mt-3 text-xs text-black/50 dark:text_white/50 inline-flex items-center gap-2">
-                <button onClick={() => setGuideOpen(true)} className="underline">Quick Start Guide</button>
-                <span>•</span>
-                <span>Import from Notion</span>
-              </div>
-            </div>
-          ) : (
-            <div className="space-y-3">
-              {filteredTasks.map((task) => (
-                <div
+                </motion.div>
+                <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="text-3xl font-black tracking-tighter mb-2">Start fresh.</motion.p>
+                <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="text-black/40 dark:text-white/40 max-w-xs text-center leading-relaxed">
+                  Clear your mind and organize your day. Begin by creating your first milestone.
+                </motion.p>
+                <motion.button 
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={openNewTask} 
+                  className="mt-10 h-12 px-8 rounded-2xl bg-black text-white dark:bg-white dark:text-black text-sm font-black uppercase tracking-widest shadow-2xl shadow-black/20 dark:shadow-white/10"
+                >
+                  Create Task
+                </motion.button>
+              </motion.div>
+            ) : (
+            <motion.div layout className="space-y-3">
+              <AnimatePresence mode="popLayout">
+                {filteredTasks.map((task, index) => (
+                <motion.div
                   key={task.id}
-                  className={`group flex items-start gap-3 p-3 rounded-xl border transition-all ${
+                  layout
+                  initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                  animate={{ 
+                    opacity: 1, 
+                    y: 0, 
+                    scale: 1,
+                    backgroundColor: task.status === 'completed' ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,1)'
+                  }}
+                  whileHover={{ scale: 1.005, borderColor: 'rgba(249, 115, 22, 0.4)', boxShadow: '0 4px 12px rgba(0,0,0,0.03)' }}
+                  whileTap={{ scale: 0.998 }}
+                  exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.2 } }}
+                  transition={{ 
+                    duration: 0.3, 
+                    delay: index * 0.05,
+                    layout: { duration: 0.3 }
+                  }}
+                  className={`group flex items-start gap-3 p-3 rounded-xl border transition-colors ${
                     styleMap[uiStyle]?.card || ''
                   } ${
                     task.status === 'completed'
                       ? 'bg-black/5 dark:bg-white/5 border-black/10 dark:border-white/10 opacity-70'
-                      : 'bg-white dark:bg-black border-black/10 dark:border-white/10 hover:shadow-sm'
+                      : 'bg-white dark:bg-[#0a0a0a] border-black/10 dark:border-white/10 hover:shadow-sm'
                   }`}
                   style={
-                    uiStyle === 'monochrome'
-                      ? (task.status !== 'completed' ? { borderLeft: `4px solid ${isDark ? '#ffffff' : '#000000'}` } : undefined)
-                      : (task.color && task.status !== 'completed' ? { borderLeft: `4px solid ${task.color}` } : undefined)
+                    uiStyle === 'minimal_orange'
+                      ? (task.status !== 'completed' ? { borderLeft: `2px solid #f97316` } : undefined)
+                      : (uiStyle === 'monochrome'
+                        ? (task.status !== 'completed' ? { borderLeft: `4px solid ${isDark ? '#ffffff' : '#000000'}` } : undefined)
+                        : (task.color && task.status !== 'completed' ? { borderLeft: `4px solid ${task.color}` } : undefined))
                   }
                 >
-                  <input
-                    type="checkbox"
-                    checked={task.status === 'completed'}
-                    onChange={() => toggleComplete(task)}
+                  <motion.div
+                    animate={task.status === 'completed' ? { scale: [1, 1.2, 1] } : {}}
+                    transition={{ duration: 0.3 }}
                     className="mt-1"
-                  />
+                  >
+                    <input
+                      type="checkbox"
+                      checked={task.status === 'completed'}
+                      onChange={() => toggleComplete(task)}
+                      className="cursor-pointer accent-orange-500"
+                    />
+                  </motion.div>
                   <div className="flex-1 min-w-0">
                     <p className={`text-sm font-semibold ${task.status === 'completed' ? 'line-through text-black/40 dark:text-white/40' : ''}`}>
                       {task.title}
@@ -1385,10 +1568,12 @@ export default function NotionPage() {
                       Delete
                     </button>
                   </div>
-                </div>
+                </motion.div>
               ))}
-            </div>
+            </AnimatePresence>
+            </motion.div>
           )}
+          </AnimatePresence>
         </div>
       </main>
 

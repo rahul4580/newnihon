@@ -163,7 +163,13 @@ export default function KanjiMasterPage() {
       feedback: isCorrect ? 'correct' : 'incorrect',
       score: isCorrect ? prev.score + 1 : prev.score,
       total: prev.total + 1,
-      history: [...prev.history, { ...prev.currentQuestion, wasCorrect: isCorrect, difficultyAchieved: difficulty }]
+      history: [...prev.history, { 
+        ...prev.currentQuestion, 
+        userChoice: mode === 'exam' ? option : (option.char || option),
+        targetCheck: mode === 'exam' ? quizState.currentQuestion.target : (quizState.currentQuestion.char || quizState.currentQuestion.target),
+        wasCorrect: isCorrect, 
+        difficultyAchieved: difficulty 
+      }]
     }));
     setTimeLeft(null);
     setTimeout(() => startNewQuestion(), 1500);
@@ -230,28 +236,29 @@ export default function KanjiMasterPage() {
         </motion.div>
 
         {/* ═══════════════ JLPT LEVEL SELECTOR ═══════════════ */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="max-w-4xl mx-auto mb-12">
-          <div className="flex justify-center gap-2 md:gap-3 flex-wrap">
-            {Object.entries(LEVEL_CONFIG).map(([key, cfg]) => {
-              const a = ACCENT_COLORS[cfg.color];
-              const isActive = level === key;
-              const count = Object.values(cfg.data).flat().length;
-              return (
-                <button
-                  key={key}
-                  onClick={() => setLevel(key)}
-                  className={`relative group flex flex-col items-center gap-1 px-5 md:px-8 py-3 md:py-4 rounded-2xl md:rounded-3xl border-2 transition-all duration-500 ${
-                    isActive
-                      ? `${a.bg} text-white border-transparent shadow-xl scale-105`
-                      : 'bg-white dark:bg-neutral-900 border-black/5 dark:border-white/5 hover:border-black/20 dark:hover:border-white/20 opacity-70 hover:opacity-100'
-                  }`}
-                >
-                  <span className="text-lg md:text-2xl font-black tracking-tighter">{cfg.label}</span>
-                  <span className={`text-[8px] md:text-[10px] font-black uppercase tracking-widest ${ isActive ? 'opacity-70' : 'opacity-40'}`}>{cfg.desc}</span>
-                  <span className={`text-[8px] font-mono font-bold ${ isActive ? 'opacity-50' : 'opacity-20'}`}>{count} 字</span>
-                </button>
-              );
-            })}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-12 flex justify-center">
+          <div className="flex items-center gap-1 bg-white dark:bg-neutral-900 p-1.5 rounded-2xl border border-black/5 dark:border-white/5 shadow-sm">
+             {Object.entries(LEVEL_CONFIG).map(([key, cfg]) => {
+                const isActive = level === key;
+                return (
+                  <button
+                    key={key}
+                    onClick={() => setLevel(key)}
+                    className={`relative px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${
+                      isActive ? 'text-white' : 'text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300'
+                    }`}
+                  >
+                    {isActive && (
+                      <motion.div
+                        layoutId="level-toggle"
+                        className={`absolute inset-0 bg-${cfg.color}-500 rounded-xl shadow-lg shadow-${cfg.color}-500/30`}
+                        transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
+                      />
+                    )}
+                    <span className="relative z-10">{key}</span>
+                  </button>
+                );
+             })}
           </div>
         </motion.div>
 
@@ -302,7 +309,7 @@ export default function KanjiMasterPage() {
 
             {/* Exam Countdown Overlay */}
             {examCountdown !== null && (
-              <motion.div key="countdown" initial={{ opacity: 0, scale: 0.5 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 2 }} className="fixed inset-0 z-[150] bg-black/90 flex items-center justify-center pointer-events-none">
+              <motion.div key="countdown" initial={{ opacity: 0, scale: 0.5 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 2 }} className="fixed inset-0 z-150 bg-black/90 flex items-center justify-center pointer-events-none">
                 <div className="text-center">
                   <p className={`${accent.text} text-sm font-black uppercase tracking-[0.5em] mb-10`}>Starting {level} {difficulty.toUpperCase()} Exam</p>
                   <span className="text-[15rem] font-black text-white">{examCountdown}</span>
@@ -338,7 +345,7 @@ export default function KanjiMasterPage() {
                       <span className="text-8xl font-noto font-black">{allKanji[activeIndex]?.char}</span>
                       <button onClick={(e) => { e.stopPropagation(); playSound(allKanji[activeIndex]?.char); }} className="p-5 rounded-full bg-gray-100 dark:bg-neutral-800"><FaVolumeUp className={accent.text} /></button>
                     </div>
-                    <div className={`absolute inset-0 backface-hidden bg-gradient-to-br ${config.gradient} rounded-[3rem] flex flex-col items-center justify-center gap-6 text-white text-center`} style={{ transform: 'rotateY(180deg)' }}>
+                    <div className={`absolute inset-0 backface-hidden bg-linear-to-br ${config.gradient} rounded-[3rem] flex flex-col items-center justify-center gap-6 text-white text-center`} style={{ transform: 'rotateY(180deg)' }}>
                       <span className="text-xs uppercase tracking-widest opacity-60">Meaning</span>
                       <span className="text-4xl font-black">{allKanji[activeIndex]?.meaning}</span>
                       <div className="flex gap-8 text-sm opacity-80 mt-4">
@@ -365,7 +372,7 @@ export default function KanjiMasterPage() {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-2xl">
                   {quizState.options.map((opt, i) => (
-                    <button key={i} onClick={() => handleAnswer(opt)} className={`p-8 rounded-[2rem] font-bold border-2 transition-all ${quizState.feedback && opt.char === quizState.currentQuestion.char ? 'bg-green-500 text-white border-green-500' : 'bg-white dark:bg-neutral-900 border-black/5 hover:border-black'}`}>{opt.label}</button>
+                    <button key={i} onClick={() => handleAnswer(opt)} className={`p-8 rounded-4xl font-bold border-2 transition-all ${quizState.feedback && opt.char === quizState.currentQuestion.char ? 'bg-green-500 text-white border-green-500' : 'bg-white dark:bg-neutral-900 border-black/5 hover:border-black'}`}>{opt.label}</button>
                   ))}
                 </div>
               </motion.div>
@@ -443,7 +450,7 @@ export default function KanjiMasterPage() {
                       key={i}
                       onClick={() => handleAnswer(opt)}
                       disabled={!!quizState.feedback}
-                      className={`group relative aspect-square rounded-[2rem] md:rounded-[2.5rem] text-4xl md:text-6xl font-noto font-black transition-all border-2 md:border-4 flex items-center justify-center overflow-hidden hover:scale-[1.03] active:scale-95 shadow-xl shadow-black/5 ${
+                      className={`group relative aspect-square rounded-4xl md:rounded-[2.5rem] text-4xl md:text-6xl font-noto font-black transition-all border-2 md:border-4 flex items-center justify-center overflow-hidden hover:scale-[1.03] active:scale-95 shadow-xl shadow-black/5 ${
                         quizState.feedback === 'correct' && opt === quizState.currentQuestion.target
                           ? 'bg-green-500 text-white border-green-500 shadow-green-500/20'
                           : quizState.feedback === 'incorrect' && opt === quizState.currentQuestion.target
@@ -472,17 +479,67 @@ export default function KanjiMasterPage() {
                 <div className={`w-40 h-40 rounded-full ${accent.bgLight} flex items-center justify-center mb-10 border ${accent.borderLight}`}><FaTrophy className={`text-7xl ${accent.text}`} /></div>
                 <h2 className="text-5xl md:text-7xl font-black mb-4 tracking-tighter">{level} {difficulty.toUpperCase()} <span className={accent.text}>CLEARED</span></h2>
                 <p className="text-xl text-gray-500 font-medium mb-12">Congratulations on completing the proficiency session!</p>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-2xl mb-16">
-                  <div className="p-10 rounded-[3rem] bg-white dark:bg-neutral-900 border border-black/5 flex items-center gap-6 text-black dark:text-white"><FaStar className="text-4xl text-yellow-500" /><div className="text-left"><div className="text-xs font-black uppercase opacity-40">Accuracy</div><div className="text-4xl font-black">{Math.round((quizState.score / 10) * 100)}%</div></div></div>
-                  <div className="p-10 rounded-[3rem] bg-white dark:bg-neutral-900 border border-black/5 flex items-center gap-6 text-black dark:text-white"><FaCheckCircle className="text-4xl text-green-500" /><div className="text-left"><div className="text-xs font-black uppercase opacity-40">Daily Goal</div><div className="text-4xl font-black">{stats.daily || 0}/5</div></div></div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-2xl mb-10 text-left">
+                  <div className="p-10 rounded-[3rem] bg-white dark:bg-neutral-900 border border-black/5 flex items-center gap-6 text-black dark:text-white shadow-xl">
+                    <div className="w-14 h-14 rounded-2xl bg-orange-100 text-orange-500 flex items-center justify-center shrink-0 animate-pulse"><FaStar className="text-4xl" /></div>
+                    <div>
+                      <div className="text-[10px] font-black uppercase opacity-40">Accuracy Score</div>
+                      <div className="text-4xl font-black">{Math.round((quizState.score / 10) * 100)}%</div>
+                    </div>
+                  </div>
+                  <div className="p-10 rounded-[3rem] bg-white dark:bg-neutral-900 border border-black/5 flex items-center gap-6 text-black dark:text-white shadow-xl">
+                    <div className="w-14 h-14 rounded-2xl bg-green-100 text-green-500 flex items-center justify-center shrink-0"><FaCheckCircle className="text-4xl" /></div>
+                    <div>
+                      <div className="text-[10px] font-black uppercase opacity-40">Daily Progress</div>
+                      <div className="text-4xl font-black">{stats.daily || 0}/5</div>
+                    </div>
+                  </div>
                 </div>
-                <button onClick={() => { setQuizState({ currentQuestion: null, options: [], score: 0, total: 0, history: [], feedback: null }); setMode('grid'); }} className="px-14 py-6 rounded-[2.5rem] bg-black dark:bg-white text-white dark:text-black text-xs font-black uppercase tracking-[0.4em] hover:scale-105 transition-transform flex items-center gap-3"><FaRedo /> Return to Study</button>
+
+                <div className="w-full max-w-2xl mb-16 text-left">
+                  <h3 className="text-[10px] font-black uppercase tracking-[0.3em] opacity-30 mb-6 px-4">Performance Review</h3>
+                  <div className="space-y-3 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+                    {quizState.history.map((item, i) => (
+                      <div key={i} className="group p-6 rounded-[2.5rem] bg-white dark:bg-neutral-900 border border-black/5 shadow-sm flex items-start gap-6 transition-all hover:border-black/10">
+                        <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 text-xl ${item.wasCorrect ? 'bg-green-500/10 text-green-500' : 'bg-red-500/10 text-red-500'}`}>
+                          {item.wasCorrect ? <FaCheckCircle /> : <FaRedo className="rotate-45" />}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                           {item.sentence ? (
+                             <div className="text-xl font-medium font-noto mb-2 leading-relaxed">
+                               {item.sentence.split('*').map((part, idx) => idx % 2 === 1 ? <span key={idx} className="text-purple-500 font-black">{item.targetCheck}</span> : part)}
+                             </div>
+                           ) : (
+                             <div className="text-3xl font-black font-noto mb-1">{item.char}</div>
+                           )}
+                           <div className="flex gap-4 items-center">
+                              <div className="flex items-center gap-2">
+                                <span className="text-[9px] font-black uppercase opacity-30">Your Answer:</span>
+                                <span className={`text-[11px] font-bold ${item.wasCorrect ? 'text-green-500' : 'text-red-500'}`}>{item.userChoice}</span>
+                              </div>
+                              {!item.wasCorrect && (
+                                <div className="flex items-center gap-2">
+                                  <span className="text-[9px] font-black uppercase opacity-30">Goal:</span>
+                                  <span className="text-[11px] font-bold text-green-500">{item.targetCheck}</span>
+                                </div>
+                              )}
+                              <div className="ml-auto text-[9px] font-black uppercase opacity-20 group-hover:opacity-100 transition-opacity">
+                                {item.meaning || item.translation?.slice(0, 15)+'...'}
+                              </div>
+                           </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <button onClick={() => { setQuizState({ currentQuestion: null, options: [], score: 0, total: 0, history: [], feedback: null }); setMode('grid'); }} className="px-14 py-6 rounded-[2.5rem] bg-black dark:bg-white text-white dark:text-black text-[10px] font-black uppercase tracking-[0.4em] hover:scale-105 transition-transform flex items-center gap-3 shadow-2xl shadow-black/10"><FaRedo /> Return to Study</button>
               </motion.div>
             )}
           </AnimatePresence>
         </div>
       </div>
-      <style jsx global>{`.perspective-1000 { perspective: 1000px; } .preserve-3d { transform-style: preserve-3d; } .backface-hidden { backface-visibility: hidden; } .animate-spin-slow { animation: spin 3s linear infinite; } @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
+      <style jsx global>{`.perspective-1000 { perspective: 1000px; } .preserve-3d { transform-style: preserve-3d; } .backface-hidden { backface-visibility: hidden; } .animate-spin-slow { animation: spin 3s linear infinite; } @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } } .custom-scrollbar::-webkit-scrollbar { width: 4px; } .custom-scrollbar::-webkit-scrollbar-track { background: transparent; } .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.05); border-radius: 10px; } .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.05); }`}</style>
       <Footer />
     </div>
   );

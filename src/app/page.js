@@ -10,13 +10,17 @@ import SummerInJapan from '../components/SummerInJapan';
 import Contact from '../components/Contact';
 import Footer from '../components/Footer';
 
+import { useRouter } from 'next/navigation';
+
 export default function Home() {
+  const router = useRouter();
+
   const handleBack = () => {
     // Go back in browser history if possible, otherwise navigate to about page
     if (window.history.length > 1) {
-      window.history.back();
+      router.back();
     } else {
-      window.location.href = '/about';
+      router.push('/about');
     }
   };
 
