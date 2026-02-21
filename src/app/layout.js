@@ -1,4 +1,5 @@
 import { Geist, Geist_Mono, Noto_Sans_JP } from "next/font/google";
+import Script from "next/script";
 import {
   ClerkProvider,
 } from "@clerk/nextjs";
@@ -40,6 +41,18 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+      <head>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-6TD85QQZ6L"
+          strategy="afterInteractive"
+        />
+        <Script id="gtag-init" strategy="afterInteractive">
+          {`window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-6TD85QQZ6L');`}
+        </Script>
+      </head>
       <body className={`${geistSans.variable} ${geistMono.variable} ${notoSansJP.variable} antialiased selection:bg-blue-500 selection:text-white`}>
         <ClientWrapper>
           {children}
